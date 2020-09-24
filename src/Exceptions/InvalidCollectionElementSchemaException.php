@@ -4,7 +4,7 @@
 namespace CodexSoft\Transmission\Exceptions;
 
 
-class InvalidCollectionElementSchemaException extends \Exception
+class InvalidCollectionElementSchemaException extends GenericException
 {
 
 }

@@ -4,7 +4,7 @@
 namespace CodexSoft\Transmission\Exceptions;
 
 
-class CouldNotNormalizeDataException extends \Exception
+class CouldNotNormalizeDataException extends GenericException
 {
 
 }

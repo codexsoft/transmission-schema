@@ -6,7 +6,7 @@ namespace CodexSoft\Transmission\Exceptions;
 
 use Throwable;
 
-class ValidationDetectedViolationsException extends \Exception
+class ValidationDetectedViolationsException extends GenericException
 {
     private array $violations;
 
