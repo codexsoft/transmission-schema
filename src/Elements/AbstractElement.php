@@ -4,7 +4,7 @@
 namespace CodexSoft\Transmission\Elements;
 
 
-use CodexSoft\Transmission\Exceptions\CouldNotNormalizeDataException;
+use CodexSoft\Transmission\Exceptions\IncompatibleInputDataTypeException;
 use CodexSoft\Transmission\Exceptions\ValidationDetectedViolationsException;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints;
@@ -61,7 +61,7 @@ abstract class AbstractElement
      * @param $data
      *
      * @return mixed|null
-     * @throws CouldNotNormalizeDataException
+     * @throws IncompatibleInputDataTypeException
      */
     final public function normalizeData($data)
     {
@@ -74,7 +74,7 @@ abstract class AbstractElement
         //}
 
         if ($this->strict && \is_array($this->acceptedTypes) && !$this->valueHasType($data, $this->acceptedTypes)) {
-            throw new CouldNotNormalizeDataException('Value must be one of accepted types: {'.\implode(', ', $this->acceptedTypes).'} but '.\gettype($data).' given');
+            throw new IncompatibleInputDataTypeException('Value must be one of accepted types: {'.\implode(', ', $this->acceptedTypes).'} but '.\gettype($data).' given');
         }
 
         return $this->doNormalizeData($data);
@@ -110,7 +110,7 @@ abstract class AbstractElement
      * @param bool $validateNormalizedData
      *
      * @return mixed|null
-     * @throws CouldNotNormalizeDataException
+     * @throws IncompatibleInputDataTypeException
      * @throws ValidationDetectedViolationsException
      */
     final public function validateAndReturnData($data, bool $validateNormalizedData = true)
