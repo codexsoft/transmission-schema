@@ -15,19 +15,18 @@ use Symfony\Component\Validator\Constraint;
  */
 class JsonElement extends AbstractElement
 {
-
     protected ?array $acceptedTypes = ['array'];
     //public const MODE_LEAVE_EXTRA_KEYS = 1;
     //public const MODE_EXTRACT_EXTRA_KEYS = 2;
     //public const MODE_IGNORE_EXTRA_KEYS = 3;
 
-    /** @var AbstractElement[]|string */
-    protected $schema;
+    /** @var AbstractElement[] */
+    protected array $schema;
 
     /**
      * JsonElement constructor.
      *
-     * @param $schema
+     * @param AbstractElement[]|string $schema
      * @param string $label
      *
      * @throws InvalidJsonSchemaException
@@ -35,7 +34,7 @@ class JsonElement extends AbstractElement
     public function __construct($schema, string $label = '')
     {
         parent::__construct($label);
-        $this->schema($schema);
+        $this->setSchema($schema);
     }
 
     protected ?string $schemaGatheredFromClass = null;
@@ -79,7 +78,6 @@ class JsonElement extends AbstractElement
      * @param bool $extractExtraKeysToExtraData
      *
      * @return array[]
-     * @throws InvalidJsonSchemaException
      * @throws \CodexSoft\Transmission\Exceptions\IncompatibleInputDataTypeException
      */
     public function normalizeDataReturningNormalizedAndExtraData(
@@ -108,9 +106,9 @@ class JsonElement extends AbstractElement
 
             $schemaNode = $this->schema[$key];
 
-            if (!$schemaNode instanceof AbstractElement) {
-                throw new InvalidJsonSchemaException();
-            }
+            //if (!$schemaNode instanceof AbstractElement) {
+            //    throw new InvalidJsonSchemaException();
+            //}
 
             $normalizedData[$key] = $schemaNode->normalizeData($data[$key]);
         }
@@ -167,8 +165,12 @@ class JsonElement extends AbstractElement
      * @return static
      * @throws InvalidJsonSchemaException
      */
-    public function schema($schema)
+    protected function setSchema($schema)
     {
+        if (!\is_string($schema) && !\is_array($schema)) {
+            throw new InvalidJsonSchemaException('JSON schema must be array or class implementing '.JsonSchemaInterface::class);
+        }
+
         if (\is_string($schema)) {
             $schemaClass = $schema;
             if (!\class_exists($schemaClass) || !\in_array(JsonSchemaInterface::class, class_implements($schemaClass), true)) {
@@ -177,11 +179,18 @@ class JsonElement extends AbstractElement
             /** @var JsonSchemaInterface $schemaClass */
             $this->schema = $schemaClass::createSchema();
             $this->schemaGatheredFromClass = $schemaClass;
-        } elseif (\is_array($schema)) {
+        }
+
+        if (\is_array($schema)) {
             $this->schema = $schema;
             $this->schemaGatheredFromClass = null;
-        } else {
-            throw new InvalidJsonSchemaException('JSON schema must be array or class implementing '.JsonSchemaInterface::class);
+        }
+
+        foreach ($this->schema as $key => $value) {
+            if (!$value instanceof AbstractElement) {
+                // todo: check it recursively?
+                throw new InvalidJsonSchemaException('All JSON schema elements must be instances of '.AbstractElement::class.' but element with key '.$key.' does not.');
+            }
         }
 
         return $this;

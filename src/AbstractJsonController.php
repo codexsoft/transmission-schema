@@ -68,7 +68,6 @@ abstract class AbstractJsonController
             //$normalizedData = $schema->normalizeData($inputData);
         } catch (IncompatibleInputDataTypeException $e) {
             return new JsonResponse([], Response::HTTP_NOT_ACCEPTABLE);
-        } catch (InvalidJsonSchemaException $e) {
         }
 
         $sfConstraints = $schema->compileToSymfonyValidatorConstraint();
@@ -91,7 +90,7 @@ abstract class AbstractJsonController
         }
 
         $this->beforeHandle();
-        $response = $this->handle($inputData);
+        $response = $this->handle($normalizedData, $extraData);
         $this->afterHandle($response);
 
         return $response;
