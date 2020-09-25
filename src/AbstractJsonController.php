@@ -27,6 +27,19 @@ abstract class AbstractJsonController
             throw new \InvalidArgumentException('RequestStack is empty, failed to get current Request!');
         }
         $this->request = $request;
+        $this->init();
+    }
+
+    protected function init(): void
+    {
+    }
+
+    protected function beforeHandle(): void
+    {
+    }
+
+    protected function afterHandle(Response $response): void
+    {
     }
 
     abstract protected function handle(array $data): Response;
@@ -75,7 +88,11 @@ abstract class AbstractJsonController
             ], Response::HTTP_BAD_REQUEST);
         }
 
-        return $this->handle($inputData);
+        $this->beforeHandle();
+        $response = $this->handle($inputData);
+        $this->afterHandle($response);
+
+        return $response;
     }
 
     public static function getTags(): array
