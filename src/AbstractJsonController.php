@@ -42,7 +42,7 @@ abstract class AbstractJsonController
     {
     }
 
-    abstract protected function handle(array $data): Response;
+    abstract protected function handle(array $data, array $extraData = []): Response;
 
     /**
      * @return Response
@@ -58,15 +58,17 @@ abstract class AbstractJsonController
         $inputData = $this->request->request->all();
 
         try {
-            $schema = (new JsonElement())->schema($this->inputSchema());
+            $schema = (new JsonElement($this->inputSchema()));
         } catch (InvalidJsonSchemaException $e) {
             return new JsonResponse([], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         try {
-            $normalizedData = $schema->normalizeData($inputData);
+            [$normalizedData, $extraData] = $schema->normalizeDataReturningNormalizedAndExtraData();
+            //$normalizedData = $schema->normalizeData($inputData);
         } catch (IncompatibleInputDataTypeException $e) {
             return new JsonResponse([], Response::HTTP_NOT_ACCEPTABLE);
+        } catch (InvalidJsonSchemaException $e) {
         }
 
         $sfConstraints = $schema->compileToSymfonyValidatorConstraint();

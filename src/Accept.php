@@ -52,15 +52,22 @@ class Accept
         return (new Elements\CollectionElement($label))->each($elementSchema);
     }
 
+    /**
+     * @param null $schema
+     * @param string $label
+     *
+     * @return Elements\JsonElement
+     * @throws Exceptions\InvalidJsonSchemaException
+     */
     public static function json($schema = null, string $label = ''): Elements\JsonElement
     {
-        return (new Elements\JsonElement($label))->schema($schema);
+        return (new Elements\JsonElement($schema, $label));
     }
 
-    public static function oneOf(string $label = '', ...$parts): Parts\OneOfPart
-    {
-        return (new Parts\OneOfPart($label));
-    }
+    //public static function oneOf(string $label = '', ...$parts): Parts\OneOfPart
+    //{
+    //    return (new Parts\OneOfPart($label));
+    //}
 
     public static function __callStatic($name, $arguments)
     {

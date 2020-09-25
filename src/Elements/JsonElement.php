@@ -24,6 +24,20 @@ class JsonElement extends AbstractElement
     /** @var AbstractElement[]|string */
     protected $schema;
 
+    /**
+     * JsonElement constructor.
+     *
+     * @param $schema
+     * @param string $label
+     *
+     * @throws InvalidJsonSchemaException
+     */
+    public function __construct($schema, string $label = '')
+    {
+        parent::__construct($label);
+        $this->schema($schema);
+    }
+
     protected ?string $schemaGatheredFromClass = null;
 
     //protected $mode = self::MODE_IGNORE_EXTRA_KEYS;
@@ -59,6 +73,15 @@ class JsonElement extends AbstractElement
         //return $this->isRequired ? new Constraints\Required($collection) : new Constraints\Optional($collection);
     }
 
+    /**
+     * @param array $data
+     * @param bool $ignoreExtraKeys
+     * @param bool $extractExtraKeysToExtraData
+     *
+     * @return array[]
+     * @throws InvalidJsonSchemaException
+     * @throws \CodexSoft\Transmission\Exceptions\IncompatibleInputDataTypeException
+     */
     public function normalizeDataReturningNormalizedAndExtraData(
         array $data,
         bool $ignoreExtraKeys = false,
