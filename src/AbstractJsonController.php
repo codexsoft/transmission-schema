@@ -107,13 +107,14 @@ abstract class AbstractJsonController
     }
 
     /**
+     * Expected request JSON schema
      * @return AbstractElement[]
      */
     abstract protected function inputSchema(): array;
 
-    ///**
-    // * Default response schema?
-    // * @return AbstractElement[]
-    // */
-    //abstract protected function outputSchema(): array;
+    /**
+     * Successful response JSON schema
+     * @return AbstractElement[]
+     */
+    abstract protected function outputSchema(): array;
 }
