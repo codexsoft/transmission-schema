@@ -16,6 +16,7 @@ abstract class AbstractElement
     /** @var Constraint[] */
     protected array $customSfConstraints = [];
 
+    protected string $description;
     protected $example;
     protected string $label = '';
     protected ?string $defaultValue = self::UNDEFINED;
@@ -83,6 +84,25 @@ abstract class AbstractElement
     protected function doNormalizeData($data)
     {
         return $data;
+    }
+
+    /**
+     * @param string $description
+     *
+     * @return static
+     */
+    public function description(string $description)
+    {
+        $this->description = $description;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription(): string
+    {
+        return $this->description;
     }
 
     /**

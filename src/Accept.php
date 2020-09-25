@@ -4,7 +4,6 @@
 namespace CodexSoft\Transmission;
 
 
-use CodexSoft\JsonValidator\Parts;
 use CodexSoft\Transmission\Elements\AbstractElement;
 
 /**
