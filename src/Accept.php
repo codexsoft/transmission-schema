@@ -20,6 +20,7 @@ use CodexSoft\Transmission\Elements\AbstractElement;
  * @method static Elements\IdElement id(string $label = '', array $constraints = [])
  * @method static Elements\UuidElement uuid(string $label = '', array $constraints = [])
  * @method static Elements\ScalarElement scalar(string $label = '', array $constraints = [])
+ * @method static Elements\DateElement date(string $label = '', array $constraints = [])
  */
 class Accept
 {
@@ -37,6 +38,7 @@ class Accept
         'id' => Elements\IdElement::class,
         'uuid' => Elements\UuidElement::class,
         'scalar' => Elements\ScalarElement::class,
+        'date' => Elements\DateElement::class,
     ];
 
     /**

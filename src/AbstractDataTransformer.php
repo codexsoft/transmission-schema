@@ -4,6 +4,7 @@
 namespace CodexSoft\Transmission;
 
 /**
+ * todo: transform method result can be checked formally using schema
  * @method static array transform($entity, ...$context)
  */
 abstract class AbstractDataTransformer
