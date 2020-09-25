@@ -78,6 +78,11 @@ abstract class AbstractJsonController
         return $this->handle($inputData);
     }
 
+    public static function getTags(): array
+    {
+        return [];
+    }
+
     public static function producesResponses(): array
     {
         return [];
@@ -88,9 +93,9 @@ abstract class AbstractJsonController
      */
     abstract protected function inputSchema(): array;
 
-    /**
-     * Default response schema?
-     * @return AbstractElement[]
-     */
-    abstract protected function outputSchema(): array;
+    ///**
+    // * Default response schema?
+    // * @return AbstractElement[]
+    // */
+    //abstract protected function outputSchema(): array;
 }
