@@ -7,38 +7,40 @@ namespace CodexSoft\Transmission;
 use CodexSoft\Transmission\Elements\AbstractElement;
 
 /**
- * @method static Elements\UrlElement url(string $label = '', array $constraints = [])
- * @method static Elements\StringElement text(string $label = '', array $constraints = [])
- * @method static Elements\StringElement string(string $label = '', array $constraints = [])
- * @method static Elements\EmailElement email(string $label = '', array $constraints = [])
- * @method static Elements\IntegerElement integer(string $label = '', array $constraints = [])
- * @method static Elements\FloatElement float(string $label = '', array $constraints = [])
- * @method static Elements\BoolElement bool(string $label = '', array $constraints = [])
- * @method static Elements\FloatElement double(string $label = '', array $constraints = [])
- * @method static Elements\NumberElement number(string $label = '', array $constraints = [])
- * @method static Elements\TimestampElement timestamp(string $label = '', array $constraints = [])
- * @method static Elements\IdElement id(string $label = '', array $constraints = [])
- * @method static Elements\UuidElement uuid(string $label = '', array $constraints = [])
- * @method static Elements\ScalarElement scalar(string $label = '', array $constraints = [])
- * @method static Elements\DateElement date(string $label = '', array $constraints = [])
+ * @method static Elements\BoolElement bool(string $label = '')
+ * @method static Elements\DateElement date(string $label = '')
+ * @method static Elements\EmailElement email(string $label = '')
+ * @method static Elements\FloatElement double(string $label = '')
+ * @method static Elements\FloatElement float(string $label = '')
+ * @method static Elements\IdElement id(string $label = '')
+ * @method static Elements\IntegerElement integer(string $label = '')
+ * @method static Elements\NumberElement number(string $label = '')
+ * @method static Elements\ScalarElement scalar(string $label = '')
+ * @method static Elements\StringElement string(string $label = '')
+ * @method static Elements\StringElement text(string $label = '')
+ * @method static Elements\TimeElement time(string $label = '')
+ * @method static Elements\TimestampElement timestamp(string $label = '')
+ * @method static Elements\UrlElement url(string $label = '')
+ * @method static Elements\UuidElement uuid(string $label = '')
  */
 class Accept
 {
     protected const MAP = [
-        'url' => Elements\UrlElement::class,
-        'text' => Elements\StringElement::class,
-        'string' => Elements\StringElement::class,
-        'email' => Elements\EmailElement::class,
-        'integer' => Elements\IntegerElement::class,
-        'float' => Elements\FloatElement::class,
         'bool' => Elements\BoolElement::class,
-        'double' => Elements\FloatElement::class,
-        'number' => Elements\NumberElement::class,
-        'timestamp' => Elements\TimestampElement::class,
-        'id' => Elements\IdElement::class,
-        'uuid' => Elements\UuidElement::class,
-        'scalar' => Elements\ScalarElement::class,
         'date' => Elements\DateElement::class,
+        'double' => Elements\FloatElement::class,
+        'email' => Elements\EmailElement::class,
+        'float' => Elements\FloatElement::class,
+        'id' => Elements\IdElement::class,
+        'integer' => Elements\IntegerElement::class,
+        'number' => Elements\NumberElement::class,
+        'scalar' => Elements\ScalarElement::class,
+        'string' => Elements\StringElement::class,
+        'text' => Elements\StringElement::class,
+        'time' => Elements\TimeElement::class,
+        'timestamp' => Elements\TimestampElement::class,
+        'url' => Elements\UrlElement::class,
+        'uuid' => Elements\UuidElement::class,
     ];
 
     /**
@@ -54,21 +56,16 @@ class Accept
     }
 
     /**
-     * @param null $schema
+     * @param AbstractElement[]|string $schema
      * @param string $label
      *
      * @return Elements\JsonElement
      * @throws Exceptions\InvalidJsonSchemaException
      */
-    public static function json($schema = null, string $label = ''): Elements\JsonElement
+    public static function json($schema, string $label = ''): Elements\JsonElement
     {
         return (new Elements\JsonElement($schema, $label));
     }
-
-    //public static function oneOf(string $label = '', ...$parts): Parts\OneOfPart
-    //{
-    //    return (new Parts\OneOfPart($label));
-    //}
 
     public static function __callStatic($name, $arguments)
     {

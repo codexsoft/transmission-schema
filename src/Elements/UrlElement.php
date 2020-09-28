@@ -3,7 +3,6 @@
 
 namespace CodexSoft\Transmission\Elements;
 
-use CodexSoft\Transmission\Elements\StringElement;
 use Symfony\Component\Validator\Constraints;
 
 class UrlElement extends StringElement

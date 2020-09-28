@@ -3,6 +3,7 @@
 
 namespace CodexSoft\Transmission\Elements;
 
+use CodexSoft\Transmission\Exceptions\IncompatibleInputDataTypeException;
 use CodexSoft\Transmission\Exceptions\InvalidCollectionElementSchemaException;
 use CodexSoft\Transmission\Exceptions\InvalidJsonSchemaException;
 use CodexSoft\Transmission\JsonSchemaInterface;
@@ -22,6 +23,7 @@ class CollectionElement extends AbstractElement
 
     private ?int $minCount = null;
     private ?int $maxCount = null;
+    private bool $elementsMustBeUnique = false;
 
     /**
      * @param AbstractElement|string|null $elementSchema
@@ -53,12 +55,25 @@ class CollectionElement extends AbstractElement
         return $this;
     }
 
+    /**
+     * @param bool $elementsMustBeUnique
+     *
+     * @return static
+     */
+    public function unique(bool $elementsMustBeUnique = true)
+    {
+        $this->elementsMustBeUnique = $elementsMustBeUnique;
+        return $this;
+    }
+
+    /**
+     * @param $data
+     *
+     * @return array|mixed
+     * @throws IncompatibleInputDataTypeException
+     */
     protected function doNormalizeData($data)
     {
-        //if (!\is_array($data)) {
-        //    throw new IncompatibleInputDataTypeException('Collection type allows only array as input data type');
-        //}
-
         $normalizedData = [];
         if ($this->elementSchema) {
             foreach ($data as $datum) {
@@ -85,22 +100,17 @@ class CollectionElement extends AbstractElement
             $constraints[] = new Constraints\Count($countRestrictions);
         }
 
+        if ($this->elementsMustBeUnique) {
+            $constraints[] = new Constraints\Unique();
+        }
+
         if ($this->elementSchema) {
-            //if ($this->elementSchema instanceof AbstractPart) {
-            //    $compiledElementSchema = $this->elementSchema->compileToSymfonyValidatorConstraint();
-            //} else {
-            //    $compiledElementSchema = $this->elementSchema;
-            //}
             $compiledElementSchema = $this->elementSchema->compileToSymfonyValidatorConstraint();
             $constraints[] = new Constraints\All(['constraints' => $compiledElementSchema]);
-            //$constraints[] = new Constraints\All($compiledElementSchema);
-            //$constraints[] = new Constraints\All(['constraints' => $compiledElementSchema]);
         }
 
         return $constraints;
     }
-
-    //public function compileToSymfonyValidatorConstraint(): Constraint
 
     /**
      * @return Constraint|Constraint[]

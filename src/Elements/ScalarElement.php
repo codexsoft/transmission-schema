@@ -22,6 +22,12 @@ class ScalarElement extends AbstractElement
         return $constraints;
     }
 
+    /**
+     * @param $data
+     *
+     * @return bool|float|int|mixed|string|null
+     * @throws IncompatibleInputDataTypeException
+     */
     protected function doNormalizeData($data)
     {
         $data = parent::doNormalizeData($data);

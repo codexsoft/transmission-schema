@@ -69,8 +69,11 @@ abstract class AbstractElement
             return null;
         }
 
+        /**
+         * NULL can be normalized to empty string or to 0. This is default behaviour.
+         * To prevent this, strict type checking must be enabled.
+         */
         if ($this->strictTypeCheck && $data === null && !$this->isNullable) {
-        //if ($data === null && !$this->isNullable) {
             throw new IncompatibleInputDataTypeException('NULL is not acceptable value');
         }
 
