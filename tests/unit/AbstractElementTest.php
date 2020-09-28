@@ -3,11 +3,47 @@
 namespace CodexSoft\Transmission;
 
 use CodexSoft\Transmission\AbstractElementTest\EmailStruct;
+use CodexSoft\Transmission\Elements\AbstractElement;
 use PHPUnit\Framework\TestCase;
 
-class AbstractElementTest extends TestCase
+abstract class AbstractElementTest extends TestCase
 {
-    public function testNormalizeData()
+    abstract public function dataProviderNormalizeData(): array;
+
+    /**
+     * @dataProvider dataProviderNormalizeData
+     *
+     * @param $input
+     * @param AbstractElement $schema
+     * @param mixed|null $expectedOutput
+     *
+     * @param string|null $exceptionClass
+     */
+    public function testNormalizeData($input, AbstractElement $schema, $expectedOutput, ?string $exceptionClass): void
+    {
+        try {
+            $normalizedData = $schema->normalizeData($input);
+            //self::assertSame($expectedOutput, $normalizedData);
+        } catch (\Throwable $e) {
+            if ($exceptionClass) {
+                self::assertInstanceOf($exceptionClass, $e);
+            } else {
+                throw new \RuntimeException('Unexpected exception for data '.\var_export($input, true).': '.$e);
+            }
+
+            return;
+        }
+
+        //self::expectException()
+
+        if ($exceptionClass) {
+            throw new \RuntimeException('Expected exception for data '.\var_export($input, true).' '.$exceptionClass.' was not thrown');
+        }
+
+        self::assertSame($expectedOutput, $normalizedData);
+    }
+
+    public function xxxtestNormalizeData()
     {
         $testData = [
             [null, Accept::bool()->strict()->nullable(), null],

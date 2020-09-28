@@ -2,16 +2,12 @@
 
 namespace CodexSoft\Transmission\Elements;
 
+use CodexSoft\Transmission\AbstractElementTest;
 use CodexSoft\Transmission\Accept;
 use CodexSoft\Transmission\Exceptions\IncompatibleInputDataTypeException;
-use PHPUnit\Framework\TestCase;
 
-class BoolElementTest extends TestCase
+class BoolElementTest extends AbstractElementTest
 {
-
-    //public function testCompileToSymfonyValidatorConstraint()
-    //{
-    //}
 
     public function dataProviderNormalizeData(): array
     {
@@ -21,7 +17,7 @@ class BoolElementTest extends TestCase
         $strictBoolean = Accept::bool()->strict();
 
         return [
-            [[], $boolean, false, IncompatibleInputDataTypeException::class],
+            [[], $boolean, null, IncompatibleInputDataTypeException::class],
             [0.0, $boolean, false, null],
             [1.42, $boolean, true, null],
             ['null', $boolean, true, null],
@@ -36,11 +32,11 @@ class BoolElementTest extends TestCase
             [-1, $nullableBoolean, true, null],
             [1, $nullableBoolean, true, null],
             [0, $nullableBoolean, false, null],
-            [[], $nullableBoolean, false, IncompatibleInputDataTypeException::class],
+            [[], $nullableBoolean, null, IncompatibleInputDataTypeException::class],
 
-            [1.52, $nullableStrictBoolean, false, IncompatibleInputDataTypeException::class],
-            ['', $nullableStrictBoolean, false, IncompatibleInputDataTypeException::class],
-            [0, $nullableStrictBoolean, false, IncompatibleInputDataTypeException::class],
+            [1.52, $nullableStrictBoolean, null, IncompatibleInputDataTypeException::class],
+            ['', $nullableStrictBoolean, null, IncompatibleInputDataTypeException::class],
+            [0, $nullableStrictBoolean, null, IncompatibleInputDataTypeException::class],
             [false, $nullableStrictBoolean, false, null],
             [true, $nullableStrictBoolean, true, null],
             [null, $nullableStrictBoolean, null, null],
@@ -50,45 +46,14 @@ class BoolElementTest extends TestCase
             [null, $strictBoolean, null, IncompatibleInputDataTypeException::class],
             [true, $strictBoolean, true, null],
             [false, $strictBoolean, false, null],
-            [0, $strictBoolean, false, IncompatibleInputDataTypeException::class],
-            [1, $strictBoolean, true, IncompatibleInputDataTypeException::class],
-            [1.5, $strictBoolean, true, IncompatibleInputDataTypeException::class],
-            [0.0, $strictBoolean, false, IncompatibleInputDataTypeException::class],
-            ['1', $strictBoolean, false, IncompatibleInputDataTypeException::class],
-            ['true', $strictBoolean, false, IncompatibleInputDataTypeException::class],
-            ['false', $strictBoolean, false, IncompatibleInputDataTypeException::class],
-            [[], $strictBoolean, false, IncompatibleInputDataTypeException::class],
+            [0, $strictBoolean, null, IncompatibleInputDataTypeException::class],
+            [1, $strictBoolean, null, IncompatibleInputDataTypeException::class],
+            [1.5, $strictBoolean, null, IncompatibleInputDataTypeException::class],
+            [0.0, $strictBoolean, null, IncompatibleInputDataTypeException::class],
+            ['1', $strictBoolean, null, IncompatibleInputDataTypeException::class],
+            ['true', $strictBoolean, null, IncompatibleInputDataTypeException::class],
+            ['false', $strictBoolean, null, IncompatibleInputDataTypeException::class],
+            [[], $strictBoolean, null, IncompatibleInputDataTypeException::class],
         ];
-    }
-
-    /**
-     * @dataProvider dataProviderNormalizeData
-     *
-     * @param $input
-     * @param BoolElement $schema
-     * @param bool|null $expectedOutput
-     *
-     * @param string|null $exceptionClass
-     */
-    public function testNormalizeData($input, BoolElement $schema, ?bool $expectedOutput, ?string $exceptionClass)
-    {
-        try {
-            $normalizedData = $schema->normalizeData($input);
-            self::assertSame($expectedOutput, $normalizedData);
-        } catch (\Throwable $e) {
-            if ($exceptionClass) {
-                self::assertInstanceOf($exceptionClass, $e);
-            } else {
-                throw new \RuntimeException('Unexpected exception for data '.\var_export($input, true).' '.$e);
-            }
-
-            return;
-        }
-
-        //self::expectException()
-
-        if ($exceptionClass) {
-            throw new \RuntimeException('Expected exception for data '.\var_export($input, true).' '.$exceptionClass.' was not thrown');
-        }
     }
 }
