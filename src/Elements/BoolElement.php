@@ -19,6 +19,7 @@ class BoolElement extends ScalarElement
      */
     protected function doNormalizeData($data): ?bool
     {
+        $data = parent::doNormalizeData($data);
         return (bool) $data;
     }
 }

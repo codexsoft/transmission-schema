@@ -12,6 +12,8 @@ class StringElement extends ScalarElement
     protected ?array $acceptedTypes = ['string'];
     protected $example = 'Some text sample';
 
+    protected bool $isNotBlank = false;
+
     /*
      * Processing
      */
@@ -28,12 +30,22 @@ class StringElement extends ScalarElement
     protected bool $noWhiteSpace = false;
 
     /**
+     * @return static
+     */
+    public function notBlank()
+    {
+        $this->isNotBlank = true;
+        return $this;
+    }
+
+    /**
      * @param $data
      *
      * @return string
      */
     public function doNormalizeData($data): ?string
     {
+        $data = parent::doNormalizeData($data);
         $data = (string) $data;
 
         if ($this->stripTags) {
@@ -82,6 +94,10 @@ class StringElement extends ScalarElement
         }
         if ($lengthOptions) {
             $constraints[] = new Constraints\Length($lengthOptions);
+        }
+
+        if ($this->isNotBlank) {
+            $constraints[] = new Constraints\NotBlank();
         }
 
         return $constraints;

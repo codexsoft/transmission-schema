@@ -50,6 +50,7 @@ class CollectionElement extends AbstractElement
     protected function doNormalizeData($data)
     {
         if (!\is_array($data)) {
+            // todo: throw exception?
             return $data;
         }
 

@@ -18,6 +18,7 @@ class IntegerElement extends NumberElement
      */
     public function doNormalizeData($data): ?int
     {
+        $data = parent::doNormalizeData($data);
         return (int) $data;
     }
 }

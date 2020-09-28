@@ -4,6 +4,7 @@
 namespace CodexSoft\Transmission\Elements;
 
 use CodexSoft\Transmission\Elements\AbstractElement;
+use CodexSoft\Transmission\Exceptions\IncompatibleInputDataTypeException;
 use Symfony\Component\Validator\Constraints;
 
 class ScalarElement extends AbstractElement
@@ -19,6 +20,17 @@ class ScalarElement extends AbstractElement
         }
 
         return $constraints;
+    }
+
+    protected function doNormalizeData($data)
+    {
+        $data = parent::doNormalizeData($data);
+
+        if ($data !== null && !\is_scalar($data)) {
+            throw new IncompatibleInputDataTypeException(\var_export($data, true).' is not scalar');
+        }
+
+        return $data;
     }
 
     /**

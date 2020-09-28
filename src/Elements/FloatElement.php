@@ -16,6 +16,7 @@ class FloatElement extends NumberElement
      */
     public function doNormalizeData($data): ?float
     {
+        $data = parent::doNormalizeData($data);
         return (double) $data;
     }
 }

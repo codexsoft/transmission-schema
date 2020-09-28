@@ -23,7 +23,6 @@ abstract class AbstractElement
 
     protected bool $isRequired = true;
     protected bool $isNullable = false;
-    protected bool $isNotBlank = false;
     protected ?array $acceptedTypes = null;
 
     /**
@@ -68,6 +67,10 @@ abstract class AbstractElement
     {
         if ($data === null && $this->isNullable) {
             return null;
+        }
+
+        if ($this->strict && $data === null && !$this->isNullable) {
+            throw new IncompatibleInputDataTypeException('NULL is not acceptable value');
         }
 
         //if ($this->strict && \is_array($this->acceptedTypes) && !$this->valueHasType($data, $this->acceptedTypes)) {
@@ -234,16 +237,6 @@ abstract class AbstractElement
     public function nullable()
     {
         $this->isNullable = true;
-        return $this;
-    }
-
-    /**
-     * @return static
-     */
-    public function notBlank()
-    {
-        $this->isNotBlank = true;
-        //$this->addConstraint(new Constraints\NotBlank());
         return $this;
     }
 
