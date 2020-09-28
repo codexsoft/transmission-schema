@@ -29,7 +29,7 @@ abstract class AbstractElement
      * Input data must strictly have one of whitelisted types
      * @var bool
      */
-    protected bool $strict = false;
+    protected bool $strictTypeCheck = false;
 
     /**
      * Should exception be thrown on first violation or not
@@ -69,15 +69,12 @@ abstract class AbstractElement
             return null;
         }
 
-        if ($this->strict && $data === null && !$this->isNullable) {
+        if ($this->strictTypeCheck && $data === null && !$this->isNullable) {
+        //if ($data === null && !$this->isNullable) {
             throw new IncompatibleInputDataTypeException('NULL is not acceptable value');
         }
 
-        //if ($this->strict && \is_array($this->acceptedTypes) && !$this->valueHasType($data, $this->acceptedTypes)) {
-        //    throw new CouldNotNormalizeDataException();
-        //}
-
-        if ($this->strict && \is_array($this->acceptedTypes) && !$this->valueHasType($data, $this->acceptedTypes)) {
+        if ($this->strictTypeCheck && \is_array($this->acceptedTypes) && $this->acceptedTypes && !$this->valueHasType($data, $this->acceptedTypes)) {
             throw new IncompatibleInputDataTypeException('Value must be one of accepted types: {'.\implode(', ', $this->acceptedTypes).'} but '.\gettype($data).' given');
         }
 
@@ -191,7 +188,7 @@ abstract class AbstractElement
             $constraints[] = new Constraints\NotNull();
         }
 
-        if ($this->strict && $this->acceptedTypes) {
+        if ($this->strictTypeCheck && $this->acceptedTypes) {
             $constraints[] = new Constraints\Type(['type' => $this->acceptedTypes]);
         }
 
@@ -295,7 +292,7 @@ abstract class AbstractElement
      */
     public function strict(bool $value = true)
     {
-        $this->strict = $value;
+        $this->strictTypeCheck = $value;
         return $this;
     }
 

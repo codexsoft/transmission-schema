@@ -3,7 +3,6 @@
 
 namespace CodexSoft\Transmission\Elements;
 
-use CodexSoft\Transmission\Exceptions\IncompatibleInputDataTypeException;
 use CodexSoft\Transmission\Exceptions\InvalidCollectionElementSchemaException;
 use CodexSoft\Transmission\Exceptions\InvalidJsonSchemaException;
 use CodexSoft\Transmission\JsonSchemaInterface;
@@ -19,7 +18,7 @@ class CollectionElement extends AbstractElement
 
     private ?AbstractElement $elementSchema = null;
     protected ?string $schemaGatheredFromClass = null;
-    protected bool $strict = true;
+    protected bool $strictTypeCheck = true;
 
     private ?int $minCount = null;
     private ?int $maxCount = null;

@@ -4,7 +4,6 @@
 namespace CodexSoft\Transmission\Elements;
 
 
-use CodexSoft\Code\Classes\Classes;
 use CodexSoft\Transmission\Exceptions\InvalidJsonSchemaException;
 use CodexSoft\Transmission\JsonSchemaInterface;
 use Symfony\Component\Validator\Constraints;
@@ -16,6 +15,7 @@ use Symfony\Component\Validator\Constraint;
 class JsonElement extends AbstractElement
 {
     protected ?array $acceptedTypes = ['array'];
+    protected bool $strictTypeCheck = true;
     //public const MODE_LEAVE_EXTRA_KEYS = 1;
     //public const MODE_EXTRACT_EXTRA_KEYS = 2;
     //public const MODE_IGNORE_EXTRA_KEYS = 3;
@@ -153,6 +153,10 @@ class JsonElement extends AbstractElement
     {
         //if (!\is_array($data)) {
         //    throw new CouldNotNormalizeDataException();
+        //}
+
+        //if ($data === null) {
+        //    return null;
         //}
 
         [$normalizedData, $extraData] = $this->normalizeDataReturningNormalizedAndExtraData($data);

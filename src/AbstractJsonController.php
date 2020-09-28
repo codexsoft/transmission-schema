@@ -64,7 +64,7 @@ abstract class AbstractJsonController
         }
 
         try {
-            [$normalizedData, $extraData] = $schema->normalizeDataReturningNormalizedAndExtraData();
+            [$normalizedData, $extraData] = $schema->normalizeDataReturningNormalizedAndExtraData($inputData);
             //$normalizedData = $schema->normalizeData($inputData);
         } catch (IncompatibleInputDataTypeException $e) {
             return new JsonResponse([], Response::HTTP_NOT_ACCEPTABLE);
