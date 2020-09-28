@@ -3,7 +3,9 @@
 
 namespace CodexSoft\Transmission\Elements;
 
+use CodexSoft\Transmission\Exceptions\IncompatibleInputDataTypeException;
 use CodexSoft\Transmission\Exceptions\InvalidCollectionElementSchemaException;
+use CodexSoft\Transmission\Exceptions\InvalidJsonSchemaException;
 use CodexSoft\Transmission\JsonSchemaInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints;
@@ -17,6 +19,7 @@ class CollectionElement extends AbstractElement
 
     private ?AbstractElement $elementSchema = null;
     protected ?string $schemaGatheredFromClass = null;
+    protected bool $strict = true;
 
     private ?int $minCount = null;
     private ?int $maxCount = null;
@@ -35,7 +38,11 @@ class CollectionElement extends AbstractElement
                 throw new InvalidCollectionElementSchemaException("Element schema class $schemaClass does not implement ".JsonSchemaInterface::class);
             }
             /** @var JsonSchemaInterface $schemaClass */
-            $this->elementSchema = $schemaClass::createSchema();
+            try {
+                $this->elementSchema = new JsonElement($schemaClass::createSchema());
+            } catch (InvalidJsonSchemaException $e) {
+                throw new InvalidCollectionElementSchemaException("Element schema class $schemaClass contains invalid schema");
+            }
             $this->schemaGatheredFromClass = $schemaClass;
         } elseif ($elementSchema instanceof AbstractElement) {
             $this->elementSchema = $elementSchema;
@@ -49,10 +56,9 @@ class CollectionElement extends AbstractElement
 
     protected function doNormalizeData($data)
     {
-        if (!\is_array($data)) {
-            // todo: throw exception?
-            return $data;
-        }
+        //if (!\is_array($data)) {
+        //    throw new IncompatibleInputDataTypeException('Collection type allows only array as input data type');
+        //}
 
         $normalizedData = [];
         if ($this->elementSchema) {
