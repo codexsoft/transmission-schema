@@ -3,7 +3,6 @@
 
 namespace CodexSoft\Transmission\Elements;
 
-use CodexSoft\Transmission\Elements\ScalarElement;
 use Symfony\Component\Validator\Constraints;
 
 class StringElement extends ScalarElement

@@ -3,11 +3,11 @@
 
 namespace CodexSoft\Transmission\Elements;
 
-use CodexSoft\Transmission\Elements\ScalarElement;
 use Symfony\Component\Validator\Constraints;
 
 class NumberElement extends ScalarElement
 {
+    protected ?array $acceptedTypes = ['integer', 'float', 'double'];
     protected $example = 42.5;
     protected $lessThanOrEqual = null;
     protected $lessThan = null;
