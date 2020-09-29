@@ -6,8 +6,10 @@ namespace CodexSoft\Transmission\Elements;
 
 use CodexSoft\Transmission\Exceptions\IncompatibleInputDataTypeException;
 use CodexSoft\Transmission\Exceptions\ValidationDetectedViolationsException;
+use CodexSoft\Transmission\ValidationResult;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints;
+use Symfony\Component\Validator\Validation;
 
 abstract class AbstractElement
 {
@@ -135,6 +137,7 @@ abstract class AbstractElement
      * @return mixed|null
      * @throws IncompatibleInputDataTypeException
      * @throws ValidationDetectedViolationsException
+     * @deprecated
      */
     final public function validateAndReturnData($data, bool $validateNormalizedData = true)
     {
@@ -147,6 +150,14 @@ abstract class AbstractElement
         return $normalizedData;
     }
 
+    /**
+     * @param $data
+     * @param bool $validateNormalizedData
+     *
+     * @return array
+     * @throws IncompatibleInputDataTypeException
+     * @deprecated
+     */
     final public function validate($data, bool $validateNormalizedData = true)
     {
         $normalizedData = $this->normalizeData($data);
@@ -163,8 +174,26 @@ abstract class AbstractElement
     /**
      * @param $data
      *
+     * @return ValidationResult
+     * @throws IncompatibleInputDataTypeException
+     */
+    public function getValidatedNormalizedData($data): ValidationResult
+    {
+        $normalizedData = $this->normalizeData($data);
+
+        $sfConstraints = $this->compileToSymfonyValidatorConstraint();
+        $validator = Validation::createValidator();
+        $violations = $validator->validate($normalizedData, $sfConstraints);
+
+        return new ValidationResult($normalizedData, $violations);
+    }
+
+    /**
+     * @param $data
+     *
      * @return mixed
      * @throws ValidationDetectedViolationsException
+     * @deprecated
      */
     abstract protected function doValidate($data);
 
@@ -205,21 +234,9 @@ abstract class AbstractElement
      */
     public function compileToSymfonyValidatorConstraint()
     {
-        //$constraints = new Constraints\All(\array_merge($this->generateSfConstraints(), $this->customSfConstraints));
-        //$constraints = new Constraints\All([
-        //    'constraints' => \array_merge($this->generateSfConstraints(), $this->customSfConstraints),
-        //]);
-
         $constraints = \array_merge($this->generateSfConstraints(), $this->customSfConstraints);
 
         return $this->isRequired ? $constraints : new Constraints\Optional($constraints);
-        //return $this->isRequired ? new Constraints\Required($constraints) : new Constraints\Optional($constraints);
-
-        //if ($this->isRequired) {
-        //    return new Constraints\Required($constraints);
-        //}
-
-        //return new Constraints\Optional($constraints);
     }
 
     /**

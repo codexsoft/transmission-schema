@@ -3,6 +3,8 @@
 
 namespace CodexSoft\Transmission\Elements;
 
+use CodexSoft\Transmission\Constraints\ContainsAlphanumeric;
+use CodexSoft\Transmission\Constraints\ContainsNoWhitespaces;
 use Symfony\Component\Validator\Constraints;
 
 class StringElement extends ScalarElement
@@ -11,14 +13,12 @@ class StringElement extends ScalarElement
     protected ?array $acceptedTypes = ['string'];
     protected $example = 'Some text sample';
 
-    protected bool $isNotBlank = false;
-
     /*
      * Processing
      */
 
     protected bool $stripTags = false;
-    protected bool $trim = true;
+    protected bool $trim = false;
 
     /*
      * Constraints
@@ -27,6 +27,8 @@ class StringElement extends ScalarElement
     protected ?int $minLength = null;
     protected ?int $maxLength = null;
     protected bool $noWhiteSpace = false;
+    protected bool $isNotBlank = false;
+    protected bool $isAlphaNumeric = false;
 
     /**
      * @return static
@@ -80,23 +82,44 @@ class StringElement extends ScalarElement
         return $this;
     }
 
+    /**
+     * @param bool $isAlphaNumeric
+     *
+     * @return static
+     */
+    public function alnum(bool $isAlphaNumeric = true)
+    {
+        $this->isAlphaNumeric = $isAlphaNumeric;
+        return $this;
+    }
+
     protected function generateSfConstraints(): array
     {
         $constraints = parent::generateSfConstraints();
 
         $lengthOptions = [];
         if ($this->minLength !== null) {
-            $lengthOptions['min'] = $this->minLength;
+            $constraints[] = new Constraints\Length(['min' => $this->minLength]);
+            //$lengthOptions['min'] = $this->minLength;
         }
         if ($this->maxLength !== null) {
-            $lengthOptions['max'] = $this->maxLength;
+            $constraints[] = new Constraints\Length(['max' => $this->maxLength]);
+            //$lengthOptions['max'] = $this->maxLength;
         }
-        if ($lengthOptions) {
-            $constraints[] = new Constraints\Length($lengthOptions);
-        }
+        //if ($lengthOptions) {
+        //    $constraints[] = new Constraints\Length($lengthOptions);
+        //}
 
         if ($this->isNotBlank) {
             $constraints[] = new Constraints\NotBlank();
+        }
+
+        if ($this->noWhiteSpace) {
+            $constraints[] = new ContainsNoWhitespaces();
+        }
+
+        if ($this->isAlphaNumeric) {
+            $constraints[] = new ContainsAlphanumeric();
         }
 
         return $constraints;

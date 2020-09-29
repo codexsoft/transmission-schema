@@ -6,8 +6,10 @@ namespace CodexSoft\Transmission\Elements;
 
 use CodexSoft\Transmission\Exceptions\InvalidJsonSchemaException;
 use CodexSoft\Transmission\JsonSchemaInterface;
+use CodexSoft\Transmission\ValidationResult;
 use Symfony\Component\Validator\Constraints;
 use Symfony\Component\Validator\Constraint;
+use Symfony\Component\Validator\Validation;
 
 /**
  * Represents JSON object
@@ -56,20 +58,12 @@ class JsonElement extends AbstractElement
             }
         }
 
-        //$collection = new Constraints\Collection($constraints);
         $collection = new Constraints\Collection([
             'fields' => $constraints,
             'allowMissingFields' => false,
         ]);
 
-        //if (!$this->isRequired) {
-        //    return new Constraints\Required($result);
-        //}
-
-        //return new Constraints\Optional($result);
-
         return $this->isRequired ? $collection : new Constraints\Optional($collection);
-        //return $this->isRequired ? new Constraints\Required($collection) : new Constraints\Optional($collection);
     }
 
     /**
@@ -130,6 +124,7 @@ class JsonElement extends AbstractElement
      * @param $data
      *
      * @throws \CodexSoft\Transmission\Exceptions\ValidationDetectedViolationsException
+     * @deprecated
      */
     protected function doValidate($data)
     {
@@ -151,16 +146,19 @@ class JsonElement extends AbstractElement
      */
     protected function doNormalizeData($data)
     {
-        //if (!\is_array($data)) {
-        //    throw new CouldNotNormalizeDataException();
-        //}
-
-        //if ($data === null) {
-        //    return null;
-        //}
-
         [$normalizedData, $extraData] = $this->normalizeDataReturningNormalizedAndExtraData($data);
         return $normalizedData;
+    }
+
+    public function getValidatedNormalizedData($data): ValidationResult
+    {
+        [$normalizedData, $extraData] = $this->normalizeDataReturningNormalizedAndExtraData($data);
+
+        $sfConstraints = $this->compileToSymfonyValidatorConstraint();
+        $validator = Validation::createValidator();
+        $violations = $validator->validate($normalizedData, $sfConstraints);
+
+        return new ValidationResult($normalizedData, $violations, $extraData);
     }
 
     /**

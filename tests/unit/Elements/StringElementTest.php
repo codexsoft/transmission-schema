@@ -8,6 +8,46 @@ use CodexSoft\Transmission\Exceptions\IncompatibleInputDataTypeException;
 
 class StringElementTest extends AbstractElementTest
 {
+    public function dataProviderValidateData(): array
+    {
+        return [
+            ['12', Accept::string()->alnum(), true],
+            [' 12  ', Accept::string()->alnum(), false],
+            [' 12_  ', Accept::string()->alnum(), false],
+            ['12_', Accept::string()->alnum(), false],
+            [' 12  ', Accept::string()->trim()->minLength(3), false],
+            [' 12  ', Accept::string()->minLength(3), true],
+            ['12', Accept::string()->minLength(3), false],
+            ['123', Accept::string()->minLength(3), true],
+            ['123456', Accept::string()->maxLength(5), false],
+            ['12345', Accept::string()->maxLength(5), true],
+            ['  123456', Accept::string()->maxLength(5), false],
+            ['  ', Accept::string()->notBlank(), true],
+            ['  ', Accept::string()->trim()->notBlank(), false],
+            [' abc ', Accept::string()->trim()->noWhiteSpace(), true],
+            ['abc', Accept::string()->noWhiteSpace(), true],
+            ['a b c', Accept::string()->noWhiteSpace(), false],
+        ];
+    }
+
+    /**
+     * @dataProvider dataProviderValidateData
+     *
+     * @param $input
+     * @param AbstractElement $schema
+     * @param bool $expectedIsValid
+     *
+     * @throws IncompatibleInputDataTypeException
+     */
+    public function testValidateData($input, AbstractElement $schema, bool $expectedIsValid): void
+    {
+        $validationResult = $schema->getValidatedNormalizedData($input);
+        //foreach ($validationResult->getViolations() as $violation) {
+        //    var_dump($violation->getPropertyPath().': '.$violation->getMessage());
+        //}
+        self::assertEquals($validationResult->getViolations()->count() === 0, $expectedIsValid);
+    }
+
     public function dataProviderNormalizeData(): array
     {
         $string = Accept::string();
