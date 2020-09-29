@@ -9,6 +9,7 @@ use CodexSoft\Transmission\Elements\JsonElement;
 use CodexSoft\Transmission\Exceptions\IncompatibleInputDataTypeException;
 use CodexSoft\Transmission\Exceptions\GenericException;
 use CodexSoft\Transmission\Exceptions\InvalidJsonSchemaException;
+use CodexSoft\Transmission\Schemas\InvalidRequestBodySchema;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -96,12 +97,24 @@ abstract class AbstractJsonController
         return $response;
     }
 
-    public static function getTags(): array
+    public static function getOpenApiTags(): array
     {
         return [];
     }
 
-    public static function producesResponses(): array
+    protected static function defaultAlternativeResponses(): array
+    {
+        return [
+            Response::HTTP_BAD_REQUEST => InvalidRequestBodySchema::class,
+        ];
+    }
+
+    public static function allAlternativeResponses(): array
+    {
+        return \array_merge(static::defaultAlternativeResponses(), static::alternativeResponses());
+    }
+
+    public static function alternativeResponses(): array
     {
         return [];
     }

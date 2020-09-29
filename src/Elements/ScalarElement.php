@@ -10,7 +10,7 @@ class ScalarElement extends AbstractElement
 {
     protected $example = 'value';
     protected array $choicesSourceArray = [];
-    protected string $pattern;
+    protected ?string $pattern = null;
 
     public function toOpenApiV2(): array
     {
@@ -28,7 +28,6 @@ class ScalarElement extends AbstractElement
     }
 
     /**
-     * @deprecated currently has no effect todo: implement
      * @param string $pattern
      *
      * @return static
@@ -77,21 +76,21 @@ class ScalarElement extends AbstractElement
         return $this;
     }
 
-    /**
-     * @param $data
-     *
-     * @return mixed|void
-     * @throws \CodexSoft\Transmission\Exceptions\ValidationDetectedViolationsException
-     * @deprecated
-     */
-    protected function doValidate($data)
-    {
-        if (!\is_scalar($data)) {
-            $this->reportViolation("$data must be scalar");
-        }
-
-        if ($this->choicesSourceArray && !\in_array($data, $this->choicesSourceArray)) {
-            $this->reportViolation("Not acceptable value $data");
-        }
-    }
+    ///**
+    // * @param $data
+    // *
+    // * @return mixed|void
+    // * @throws \CodexSoft\Transmission\Exceptions\ValidationDetectedViolationsException
+    // * @deprecated
+    // */
+    //protected function doValidate($data)
+    //{
+    //    if (!\is_scalar($data)) {
+    //        $this->reportViolation("$data must be scalar");
+    //    }
+    //
+    //    if ($this->choicesSourceArray && !\in_array($data, $this->choicesSourceArray)) {
+    //        $this->reportViolation("Not acceptable value $data");
+    //    }
+    //}
 }

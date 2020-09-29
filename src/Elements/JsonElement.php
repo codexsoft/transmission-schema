@@ -121,24 +121,24 @@ class JsonElement extends AbstractElement
         return [$normalizedData, $extraData];
     }
 
-    /**
-     * @param $data
-     *
-     * @throws \CodexSoft\Transmission\Exceptions\ValidationDetectedViolationsException
-     * @deprecated
-     */
-    protected function doValidate($data)
-    {
-        if (!\is_array($data)) {
-            $this->reportViolation('Value must be JSON object, '.\gettype($data).' given');
-        }
-
-        foreach ($this->schema as $key => $value) {
-            if ($this->isRequired && !\array_key_exists($key, $data)) {
-                $this->reportViolation("Required key $key is missing");
-            }
-        }
-    }
+    ///**
+    // * @param $data
+    // *
+    // * @throws \CodexSoft\Transmission\Exceptions\ValidationDetectedViolationsException
+    // * @deprecated
+    // */
+    //protected function doValidate($data)
+    //{
+    //    if (!\is_array($data)) {
+    //        $this->reportViolation('Value must be JSON object, '.\gettype($data).' given');
+    //    }
+    //
+    //    foreach ($this->schema as $key => $value) {
+    //        if ($this->isRequired && !\array_key_exists($key, $data)) {
+    //            $this->reportViolation("Required key $key is missing");
+    //        }
+    //    }
+    //}
 
     /**
      * @param $data

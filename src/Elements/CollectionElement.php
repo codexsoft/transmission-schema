@@ -182,17 +182,17 @@ class CollectionElement extends AbstractElement
         return $this;
     }
 
-    /**
-     * @param $data
-     *
-     * @return mixed|void
-     * @throws \CodexSoft\Transmission\Exceptions\ValidationDetectedViolationsException
-     * @deprecated
-     */
-    protected function doValidate($data)
-    {
-        if (!\is_array($data)) {
-            $this->reportViolation('Value must be array, '.\gettype($data).' given');
-        }
-    }
+    ///**
+    // * @param $data
+    // *
+    // * @return mixed|void
+    // * @throws \CodexSoft\Transmission\Exceptions\ValidationDetectedViolationsException
+    // * @deprecated
+    // */
+    //protected function doValidate($data)
+    //{
+    //    if (!\is_array($data)) {
+    //        $this->reportViolation('Value must be array, '.\gettype($data).' given');
+    //    }
+    //}
 }

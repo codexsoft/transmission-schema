@@ -139,6 +139,10 @@ class StringElement extends ScalarElement
             $constraints[] = new ContainsAlphanumeric();
         }
 
+        if ($this->pattern !== null) {
+            $constraints[] = new Constraints\Regex(['pattern' => $this->pattern]);
+        }
+
         return $constraints;
     }
 

@@ -5,7 +5,6 @@ namespace CodexSoft\Transmission\Elements;
 
 
 use CodexSoft\Transmission\Exceptions\IncompatibleInputDataTypeException;
-use CodexSoft\Transmission\Exceptions\ValidationDetectedViolationsException;
 use CodexSoft\Transmission\ValidationResult;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints;
@@ -33,19 +32,19 @@ abstract class AbstractElement
      */
     protected bool $strictTypeCheck = false;
 
-    /**
-     * Should exception be thrown on first violation or not
-     * @var bool
-     */
-    protected bool $stopOnFirstViolation = false;
+    ///**
+    // * Should exception be thrown on first violation or not
+    // * @var bool
+    // */
+    //protected bool $stopOnFirstViolation = false;
 
-    /**
-     * Collected validation violations
-     * @var array
-     */
-    protected array $violations = [];
+    ///**
+    // * Collected validation violations
+    // * @var array
+    // */
+    //protected array $violations = [];
 
-    /** @var callable|null  */
+    /** @var \Closure|null  */
     protected $normalizeDataCallback = null;
 
     protected string $openApiType = 'mixed';
@@ -56,6 +55,7 @@ abstract class AbstractElement
             'example' => $this->example,
             'description' => $this->label,
             'type' => $this->openApiType,
+            'required' => $this->isRequired,
         ];
 
         if ($this->hasDefaultValue()) {
@@ -91,16 +91,27 @@ abstract class AbstractElement
         /**
          * NULL can be normalized to empty string or to 0. This is default behaviour.
          * To prevent this, strict type checking must be enabled.
+         * todo: should failure prevent validation and collecting violations?
          */
         if ($this->strictTypeCheck && $data === null && !$this->isNullable) {
             throw new IncompatibleInputDataTypeException('NULL is not acceptable value');
         }
 
+        /**
+         * Check acceptable input data types in strict mode. Not acceptable generates failure.
+         * todo: should failure prevent validation and collecting violations?
+         */
         if ($this->strictTypeCheck && \is_array($this->acceptedPhpTypes) && $this->acceptedPhpTypes && !$this->valueHasType($data, $this->acceptedPhpTypes)) {
             throw new IncompatibleInputDataTypeException('Value must be one of accepted types: {'.\implode(', ', $this->acceptedPhpTypes).'} but '.\gettype($data).' given');
         }
 
-        return $this->doNormalizeData($data);
+        $normalizedData = $this->doNormalizeData($data);
+
+        if ($this->normalizeDataCallback instanceof \Closure) {
+            $normalizedData = ($this->normalizeDataCallback)($normalizedData);
+        }
+
+        return $normalizedData;
     }
 
     protected function doNormalizeData($data)
@@ -127,66 +138,66 @@ abstract class AbstractElement
         return $this->description;
     }
 
-    /**
-     * @param string $message
-     *
-     * @noinspection PhpUnhandledExceptionInspection
-     * @noinspection PhpDocMissingThrowsInspection
-     */
-    protected function reportViolation(string $message): void
-    {
-        $violation = $message;
-        if ($this->stopOnFirstViolation) {
-            /** @noinspection PhpUnhandledExceptionInspection */
-            throw new ValidationDetectedViolationsException([$violation]);
-        }
-        $this->violations[] = $violation;
-    }
+    ///**
+    // * @param string $message
+    // *
+    // * @noinspection PhpUnhandledExceptionInspection
+    // * @noinspection PhpDocMissingThrowsInspection
+    // */
+    //protected function reportViolation(string $message): void
+    //{
+    //    $violation = $message;
+    //    if ($this->stopOnFirstViolation) {
+    //        /** @noinspection PhpUnhandledExceptionInspection */
+    //        throw new ValidationDetectedViolationsException([$violation]);
+    //    }
+    //    $this->violations[] = $violation;
+    //}
 
     //public function isValid(): bool
     //{
     //}
 
-    /**
-     * @param $data
-     * @param bool $validateNormalizedData
-     *
-     * @return mixed|null
-     * @throws IncompatibleInputDataTypeException
-     * @throws ValidationDetectedViolationsException
-     * @deprecated
-     */
-    final public function validateAndReturnData($data, bool $validateNormalizedData = true)
-    {
-        $normalizedData = $this->normalizeData($data);
-        $this->doValidate($validateNormalizedData ? $normalizedData : $data);
-        if ($this->violations) {
-            throw new ValidationDetectedViolationsException($this->violations);
-        }
+    ///**
+    // * @param $data
+    // * @param bool $validateNormalizedData
+    // *
+    // * @return mixed|null
+    // * @throws IncompatibleInputDataTypeException
+    // * @throws ValidationDetectedViolationsException
+    // * @deprecated
+    // */
+    //final public function validateAndReturnData($data, bool $validateNormalizedData = true)
+    //{
+    //    $normalizedData = $this->normalizeData($data);
+    //    $this->doValidate($validateNormalizedData ? $normalizedData : $data);
+    //    if ($this->violations) {
+    //        throw new ValidationDetectedViolationsException($this->violations);
+    //    }
+    //
+    //    return $normalizedData;
+    //}
 
-        return $normalizedData;
-    }
-
-    /**
-     * @param $data
-     * @param bool $validateNormalizedData
-     *
-     * @return array
-     * @throws IncompatibleInputDataTypeException
-     * @deprecated
-     */
-    final public function validate($data, bool $validateNormalizedData = true)
-    {
-        $normalizedData = $this->normalizeData($data);
-
-        try {
-            $this->doValidate($validateNormalizedData ? $normalizedData : $data);
-        } catch (ValidationDetectedViolationsException $e) {
-            return $e->getViolations();
-        }
-
-        return $this->violations;
-    }
+    ///**
+    // * @param $data
+    // * @param bool $validateNormalizedData
+    // *
+    // * @return array
+    // * @throws IncompatibleInputDataTypeException
+    // * @deprecated
+    // */
+    //final public function validate($data, bool $validateNormalizedData = true)
+    //{
+    //    $normalizedData = $this->normalizeData($data);
+    //
+    //    try {
+    //        $this->doValidate($validateNormalizedData ? $normalizedData : $data);
+    //    } catch (ValidationDetectedViolationsException $e) {
+    //        return $e->getViolations();
+    //    }
+    //
+    //    return $this->violations;
+    //}
 
     /**
      * @param $data
@@ -205,14 +216,14 @@ abstract class AbstractElement
         return new ValidationResult($normalizedData, $violations);
     }
 
-    /**
-     * @param $data
-     *
-     * @return mixed
-     * @throws ValidationDetectedViolationsException
-     * @deprecated
-     */
-    abstract protected function doValidate($data);
+    ///**
+    // * @param $data
+    // *
+    // * @return mixed
+    // * @throws ValidationDetectedViolationsException
+    // * @deprecated
+    // */
+    //abstract protected function doValidate($data);
 
     //public function required()
     //{
