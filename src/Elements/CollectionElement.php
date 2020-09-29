@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Constraints;
  */
 class CollectionElement extends AbstractElement
 {
-    protected ?array $acceptedTypes = ['array'];
+    protected ?array $acceptedPhpTypes = ['array'];
 
     private ?AbstractElement $elementSchema = null;
     protected ?string $schemaGatheredFromClass = null;
@@ -24,6 +24,22 @@ class CollectionElement extends AbstractElement
     private ?int $minCount = null;
     private ?int $maxCount = null;
     private bool $elementsMustBeUnique = false;
+
+    public function toOpenApiV2(): array
+    {
+        $data = parent::toOpenApiV2();
+        $data['uniqueItems'] = $this->elementsMustBeUnique;
+
+        if ($this->minCount !== null) {
+            $data['minItems'] = $this->minCount;
+        }
+
+        if ($this->maxCount !== null) {
+            $data['maxItems'] = $this->maxCount;
+        }
+
+        return $data;
+    }
 
     /**
      * @param AbstractElement|string|null $elementSchema

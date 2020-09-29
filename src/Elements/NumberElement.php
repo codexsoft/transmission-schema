@@ -7,82 +7,103 @@ use Symfony\Component\Validator\Constraints;
 
 class NumberElement extends ScalarElement
 {
-    protected ?array $acceptedTypes = ['integer', 'float', 'double'];
+    protected ?array $acceptedPhpTypes = ['integer', 'float', 'double'];
     protected $example = 42.5;
-    protected $lessThanOrEqual = null;
-    protected $lessThan = null;
-    protected $greaterThanOrEqual = null;
-    protected $greaterThan = null;
 
-    ///**
-    // * @param $data
-    // *
-    // * @return int
-    // */
-    //public function doNormalizeData($data)
-    //{
-    //    return $data;
-    //}
+    protected $maxValue = null;
+    protected $minValue = null;
+    protected bool $exclusiveMaximum = true;
+    protected bool $exclusiveMinimum = true;
+
+    public function toOpenApiV2(): array
+    {
+        $data = parent::toOpenApiV2();
+
+        if ($this->maxValue !== null) {
+            $data['maximum'] = $this->maxValue;
+            $data['exclusiveMaximum'] = $this->exclusiveMaximum;
+        }
+
+        if ($this->minValue !== null) {
+            $data['minimum'] = $this->minValue;
+            $data['exclusiveMinimum'] = $this->exclusiveMinimum;
+        }
+
+        return $data;
+    }
 
     protected function generateSfConstraints(): array
     {
         $constraints = parent::generateSfConstraints();
-        if ($this->lessThan !== null) {
-            $constraints[] = new Constraints\LessThan($this->lessThan);
+
+        if ($this->maxValue !== null) {
+            if ($this->exclusiveMaximum) {
+                $constraints[] = new Constraints\LessThan($this->maxValue);
+            } else {
+                $constraints[] = new Constraints\LessThanOrEqual($this->maxValue);
+            }
         }
-        if ($this->lessThanOrEqual !== null) {
-            $constraints[] = new Constraints\LessThanOrEqual($this->lessThanOrEqual);
+
+        if ($this->minValue !== null) {
+            if ($this->exclusiveMinimum) {
+                $constraints[] = new Constraints\GreaterThan($this->minValue);
+            } else {
+                $constraints[] = new Constraints\GreaterThanOrEqual($this->minValue);
+            }
         }
-        if ($this->greaterThan !== null) {
-            $constraints[] = new Constraints\GreaterThan($this->greaterThan);
-        }
-        if ($this->greaterThanOrEqual !== null) {
-            $constraints[] = new Constraints\GreaterThanOrEqual($this->greaterThanOrEqual);
-        }
+
         return $constraints;
     }
 
     /**
-     * @param int|float $value
+     * @param int|float $maxValue
      *
      * @return static
      */
-    public function lt($value)
+    public function lt($maxValue)
     {
-        $this->lessThan = $value;
+        $this->maxValue = $maxValue;
+        //$this->inclusiveMaximum = false;
+        $this->exclusiveMaximum = true;
         return $this;
     }
 
     /**
-     * @param int|float $value
+     * @param int|float $maxValue
      *
      * @return static
      */
-    public function lte($value)
+    public function lte($maxValue)
     {
-        $this->lessThanOrEqual = $value;
+        $this->maxValue = $maxValue;
+        //$this->inclusiveMaximum = true;
+        $this->exclusiveMaximum = false;
         return $this;
     }
 
     /**
-     * @param int|float $value
+     * @param int|float $minValue
      *
      * @return static
      */
-    public function gt($value)
+    public function gt($minValue)
     {
-        $this->greaterThan = $value;
+        $this->minValue = $minValue;
+        //$this->inclusiveMinimum = false;
+        $this->exclusiveMinimum = true;
         return $this;
     }
 
     /**
-     * @param int|float $value
+     * @param int|float $minValue
      *
      * @return static
      */
-    public function gte($value)
+    public function gte($minValue)
     {
-        $this->greaterThanOrEqual = $value;
+        $this->minValue = $minValue;
+        //$this->inclusiveMinimum = true;
+        $this->exclusiveMinimum = false;
         return $this;
     }
 }

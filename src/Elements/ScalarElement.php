@@ -3,7 +3,6 @@
 
 namespace CodexSoft\Transmission\Elements;
 
-use CodexSoft\Transmission\Elements\AbstractElement;
 use CodexSoft\Transmission\Exceptions\IncompatibleInputDataTypeException;
 use Symfony\Component\Validator\Constraints;
 
@@ -11,6 +10,34 @@ class ScalarElement extends AbstractElement
 {
     protected $example = 'value';
     protected array $choicesSourceArray = [];
+    protected string $pattern;
+
+    public function toOpenApiV2(): array
+    {
+        $data = parent::toOpenApiV2();
+
+        if ($this->pattern) {
+            $data['pattern'] = $this->pattern;
+        }
+
+        if ($this->choicesSourceArray) {
+            $data['enum'] = $this->choicesSourceArray;
+        }
+
+        return $data;
+    }
+
+    /**
+     * @deprecated currently has no effect todo: implement
+     * @param string $pattern
+     *
+     * @return static
+     */
+    public function pattern(string $pattern)
+    {
+        $this->pattern = $pattern;
+        return $this;
+    }
 
     protected function generateSfConstraints(): array
     {

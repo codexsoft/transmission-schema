@@ -16,8 +16,9 @@ use Symfony\Component\Validator\Validation;
  */
 class JsonElement extends AbstractElement
 {
-    protected ?array $acceptedTypes = ['array'];
+    protected ?array $acceptedPhpTypes = ['array'];
     protected bool $strictTypeCheck = true;
+    protected string $openApiType = 'object';
     //public const MODE_LEAVE_EXTRA_KEYS = 1;
     //public const MODE_EXTRACT_EXTRA_KEYS = 2;
     //public const MODE_IGNORE_EXTRA_KEYS = 3;

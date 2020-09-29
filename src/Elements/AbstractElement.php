@@ -25,7 +25,7 @@ abstract class AbstractElement
 
     protected bool $isRequired = true;
     protected bool $isNullable = false;
-    protected ?array $acceptedTypes = null;
+    protected ?array $acceptedPhpTypes = null;
 
     /**
      * Input data must strictly have one of whitelisted types
@@ -47,6 +47,23 @@ abstract class AbstractElement
 
     /** @var callable|null  */
     protected $normalizeDataCallback = null;
+
+    protected string $openApiType = 'mixed';
+
+    public function toOpenApiV2(): array
+    {
+        $data = [
+            'example' => $this->example,
+            'description' => $this->label,
+            'type' => $this->openApiType,
+        ];
+
+        if ($this->hasDefaultValue()) {
+            $data['default'] = $this->defaultValue;
+        }
+
+        return $data;
+    }
 
     public function __construct(string $label = '')
     {
@@ -79,8 +96,8 @@ abstract class AbstractElement
             throw new IncompatibleInputDataTypeException('NULL is not acceptable value');
         }
 
-        if ($this->strictTypeCheck && \is_array($this->acceptedTypes) && $this->acceptedTypes && !$this->valueHasType($data, $this->acceptedTypes)) {
-            throw new IncompatibleInputDataTypeException('Value must be one of accepted types: {'.\implode(', ', $this->acceptedTypes).'} but '.\gettype($data).' given');
+        if ($this->strictTypeCheck && \is_array($this->acceptedPhpTypes) && $this->acceptedPhpTypes && !$this->valueHasType($data, $this->acceptedPhpTypes)) {
+            throw new IncompatibleInputDataTypeException('Value must be one of accepted types: {'.\implode(', ', $this->acceptedPhpTypes).'} but '.\gettype($data).' given');
         }
 
         return $this->doNormalizeData($data);
@@ -220,8 +237,8 @@ abstract class AbstractElement
             $constraints[] = new Constraints\NotNull();
         }
 
-        if ($this->strictTypeCheck && $this->acceptedTypes) {
-            $constraints[] = new Constraints\Type(['type' => $this->acceptedTypes]);
+        if ($this->strictTypeCheck && $this->acceptedPhpTypes) {
+            $constraints[] = new Constraints\Type(['type' => $this->acceptedPhpTypes]);
         }
 
         return $constraints;
@@ -292,7 +309,7 @@ abstract class AbstractElement
      */
     public function type(...$acceptedTypes)
     {
-        $this->acceptedTypes = $acceptedTypes;
+        $this->acceptedPhpTypes = $acceptedTypes;
         return $this;
     }
 

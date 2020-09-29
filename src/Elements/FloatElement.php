@@ -8,7 +8,8 @@ use Symfony\Component\Validator\Constraints;
 
 class FloatElement extends NumberElement
 {
-    protected ?array $acceptedTypes = ['double', 'float', 'integer'];
+    protected ?array $acceptedPhpTypes = ['double', 'float', 'integer'];
+    protected string $openApiType = 'number';
     /**
      * @param $data
      *

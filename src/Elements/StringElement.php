@@ -10,7 +10,8 @@ use Symfony\Component\Validator\Constraints;
 class StringElement extends ScalarElement
 {
 
-    protected ?array $acceptedTypes = ['string'];
+    protected ?array $acceptedPhpTypes = ['string'];
+    protected string $openApiType = 'string';
     protected $example = 'Some text sample';
 
     /*
@@ -29,6 +30,22 @@ class StringElement extends ScalarElement
     protected bool $noWhiteSpace = false;
     protected bool $isNotBlank = false;
     protected bool $isAlphaNumeric = false;
+
+    public function toOpenApiV2(): array
+    {
+        $data = parent::toOpenApiV2();
+        $data['allowEmptyValue'] = !$this->isNotBlank;
+
+        if ($this->minLength !== null) {
+            $data['minLength'] = $this->minLength;
+        }
+
+        if ($this->maxLength !== null) {
+            $data['maxLength'] = $this->maxLength;
+        }
+
+        return $data;
+    }
 
     /**
      * @return static

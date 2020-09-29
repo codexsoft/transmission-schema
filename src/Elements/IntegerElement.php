@@ -8,7 +8,8 @@ use Symfony\Component\Validator\Constraints;
 
 class IntegerElement extends NumberElement
 {
-    protected ?array $acceptedTypes = ['integer'];
+    protected ?array $acceptedPhpTypes = ['integer'];
+    protected string $openApiType = 'integer';
     protected $example = 42;
 
     /**

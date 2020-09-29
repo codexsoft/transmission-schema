@@ -7,5 +7,7 @@ use CodexSoft\Transmission\Elements\IntegerElement;
 
 class IdElement extends IntegerElement
 {
-    protected $greaterThan = 0;
+    protected $minValue = 0;
+    //protected bool $inclusiveMinimum = false;
+    protected bool $exclusiveMinimum = true;
 }

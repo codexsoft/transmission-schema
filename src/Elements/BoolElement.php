@@ -3,14 +3,11 @@
 
 namespace CodexSoft\Transmission\Elements;
 
-use CodexSoft\Transmission\Elements\ScalarElement;
-use CodexSoft\Transmission\Exceptions\IncompatibleInputDataTypeException;
-use Symfony\Component\Validator\Constraints;
-
 class BoolElement extends ScalarElement
 {
     protected $example = true;
-    protected ?array $acceptedTypes = ['bool'];
+    protected string $openApiType = 'boolean';
+    protected ?array $acceptedPhpTypes = ['bool'];
 
     /**
      * @param $data
@@ -22,4 +19,10 @@ class BoolElement extends ScalarElement
         $data = parent::doNormalizeData($data);
         return (bool) $data;
     }
+
+    //public function toOpenApiV2(): array
+    //{
+    //    $data = parent::toOpenApiV2();
+    //    return $data;
+    //}
 }
