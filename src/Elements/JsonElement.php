@@ -46,6 +46,27 @@ class JsonElement extends AbstractElement
     //protected bool $ignoreExtraKeys = true;
     //protected bool $extractExtraKeysToExtraData = true;
 
+    public function toOpenApiV2(): array
+    {
+        $data = parent::toOpenApiV2();
+
+        $requiredKeys = [];
+        foreach ($this->schema as $key => $element) {
+            if ($element->isRequired) {
+                $requiredKeys[] = $key;
+            }
+        }
+        $data['required'] = $requiredKeys;
+
+        $properties = [];
+        foreach ($this->schema as $key => $element) {
+            $properties[$key] = $element->toOpenApiV2();
+        }
+        $data['properties'] = $properties;
+
+        return $data;
+    }
+
     /**
      * @return Constraint|Constraint[]
      */

@@ -38,6 +38,16 @@ class CollectionElement extends AbstractElement
             $data['maxItems'] = $this->maxCount;
         }
 
+        if ($this->elementSchema !== null) {
+            if ($this->schemaGatheredFromClass) {
+                // todo: use $ref?
+            }
+
+            // 'allOf'
+
+            $data['items'] = $this->elementSchema->toOpenApiV2();
+        }
+
         return $data;
     }
 
