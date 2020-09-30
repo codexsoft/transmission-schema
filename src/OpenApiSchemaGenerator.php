@@ -4,10 +4,40 @@
 namespace CodexSoft\Transmission;
 
 
+use EXSyst\Component\Swagger\Parameter;
+use EXSyst\Component\Swagger\Path;
+use EXSyst\Component\Swagger\Swagger;
+
 class OpenApiSchemaGenerator
 {
     public function generateOpenApiV2()
     {
+        // todo: collect data (from router, from path)
+        // convert to OpenApi document
+        // generate JSON
+
+        $collectedEndpoints = [];
+        $collectedSchemaClasses = [];
+
+        $swagger = new Swagger();
+        $swagger
+            ->setHost('api.pim.one')
+            ->setBasePath('')
+            ->merge([]);
+
+        $swagger->getInfo()
+            ->setTitle('GyperPIM API')
+            ->setDescription('Интерфейс программного взаимодействия с базой данных продуктов.<br /><a href="https://api.pim.one/static/360-view/">Инструкция как добавить на свой сайт просмотр продукта в 360</a>')
+            ->setVersion('1.0.0');
+
+        (new Parameter())->setEnum();
+        (new Path())->getOperations();
+
+        $swagger->getPaths()->set();
+
+        $swagger->toArray();
+        //$swagger->getResponses()->set()
+
         $x = [
             "swagger" => "2.0",
             "info" => [

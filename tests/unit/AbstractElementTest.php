@@ -23,7 +23,6 @@ abstract class AbstractElementTest extends TestCase
     {
         try {
             $normalizedData = $schema->normalizeData($input);
-            //self::assertSame($expectedOutput, $normalizedData);
         } catch (\Throwable $e) {
             if ($exceptionClass) {
                 self::assertInstanceOf($exceptionClass, $e);
@@ -33,8 +32,6 @@ abstract class AbstractElementTest extends TestCase
 
             return;
         }
-
-        //self::expectException()
 
         if ($exceptionClass) {
             throw new \RuntimeException('Expected exception for data '.\var_export($input, true).' '.$exceptionClass.' was not thrown');
