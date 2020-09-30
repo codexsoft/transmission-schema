@@ -15,9 +15,9 @@ class NumberElement extends ScalarElement
     protected bool $exclusiveMaximum = true;
     protected bool $exclusiveMinimum = true;
 
-    public function toOpenApiV2(): array
+    public function toOpenApiV2Parameter(): array
     {
-        $data = parent::toOpenApiV2();
+        $data = parent::toOpenApiV2Parameter();
 
         if ($this->maxValue !== null) {
             $data['maximum'] = $this->maxValue;

@@ -49,14 +49,17 @@ abstract class AbstractElement
 
     protected string $openApiType = 'mixed';
 
-    public function toOpenApiV2(): array
+    public function toOpenApiV2Parameter(): array
     {
         $data = [
-            'example' => $this->example,
             'description' => $this->label,
             'type' => $this->openApiType,
             'required' => $this->isRequired,
         ];
+
+        if ($this->example !== null) {
+            $data['example'] = $this->example;
+        }
 
         if ($this->hasDefaultValue()) {
             $data['default'] = $this->defaultValue;

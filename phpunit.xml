@@ -2,12 +2,8 @@
 
 <phpunit stderr="true" bootstrap="vendor/autoload.php" colors="true" verbose="true">
     <testsuites>
-        <testsuite name="App Test Suite">
-
-            <testsuite name="default">
-                <directory>tests/unit/</directory>
-            </testsuite>
-
+        <testsuite name="default">
+            <directory>tests/unit/</directory>
         </testsuite>
     </testsuites>
 

@@ -46,9 +46,9 @@ class JsonElement extends AbstractElement
     //protected bool $ignoreExtraKeys = true;
     //protected bool $extractExtraKeysToExtraData = true;
 
-    public function toOpenApiV2(): array
+    public function toOpenApiV2Parameter(): array
     {
-        $data = parent::toOpenApiV2();
+        $data = parent::toOpenApiV2Parameter();
 
         $requiredKeys = [];
         foreach ($this->schema as $key => $element) {
@@ -60,11 +60,42 @@ class JsonElement extends AbstractElement
 
         $properties = [];
         foreach ($this->schema as $key => $element) {
-            $properties[$key] = $element->toOpenApiV2();
+            // todo: to avoid infinite loops, $refs should be generated in some cases!
+            $properties[$key] = $element->toOpenApiV2Parameter();
         }
         $data['properties'] = $properties;
 
         return $data;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function collectMentionedSchemas(): array
+    {
+        $mentioned = [];
+
+        if ($this->schemaGatheredFromClass) {
+            return [$this->schemaGatheredFromClass];
+        }
+
+        foreach ($this->schema as $key => $element) {
+            if ($element instanceof JsonElement || $element instanceof CollectionElement) {
+                \array_push($mentioned, ...$element->collectMentionedSchemas());
+            }
+        }
+
+        //foreach ($this->schema as $key => $element) {
+        //    if ($element instanceof JsonElement) {
+        //        if ($element->getSchemaGatheredFromClass()) {
+        //            $mentioned[] = $element->getSchemaGatheredFromClass();
+        //        } else {
+        //            \array_push($mentioned, ...$element->collectMentionedSchemas());
+        //        }
+        //    }
+        //}
+
+        return $mentioned;
     }
 
     /**
@@ -86,6 +117,14 @@ class JsonElement extends AbstractElement
         ]);
 
         return $this->isRequired ? $collection : new Constraints\Optional($collection);
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getSchemaGatheredFromClass(): ?string
+    {
+        return $this->schemaGatheredFromClass;
     }
 
     /**

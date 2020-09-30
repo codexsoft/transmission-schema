@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\ConstraintViolationInterface;
 use Symfony\Component\Validator\Validation;
 
-abstract class AbstractJsonController
+abstract class AbstractJsonController implements DocumentedEndpointInterface
 {
     protected Request $request;
 
@@ -59,7 +59,7 @@ abstract class AbstractJsonController
         $inputData = $this->request->request->all();
 
         try {
-            $schema = (new JsonElement($this->inputSchema()));
+            $schema = (new JsonElement($this->bodyInputSchema()));
         } catch (InvalidJsonSchemaException $e) {
             return new JsonResponse([], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
@@ -111,7 +111,7 @@ abstract class AbstractJsonController
 
     public static function allAlternativeResponses(): array
     {
-        return \array_merge(static::defaultAlternativeResponses(), static::alternativeResponses());
+        return \array_replace(static::defaultAlternativeResponses(), static::alternativeResponses());
     }
 
     public static function alternativeResponses(): array
@@ -123,11 +123,11 @@ abstract class AbstractJsonController
      * Expected request JSON schema
      * @return AbstractElement[]
      */
-    abstract protected function inputSchema(): array;
+    abstract public static function bodyInputSchema(): array;
 
     /**
      * Successful response JSON schema
      * @return AbstractElement[]
      */
-    abstract protected function outputSchema(): array;
+    abstract public static function bodyOutputSchema(): array;
 }

@@ -16,6 +16,7 @@ use Symfony\Component\Validator\Constraints;
 class CollectionElement extends AbstractElement
 {
     protected ?array $acceptedPhpTypes = ['array'];
+    protected string $openApiType = 'array';
 
     private ?AbstractElement $elementSchema = null;
     protected ?string $schemaGatheredFromClass = null;
@@ -25,9 +26,9 @@ class CollectionElement extends AbstractElement
     private ?int $maxCount = null;
     private bool $elementsMustBeUnique = false;
 
-    public function toOpenApiV2(): array
+    public function toOpenApiV2Parameter(): array
     {
-        $data = parent::toOpenApiV2();
+        $data = parent::toOpenApiV2Parameter();
         $data['uniqueItems'] = $this->elementsMustBeUnique;
 
         if ($this->minCount !== null) {
@@ -45,10 +46,28 @@ class CollectionElement extends AbstractElement
 
             // 'allOf'
 
-            $data['items'] = $this->elementSchema->toOpenApiV2();
+            $data['items'] = $this->elementSchema->toOpenApiV2Parameter();
         }
 
         return $data;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function collectMentionedSchemas(): array
+    {
+        $mentioned = [];
+
+        if ($this->schemaGatheredFromClass) {
+            return [$this->schemaGatheredFromClass];
+        }
+
+        if ($this->elementSchema instanceof JsonElement || $this->elementSchema instanceof CollectionElement) {
+            \array_push($mentioned, ...$this->elementSchema->collectMentionedSchemas());
+        }
+
+        return $mentioned;
     }
 
     /**

@@ -31,9 +31,9 @@ class StringElement extends ScalarElement
     protected bool $isNotBlank = false;
     protected bool $isAlphaNumeric = false;
 
-    public function toOpenApiV2(): array
+    public function toOpenApiV2Parameter(): array
     {
-        $data = parent::toOpenApiV2();
+        $data = parent::toOpenApiV2Parameter();
         $data['allowEmptyValue'] = !$this->isNotBlank;
 
         if ($this->minLength !== null) {

@@ -4,6 +4,8 @@
 namespace CodexSoft\Transmission;
 
 
+use CodexSoft\Transmission\Elements\JsonElement;
+use CodexSoft\Transmission\OpenApiSchemaGeneratorTest\PetsAction;
 use EXSyst\Component\Swagger\Parameter;
 use EXSyst\Component\Swagger\Path;
 use EXSyst\Component\Swagger\Swagger;
@@ -12,11 +14,14 @@ class OpenApiSchemaGenerator
 {
     public function generateOpenApiV2()
     {
-        // todo: collect data (from router, from path)
+        // todo: collect data (from router, from path). BUT. Path can be gathered from @Route annotation
         // convert to OpenApi document
         // generate JSON
 
-        $collectedEndpoints = [];
+        //$collectedEndpoints = [];
+        $collectedEndpoints = [
+            '/pets' => PetsAction::class,
+        ];
         $collectedSchemaClasses = [];
 
         $swagger = new Swagger();
@@ -30,10 +35,98 @@ class OpenApiSchemaGenerator
             ->setDescription('Интерфейс программного взаимодействия с базой данных продуктов.<br /><a href="https://api.pim.one/static/360-view/">Инструкция как добавить на свой сайт просмотр продукта в 360</a>')
             ->setVersion('1.0.0');
 
-        (new Parameter())->setEnum();
-        (new Path())->getOperations();
+        //foreach ($collectedEndpoints as $collectedEndpoint) {
+        //    if (!\in_array(JsonSchemaInterface::class, \class_implements($collectedEndpoint), true)) {
+        //        continue;
+        //    }
+        //    /** @var JsonSchemaInterface $collectedEndpoint */
+        //    $schema = $collectedEndpoint::createSchema();
+        //}
 
-        $swagger->getPaths()->set();
+        /**
+         * For JSON endpoints
+         */
+        $paths = [];
+        foreach ($collectedEndpoints as $route => $collectedEndpoint) {
+            if (!\in_array(DocumentedEndpointInterface::class, \class_implements($collectedEndpoint), true)) {
+                continue;
+            }
+            /** @var DocumentedEndpointInterface $collectedEndpoint */
+            $inputSchema = $collectedEndpoint::bodyInputSchema();
+            $inputJson = new JsonElement($inputSchema);
+            $inputJsonParameter = $inputJson->toOpenApiV2Parameter();
+
+            //if ($inputJson->getSchemaGatheredFromClass()) {
+            //    $collectedSchemaClasses[] = $inputJson->getSchemaGatheredFromClass();
+            //} else {
+            //    \array_push($collectedSchemaClasses, ...$inputJson->collectMentionedSchemas());
+            //}
+
+            $outputSchema = $collectedEndpoint::bodyOutputSchema();
+            $outputJson = new JsonElement($outputSchema);
+            $outputJsonParameter = $outputJson->toOpenApiV2Parameter();
+
+            \array_push($collectedSchemaClasses, ...$inputJson->collectMentionedSchemas());
+            \array_push($collectedSchemaClasses, ...$outputJson->collectMentionedSchemas());
+
+            // todo: if schema gathered, use ref, otherwise inline definition
+
+            // enpoint input and output schemas are not resuable
+
+            $responsesSchemas = $collectedEndpoint::allAlternativeResponses();
+
+            /* adding normal output response to responses too */
+            $responsesSchemas[200] = $outputSchema;
+
+            $routeResponses = [];
+            foreach ($responsesSchemas as $httpCode => $responsesSchema) {
+                $responseSchemaJson = new JsonElement($responsesSchema);
+                if ($responseSchemaJson->getSchemaGatheredFromClass()) {
+                    $collectedSchemaClasses[] = $responseSchemaJson->getSchemaGatheredFromClass();
+                }
+                $responseParameter = $responseSchemaJson->toOpenApiV2Parameter();
+                $routeResponses[$httpCode] = [
+                    'schema' => $responseParameter,
+                ];
+                //$swagger->getPaths()->set()
+            }
+
+            $paths[$route] = [
+                "<METHOD>" => [
+                    "tags" => $collectedEndpoint::getOpenApiTags(),
+                    'parameters' => $inputJsonParameter,
+                    'responses' => $routeResponses,
+                ],
+            ];
+        }
+
+        // generating all mentioned definitions
+
+        /** @var mixed[] $definitions standalone definitions */
+        $definitions = [];
+
+        foreach ($collectedSchemaClasses as $collectedSchemaClass) {
+            if (!\in_array(JsonSchemaInterface::class, \class_implements($collectedSchemaClass), true)) {
+                throw new \Exception('Schema definition for class '.$collectedSchemaClass.' could not be generated.');
+            }
+            /** @var JsonSchemaInterface $collectedSchemaClass */
+            $definitionSchema = $collectedSchemaClass::createSchema();
+            $definitionSchemaJson = new JsonElement($definitionSchema);
+            $definitionParameter = $definitionSchemaJson->toOpenApiV2Parameter();
+            // #/definitions/App_Controller_Api_Form_BrandForm
+
+            $definitions[$collectedSchemaClass] = $definitionParameter;
+        }
+
+        $result = [
+            'definitions' => $definitions,
+            'paths' => $paths,
+        ];
+
+        //(new Parameter())->setEnum();
+        //(new Path())->getOperations();
+
+        //$swagger->getPaths()->set();
 
         $swagger->toArray();
         //$swagger->getResponses()->set()
