@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\ConstraintViolationInterface;
 use Symfony\Component\Validator\Validation;
 
-abstract class AbstractJsonController implements DocumentedEndpointInterface
+abstract class AbstractJsonController implements DocumentedJsonEndpointInterface
 {
     protected Request $request;
 

@@ -6,7 +6,7 @@ namespace CodexSoft\Transmission;
 
 use CodexSoft\Transmission\Elements\AbstractElement;
 
-interface DocumentedEndpointInterface
+interface DocumentedJsonEndpointInterface
 {
     /**
      * Expected request JSON schema
