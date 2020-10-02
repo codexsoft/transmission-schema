@@ -4,8 +4,11 @@
 namespace CodexSoft\Transmission\OpenApi2;
 
 
+use CodexSoft\Transmission\OpenApi2;
+
 class Operation
 {
+
     /**
      * key in the Swagger "Paths Object" for this operation
      */
@@ -19,9 +22,8 @@ class Operation
 
     /**
      * A list of tags for API documentation control. Tags can be used for logical grouping of operations by resources or any other qualifier.
-     * @var string[]
      */
-    public array $tags = [];
+    public StringCollection $tags;
 
     /**
      * A short summary of what the operation does. For maximum readability in the swagger-ui, this field SHOULD be less than 120 characters.
@@ -44,7 +46,7 @@ class Operation
      * The id MUST be unique among all operations described in the API.
      * Tools and libraries MAY use the operation id to uniquely identify an operation.
      */
-    public string $operationId = UNDEFINED;
+    public string $operationId = OpenApi2::UNDEFINED;
 
     /**
      * A list of MIME types the operation can consume.
@@ -75,9 +77,8 @@ class Operation
 
     /**
      * The list of possible responses as they are returned from executing this operation.
-     * @var array
      */
-    public array $responses = [];
+    public ResponseCollection $responses;
 
     /**
      * The transfer protocol for the operation.
@@ -101,4 +102,24 @@ class Operation
      * @var array
      */
     public $security;
+
+    public function __construct()
+    {
+        $this->responses = new ResponseCollection();
+        $this->tags = new StringCollection();
+    }
+
+    public function toArray(): array
+    {
+        $responsesData = [];
+        foreach ($this->responses as $response) {
+            $responsesData[] = $response->toArray();
+        }
+
+        return [
+            'tags' => $this->tags->toArray(),
+            'parameters' => $inputJsonParameter,
+            'responses' => $responsesData,
+        ];
+    }
 }

@@ -4,6 +4,8 @@
 namespace CodexSoft\Transmission\OpenApi2;
 
 
+use CodexSoft\Transmission\OpenApi2;
+
 class Parameter
 {
     /**
@@ -82,7 +84,7 @@ class Parameter
      * Sets a default value to the parameter. The type of the value depends on the defined type. See http://json-schema.org/latest/json-schema-validation.html#anchor101.
      * @var mixed
      */
-    public $default = UNDEFINED;
+    public $default = OpenApi2::UNDEFINED;
 
     /**
      * See http://json-schema.org/latest/json-schema-validation.html#anchor17.

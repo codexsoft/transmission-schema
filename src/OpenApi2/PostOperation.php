@@ -8,5 +8,5 @@ use Symfony\Component\HttpFoundation\Request;
 
 class PostOperation extends Operation
 {
-    public $method = Request::METHOD_POST;
+    public string $method = Request::METHOD_POST;
 }

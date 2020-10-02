@@ -43,7 +43,7 @@ class Response
      */
     public $examples;
 
-    public function generate()
+    public function toArray(): array
     {
         return [
             "description" => $this->description,
