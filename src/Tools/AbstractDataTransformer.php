@@ -1,7 +1,7 @@
 <?php
 
 
-namespace CodexSoft\Transmission\Tools;
+namespace CodexSoft\TransmissionSchema\Tools;
 
 /**
  * todo: transform method result can be checked formally using schema

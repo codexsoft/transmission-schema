@@ -1,11 +1,11 @@
 <?php
 
 
-namespace CodexSoft\Transmission\Elements;
+namespace CodexSoft\TransmissionSchema\Elements;
 
 
-use CodexSoft\Transmission\Exceptions\IncompatibleInputDataTypeException;
-use CodexSoft\Transmission\ValidationResult;
+use CodexSoft\TransmissionSchema\Exceptions\IncompatibleInputDataTypeException;
+use CodexSoft\TransmissionSchema\ValidationResult;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints;
 use Symfony\Component\Validator\Validation;

@@ -1,12 +1,12 @@
 <?php
 
 
-namespace CodexSoft\Transmission\Elements;
+namespace CodexSoft\TransmissionSchema\Elements;
 
-use CodexSoft\Transmission\Exceptions\IncompatibleInputDataTypeException;
-use CodexSoft\Transmission\Exceptions\InvalidCollectionElementSchemaException;
-use CodexSoft\Transmission\Exceptions\InvalidJsonSchemaException;
-use CodexSoft\Transmission\Contracts\JsonSchemaInterface;
+use CodexSoft\TransmissionSchema\Exceptions\IncompatibleInputDataTypeException;
+use CodexSoft\TransmissionSchema\Exceptions\InvalidCollectionElementSchemaException;
+use CodexSoft\TransmissionSchema\Exceptions\InvalidJsonSchemaException;
+use CodexSoft\TransmissionSchema\Contracts\JsonSchemaInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints;
 

@@ -1,11 +1,11 @@
 <?php
 
-namespace CodexSoft\Transmission\Elements;
+namespace CodexSoft\TransmissionSchema\Elements;
 
-use CodexSoft\Transmission\AbstractElementTest;
-use CodexSoft\Transmission\Accept;
-use CodexSoft\Transmission\Elements\CollectionElementTest\TestData;
-use CodexSoft\Transmission\Exceptions\IncompatibleInputDataTypeException;
+use CodexSoft\TransmissionSchema\AbstractElementTest;
+use CodexSoft\TransmissionSchema\Accept;
+use CodexSoft\TransmissionSchema\Elements\CollectionElementTest\TestData;
+use CodexSoft\TransmissionSchema\Exceptions\IncompatibleInputDataTypeException;
 
 class JsonElementTest extends AbstractElementTest
 {

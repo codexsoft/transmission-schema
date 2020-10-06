@@ -1,11 +1,11 @@
 <?php
 
 
-namespace CodexSoft\Transmission\Elements\CollectionElementTest;
+namespace CodexSoft\TransmissionSchema\Elements\CollectionElementTest;
 
 
-use CodexSoft\Transmission\Accept;
-use CodexSoft\Transmission\Contracts\JsonSchemaInterface;
+use CodexSoft\TransmissionSchema\Accept;
+use CodexSoft\TransmissionSchema\Contracts\JsonSchemaInterface;
 
 class TestData implements JsonSchemaInterface
 {

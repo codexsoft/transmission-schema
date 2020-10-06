@@ -1,12 +1,12 @@
 <?php
 
 
-namespace CodexSoft\Transmission\Elements;
+namespace CodexSoft\TransmissionSchema\Elements;
 
 
-use CodexSoft\Transmission\Exceptions\InvalidJsonSchemaException;
-use CodexSoft\Transmission\Contracts\JsonSchemaInterface;
-use CodexSoft\Transmission\ValidationResult;
+use CodexSoft\TransmissionSchema\Exceptions\InvalidJsonSchemaException;
+use CodexSoft\TransmissionSchema\Contracts\JsonSchemaInterface;
+use CodexSoft\TransmissionSchema\ValidationResult;
 use Symfony\Component\Validator\Constraints;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Validation;
@@ -133,7 +133,7 @@ class JsonElement extends AbstractElement
      * @param bool $extractExtraKeysToExtraData
      *
      * @return array[]
-     * @throws \CodexSoft\Transmission\Exceptions\IncompatibleInputDataTypeException
+     * @throws \CodexSoft\TransmissionSchema\Exceptions\IncompatibleInputDataTypeException
      */
     public function normalizeDataReturningNormalizedAndExtraData(
         array $data,
@@ -185,7 +185,7 @@ class JsonElement extends AbstractElement
      * @param $data
      *
      * @return array
-     * @throws \CodexSoft\Transmission\Exceptions\IncompatibleInputDataTypeException
+     * @throws \CodexSoft\TransmissionSchema\Exceptions\IncompatibleInputDataTypeException
      */
     protected function doNormalizeData($data): array
     {
@@ -197,7 +197,7 @@ class JsonElement extends AbstractElement
      * @param $data
      *
      * @return ValidationResult
-     * @throws \CodexSoft\Transmission\Exceptions\IncompatibleInputDataTypeException
+     * @throws \CodexSoft\TransmissionSchema\Exceptions\IncompatibleInputDataTypeException
      */
     public function getValidatedNormalizedData($data): ValidationResult
     {

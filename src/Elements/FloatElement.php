@@ -1,7 +1,7 @@
 <?php
 
 
-namespace CodexSoft\Transmission\Elements;
+namespace CodexSoft\TransmissionSchema\Elements;
 
 class FloatElement extends NumberElement
 {

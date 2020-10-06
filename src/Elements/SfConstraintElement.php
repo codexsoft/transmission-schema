@@ -1,9 +1,8 @@
 <?php
 
 
-namespace CodexSoft\Transmission\Elements;
+namespace CodexSoft\TransmissionSchema\Elements;
 
-use CodexSoft\Transmission\Elements\AbstractElement;
 use Symfony\Component\Validator\Constraint;
 
 class SfConstraintElement extends AbstractElement

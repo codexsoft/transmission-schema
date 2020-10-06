@@ -1,9 +1,9 @@
 <?php
 
 
-namespace CodexSoft\Transmission\Elements;
+namespace CodexSoft\TransmissionSchema\Elements;
 
-use CodexSoft\Transmission\Exceptions\IncompatibleInputDataTypeException;
+use CodexSoft\TransmissionSchema\Exceptions\IncompatibleInputDataTypeException;
 use Symfony\Component\Validator\Constraints;
 
 class ScalarElement extends AbstractElement

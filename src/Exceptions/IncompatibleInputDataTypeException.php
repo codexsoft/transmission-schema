@@ -1,7 +1,7 @@
 <?php
 
 
-namespace CodexSoft\Transmission\Exceptions;
+namespace CodexSoft\TransmissionSchema\Exceptions;
 
 
 class IncompatibleInputDataTypeException extends GenericTransmissionException

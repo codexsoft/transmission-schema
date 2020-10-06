@@ -1,7 +1,7 @@
 <?php
 
 
-namespace CodexSoft\Transmission\Constraints;
+namespace CodexSoft\TransmissionSchema\Constraints;
 
 
 use Symfony\Component\Validator\Constraint;

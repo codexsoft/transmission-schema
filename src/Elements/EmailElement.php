@@ -1,9 +1,8 @@
 <?php
 
 
-namespace CodexSoft\Transmission\Elements;
+namespace CodexSoft\TransmissionSchema\Elements;
 
-use CodexSoft\Transmission\Elements\StringElement;
 use Symfony\Component\Validator\Constraints;
 
 class EmailElement extends StringElement
