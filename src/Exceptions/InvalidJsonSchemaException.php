@@ -4,7 +4,7 @@
 namespace CodexSoft\Transmission\Exceptions;
 
 
-class InvalidJsonSchemaException extends GenericException
+class InvalidJsonSchemaException extends GenericTransmissionException
 {
 
 }

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace CodexSoft\Transmission;
+namespace CodexSoft\Transmission\Contracts;
 
 
 use CodexSoft\Transmission\Elements\AbstractElement;

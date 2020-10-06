@@ -4,10 +4,10 @@
 namespace CodexSoft\Transmission;
 
 
+use CodexSoft\Transmission\Contracts\JsonEndpointInterface;
 use CodexSoft\Transmission\Elements\AbstractElement;
 use CodexSoft\Transmission\Elements\JsonElement;
 use CodexSoft\Transmission\Exceptions\IncompatibleInputDataTypeException;
-use CodexSoft\Transmission\Exceptions\GenericException;
 use CodexSoft\Transmission\Exceptions\InvalidJsonSchemaException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,6 +16,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\ConstraintViolationInterface;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 
+/**
+ * Base class for building HTTP JSON API
+ */
 abstract class AbstractJsonController implements JsonEndpointInterface
 {
     protected Request $request;
@@ -96,18 +99,37 @@ abstract class AbstractJsonController implements JsonEndpointInterface
         return new JsonResponse([], Response::HTTP_NOT_ACCEPTABLE);
     }
 
+    protected function onJsonDecodeFailure(\JsonException $e): Response
+    {
+        return new JsonResponse([
+            'message' => 'Malformed JSON body in request: '.$e->getMessage(),
+        ], Response::HTTP_BAD_REQUEST);
+    }
+
+    protected function onEmptyBody($requestBody): Response
+    {
+        $this->beforeHandle();
+        $response = $this->handle([], []);
+        $this->afterHandle($response);
+
+        return $response;
+    }
+
     /**
      * @return Response
      */
     public function __invoke(): Response
     {
-        try {
-            Transmission::decodeJsonInRequest($this->request);
-        } catch (GenericException $e) {
-            return new JsonResponse([], Response::HTTP_NOT_ACCEPTABLE);
+        $requestBody = $this->request->getContent();
+        if (empty($requestBody)) {
+            return $this->onEmptyBody($requestBody);
         }
 
-        $inputData = $this->request->request->all();
+        try {
+            $inputData = \json_decode($this->request->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        } catch (\JsonException $e) {
+            return $this->onJsonDecodeFailure($e);
+        }
 
         try {
             $schema = (new JsonElement(static::bodyInputSchema()));

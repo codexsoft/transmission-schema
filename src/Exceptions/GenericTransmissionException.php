@@ -4,7 +4,6 @@
 namespace CodexSoft\Transmission\Exceptions;
 
 
-class GenericException extends \Exception
+class GenericTransmissionException extends \Exception
 {
-
 }

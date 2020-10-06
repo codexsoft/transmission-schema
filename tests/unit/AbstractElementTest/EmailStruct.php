@@ -5,7 +5,7 @@ namespace CodexSoft\Transmission\AbstractElementTest;
 
 
 use CodexSoft\Transmission\Accept;
-use CodexSoft\Transmission\JsonSchemaInterface;
+use CodexSoft\Transmission\Contracts\JsonSchemaInterface;
 
 class EmailStruct implements JsonSchemaInterface
 {

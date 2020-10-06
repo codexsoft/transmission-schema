@@ -8,6 +8,7 @@ use CodexSoft\Transmission\Elements\AbstractElement;
 
 /**
  * Fascade for constructing elements
+ * You can extend this class for your needs
  *
  * @method static Elements\BoolElement bool(string $label = '')
  * @method static Elements\DateElement date(string $label = '')

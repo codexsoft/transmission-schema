@@ -1,7 +1,7 @@
 <?php
 
 
-namespace CodexSoft\Transmission;
+namespace CodexSoft\Transmission\Tools;
 
 
 use CodexSoft\Transmission\Elements\AbstractElement;
@@ -90,12 +90,6 @@ class SchemaChecker
                 $this->expectedSfViolations[$sfViolation->getPropertyPath()] !== $sfViolation->getMessage()
             ) {
                 throw new \RuntimeException('Produced violation message for field '.$sfViolation->getPropertyPath().' was "'.$sfViolation->getMessage().'" but expected message was "'.$this->expectedSfViolations[$sfViolation->getPropertyPath()].'"');
-                //$xx1 = \array_key_exists($sfViolation->getPropertyPath(), $expectedSfViolations);
-                //$hhh1 = $expectedSfViolations[$sfViolation->getPropertyPath()];
-                //$hhh2 = $sfViolation->getMessage();
-                //$hhh3 = $expectedSfViolations[$sfViolation->getPropertyPath()] === $sfViolation->getMessage();
-                //$xx2 = $expectedSfViolations[$sfViolation->getPropertyPath()] !== $sfViolation->getMessage();
-                //$y = 1;
             }
         }
     }

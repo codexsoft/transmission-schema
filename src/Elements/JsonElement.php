@@ -5,7 +5,7 @@ namespace CodexSoft\Transmission\Elements;
 
 
 use CodexSoft\Transmission\Exceptions\InvalidJsonSchemaException;
-use CodexSoft\Transmission\JsonSchemaInterface;
+use CodexSoft\Transmission\Contracts\JsonSchemaInterface;
 use CodexSoft\Transmission\ValidationResult;
 use Symfony\Component\Validator\Constraints;
 use Symfony\Component\Validator\Constraint;

@@ -4,6 +4,7 @@ namespace CodexSoft\Transmission;
 
 use CodexSoft\Transmission\AbstractElementTest\EmailStruct;
 use CodexSoft\Transmission\Elements\AbstractElement;
+use CodexSoft\Transmission\Tools\SchemaChecker;
 use PHPUnit\Framework\TestCase;
 
 abstract class AbstractElementTest extends TestCase

@@ -5,7 +5,7 @@ namespace CodexSoft\Transmission\Elements\CollectionElementTest;
 
 
 use CodexSoft\Transmission\Accept;
-use CodexSoft\Transmission\JsonSchemaInterface;
+use CodexSoft\Transmission\Contracts\JsonSchemaInterface;
 
 class TestData implements JsonSchemaInterface
 {
