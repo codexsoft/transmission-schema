@@ -15,9 +15,9 @@ class NumberElement extends ScalarElement
     protected bool $exclusiveMaximum = true;
     protected bool $exclusiveMinimum = true;
 
-    public function toOpenApiV2Parameter(): array
+    public function toOpenApiV2ParameterArray(): array
     {
-        $data = parent::toOpenApiV2Parameter();
+        $data = parent::toOpenApiV2ParameterArray();
 
         if ($this->maxValue !== null) {
             $data['maximum'] = $this->maxValue;
@@ -63,7 +63,6 @@ class NumberElement extends ScalarElement
     public function lt($maxValue)
     {
         $this->maxValue = $maxValue;
-        //$this->inclusiveMaximum = false;
         $this->exclusiveMaximum = true;
         return $this;
     }
@@ -76,7 +75,6 @@ class NumberElement extends ScalarElement
     public function lte($maxValue)
     {
         $this->maxValue = $maxValue;
-        //$this->inclusiveMaximum = true;
         $this->exclusiveMaximum = false;
         return $this;
     }
@@ -89,7 +87,6 @@ class NumberElement extends ScalarElement
     public function gt($minValue)
     {
         $this->minValue = $minValue;
-        //$this->inclusiveMinimum = false;
         $this->exclusiveMinimum = true;
         return $this;
     }
@@ -102,7 +99,6 @@ class NumberElement extends ScalarElement
     public function gte($minValue)
     {
         $this->minValue = $minValue;
-        //$this->inclusiveMinimum = true;
         $this->exclusiveMinimum = false;
         return $this;
     }

@@ -12,9 +12,9 @@ class ScalarElement extends AbstractElement
     protected array $choicesSourceArray = [];
     protected ?string $pattern = null;
 
-    public function toOpenApiV2Parameter(): array
+    public function toOpenApiV2ParameterArray(): array
     {
-        $data = parent::toOpenApiV2Parameter();
+        $data = parent::toOpenApiV2ParameterArray();
 
         if ($this->pattern) {
             $data['pattern'] = $this->pattern;

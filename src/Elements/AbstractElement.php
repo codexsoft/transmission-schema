@@ -49,7 +49,7 @@ abstract class AbstractElement
 
     protected string $openApiType = 'mixed';
 
-    public function toOpenApiV2Parameter(): array
+    public function toOpenApiV2ParameterArray(): array
     {
         $data = [
             'description' => $this->label,

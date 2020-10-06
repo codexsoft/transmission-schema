@@ -6,7 +6,7 @@ namespace CodexSoft\Transmission;
 
 use CodexSoft\Transmission\Elements\AbstractElement;
 
-interface DocumentedJsonEndpointInterface
+interface DocumentedJsonEndpointInterface extends OpenApiV2EndpointInterface
 {
     /**
      * Expected request JSON schema
@@ -20,10 +20,5 @@ interface DocumentedJsonEndpointInterface
      */
     public static function bodyOutputSchema(): array;
 
-    public static function getOpenApiTags(): array;
-
     public static function allAlternativeResponses(): array;
-
-    // todo: cookies?
-    // todo: headers?
 }

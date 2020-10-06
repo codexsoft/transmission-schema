@@ -6,7 +6,7 @@ namespace CodexSoft\Transmission\OpenApi2;
 
 use Symfony\Component\HttpFoundation\Request;
 
-class PostOperation extends Operation
+class PostOperationSchema extends OperationSchema
 {
     public string $method = Request::METHOD_POST;
 }

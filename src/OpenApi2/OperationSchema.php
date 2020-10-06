@@ -6,7 +6,7 @@ namespace CodexSoft\Transmission\OpenApi2;
 
 use CodexSoft\Transmission\OpenApi2;
 
-class Operation
+class OperationSchema
 {
 
     /**
@@ -37,7 +37,7 @@ class Operation
 
     /**
      * Additional external documentation for this operation.
-     * @var ExternalDocumentation
+     * @var ExternalDocumentationSchema
      */
     public $externalDocs;
 
@@ -71,9 +71,8 @@ class Operation
      * If a parameter is already defined at the Path Item, the new definition will override it, but can never remove it. The list MUST NOT include duplicated parameters. A unique parameter is defined by a combination of a name and location.
      * The list can use the Reference Object to link to parameters that are defined at the Swagger Object's parameters.
      * There can be one "body" parameter at most.
-     * @var Parameter[]
      */
-    public array $parameters = [];
+    public ParameterCollection $parameters;
 
     /**
      * The list of possible responses as they are returned from executing this operation.
@@ -84,9 +83,8 @@ class Operation
      * The transfer protocol for the operation.
      * Values MUST be from the list: "http", "https", "ws", "wss".
      * The value overrides the Swagger Object schemes definition.
-     * @var string[]
      */
-    public array $schemes = [];
+    public StringCollection $schemes;
 
     /**
      * Declares this operation to be deprecated.
@@ -107,6 +105,8 @@ class Operation
     {
         $this->responses = new ResponseCollection();
         $this->tags = new StringCollection();
+        $this->schemes = new StringCollection();
+        $this->parameters = new ParameterCollection();
     }
 
     public function toArray(): array

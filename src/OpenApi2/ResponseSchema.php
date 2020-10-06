@@ -4,7 +4,7 @@
 namespace CodexSoft\Transmission\OpenApi2;
 
 
-class Response
+class ResponseSchema
 {
     /**
      * $ref See http://json-schema.org/latest/json-schema-core.html#rfc.section.7
@@ -21,9 +21,8 @@ class Response
 
     /**
      * A short description of the response. GFM syntax can be used for rich text representation.
-     * @var string
      */
-    public $description;
+    public ?string $description = null;
 
     /**
      * A definition of the response structure. It can be a primitive, an array or an object. If this field does not exist, it means no content is returned as part of the response. As an extension to the Schema Object, its root type value may also be "file". This SHOULD be accompanied by a relevant produces mime-type.
@@ -39,9 +38,8 @@ class Response
 
     /**
      * An example of the response message.
-     * @var array
      */
-    public $examples;
+    public array $examples = [];
 
     public function toArray(): array
     {

@@ -130,4 +130,56 @@ abstract class AbstractJsonController implements DocumentedJsonEndpointInterface
      * @return AbstractElement[]
      */
     abstract public static function bodyOutputSchema(): array;
-}
+
+     public static function getOpenApiSummary(): string
+     {
+         return '';
+     }
+
+     public static function getOpenApiDescription(): string
+     {
+         return '';
+     }
+
+     public static function getOpenApiProduces(): array
+     {
+         return ['application/json'];
+     }
+
+     public static function getOpenApiConsumes(): array
+     {
+         return ['application/json'];
+     }
+
+     public static function queryParametersSchema(): array
+     {
+         return [];
+     }
+
+     public static function pathParametersSchema(): array
+     {
+         return [];
+     }
+
+     public static function bodyParametersSchema(): array
+     {
+         return [];
+     }
+
+     public static function headerParametersSchema(): array
+     {
+         return [
+             'X-Authentication-Token' => Accept::string()->notBlank(),
+         ];
+     }
+
+     public static function formDataParametersSchema(): array
+     {
+         return [];
+     }
+
+     public static function getResponses(): array
+     {
+         return [];
+     }
+ }
