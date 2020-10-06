@@ -10,6 +10,10 @@ use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints;
 use Symfony\Component\Validator\Validation;
 
+/**
+ * Element is building block of data structures. Combine them using special element types: Json and
+ * Collection.
+ */
 abstract class AbstractElement
 {
     public const UNDEFINED = 'UNDEFINED-4c970a6d-fe50-492e-ba0c-73a75fd2f2fd';

@@ -7,6 +7,8 @@ namespace CodexSoft\Transmission;
 use CodexSoft\Transmission\Elements\AbstractElement;
 
 /**
+ * Fascade for constructing elements
+ *
  * @method static Elements\BoolElement bool(string $label = '')
  * @method static Elements\DateElement date(string $label = '')
  * @method static Elements\EmailElement email(string $label = '')
