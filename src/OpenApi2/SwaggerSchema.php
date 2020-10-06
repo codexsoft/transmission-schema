@@ -4,7 +4,7 @@
 namespace CodexSoft\Transmission\OpenApi2;
 
 
-class DocumentSchema implements AbstractOpenApiSchemaInterface
+class SwaggerSchema implements AbstractOpenApiSchemaInterface
 {
     /**
      * Specifies the Swagger Specification version being used. It can be used by the Swagger UI and

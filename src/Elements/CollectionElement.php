@@ -162,17 +162,9 @@ class CollectionElement extends AbstractElement
      */
     public function compileToSymfonyValidatorConstraint()
     {
-        //$constraints = new Constraints\Collection(\array_merge($this->generateSfConstraints(), $this->customSfConstraints));
         $constraints = \array_merge($this->generateSfConstraints(), $this->customSfConstraints);
 
         return $this->isRequired ? $constraints : new Constraints\Optional($constraints);
-        //return $this->isRequired ? new Constraints\Required($constraints) : new Constraints\Optional($constraints);
-
-        //if ($this->isRequired) {
-        //    return new Constraints\Required($constraints);
-        //}
-
-        //return new Constraints\Optional($constraints);
     }
 
     /**
@@ -210,18 +202,4 @@ class CollectionElement extends AbstractElement
         $this->maxCount = $max;
         return $this;
     }
-
-    ///**
-    // * @param $data
-    // *
-    // * @return mixed|void
-    // * @throws \CodexSoft\Transmission\Exceptions\ValidationDetectedViolationsException
-    // * @deprecated
-    // */
-    //protected function doValidate($data)
-    //{
-    //    if (!\is_array($data)) {
-    //        $this->reportViolation('Value must be array, '.\gettype($data).' given');
-    //    }
-    //}
 }

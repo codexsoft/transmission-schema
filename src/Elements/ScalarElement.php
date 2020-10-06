@@ -75,22 +75,4 @@ class ScalarElement extends AbstractElement
         $this->choicesSourceArray = $validChoices;
         return $this;
     }
-
-    ///**
-    // * @param $data
-    // *
-    // * @return mixed|void
-    // * @throws \CodexSoft\Transmission\Exceptions\ValidationDetectedViolationsException
-    // * @deprecated
-    // */
-    //protected function doValidate($data)
-    //{
-    //    if (!\is_scalar($data)) {
-    //        $this->reportViolation("$data must be scalar");
-    //    }
-    //
-    //    if ($this->choicesSourceArray && !\in_array($data, $this->choicesSourceArray)) {
-    //        $this->reportViolation("Not acceptable value $data");
-    //    }
-    //}
 }

@@ -60,6 +60,12 @@ class ParameterSchema implements AbstractOpenApiSchemaInterface
      */
     public bool $allowEmptyValue = false;
 
+    /**
+     * See http://json-schema.org/latest/json-schema-validation.html#anchor14.
+     * @var number
+     */
+    public $multipleOf;
+
     public function __construct()
     {
         $this->schema = new IOSchema();

@@ -10,19 +10,14 @@ class BoolElement extends ScalarElement
     protected ?array $acceptedPhpTypes = ['bool'];
 
     /**
-     * @param $data
+     * @param mixed $data
      *
      * @return bool|null
+     * @inheritDoc
      */
     protected function doNormalizeData($data): ?bool
     {
         $data = parent::doNormalizeData($data);
         return (bool) $data;
     }
-
-    //public function toOpenApiV2(): array
-    //{
-    //    $data = parent::toOpenApiV2();
-    //    return $data;
-    //}
 }

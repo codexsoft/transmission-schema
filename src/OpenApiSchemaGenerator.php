@@ -5,7 +5,7 @@ namespace CodexSoft\Transmission;
 
 
 use CodexSoft\Transmission\Elements\JsonElement;
-use CodexSoft\Transmission\OpenApi2\DocumentSchema;
+use CodexSoft\Transmission\OpenApi2\SwaggerSchema;
 use CodexSoft\Transmission\OpenApi2\ParameterCollection;
 use CodexSoft\Transmission\OpenApi2\ParameterSchema;
 use CodexSoft\Transmission\OpenApi2\PathSchema;
@@ -44,12 +44,7 @@ class OpenApiSchemaGenerator
             //throw new \Exception($endpointClass.' is not '.DocumentedJsonEndpointInterface::class);
         }
 
-        //foreach ($endpointClass::getOpenApiTags() as $tag) {
-        //    $post->tags->add($tag);
-        //}
-
         $post->tags->replaceElements($endpointClass::getOpenApiTags());
-        //$post->tags->set() = $endpointClass::getOpenApiTags();
 
         /*
          * Collecting request structure data
@@ -114,7 +109,7 @@ class OpenApiSchemaGenerator
 
         $collectedSchemaClasses = [];
 
-        $sw = new DocumentSchema();
+        $sw = new SwaggerSchema();
         $sw->swagger = '2.0';
         $sw->host = 'api.pim.one';
         $sw->basepath = '';

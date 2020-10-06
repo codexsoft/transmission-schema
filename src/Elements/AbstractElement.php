@@ -14,10 +14,15 @@ abstract class AbstractElement
 {
     public const UNDEFINED = 'UNDEFINED-4c970a6d-fe50-492e-ba0c-73a75fd2f2fd';
 
-    /** @var Constraint[] */
+    /**
+     * @var Constraint[]
+     * todo: implement usage of this feature
+     */
     protected array $customSfConstraints = [];
 
     protected string $description;
+
+    /** @var mixed */
     protected $example;
     protected string $label = '';
     protected ?string $defaultValue = self::UNDEFINED;
@@ -31,18 +36,6 @@ abstract class AbstractElement
      * @var bool
      */
     protected bool $strictTypeCheck = false;
-
-    ///**
-    // * Should exception be thrown on first violation or not
-    // * @var bool
-    // */
-    //protected bool $stopOnFirstViolation = false;
-
-    ///**
-    // * Collected validation violations
-    // * @var array
-    // */
-    //protected array $violations = [];
 
     /** @var \Closure|null  */
     protected $normalizeDataCallback = null;
@@ -123,6 +116,7 @@ abstract class AbstractElement
     }
 
     /**
+     * Set element description
      * @param string $description
      *
      * @return static
@@ -141,67 +135,6 @@ abstract class AbstractElement
         return $this->description;
     }
 
-    ///**
-    // * @param string $message
-    // *
-    // * @noinspection PhpUnhandledExceptionInspection
-    // * @noinspection PhpDocMissingThrowsInspection
-    // */
-    //protected function reportViolation(string $message): void
-    //{
-    //    $violation = $message;
-    //    if ($this->stopOnFirstViolation) {
-    //        /** @noinspection PhpUnhandledExceptionInspection */
-    //        throw new ValidationDetectedViolationsException([$violation]);
-    //    }
-    //    $this->violations[] = $violation;
-    //}
-
-    //public function isValid(): bool
-    //{
-    //}
-
-    ///**
-    // * @param $data
-    // * @param bool $validateNormalizedData
-    // *
-    // * @return mixed|null
-    // * @throws IncompatibleInputDataTypeException
-    // * @throws ValidationDetectedViolationsException
-    // * @deprecated
-    // */
-    //final public function validateAndReturnData($data, bool $validateNormalizedData = true)
-    //{
-    //    $normalizedData = $this->normalizeData($data);
-    //    $this->doValidate($validateNormalizedData ? $normalizedData : $data);
-    //    if ($this->violations) {
-    //        throw new ValidationDetectedViolationsException($this->violations);
-    //    }
-    //
-    //    return $normalizedData;
-    //}
-
-    ///**
-    // * @param $data
-    // * @param bool $validateNormalizedData
-    // *
-    // * @return array
-    // * @throws IncompatibleInputDataTypeException
-    // * @deprecated
-    // */
-    //final public function validate($data, bool $validateNormalizedData = true)
-    //{
-    //    $normalizedData = $this->normalizeData($data);
-    //
-    //    try {
-    //        $this->doValidate($validateNormalizedData ? $normalizedData : $data);
-    //    } catch (ValidationDetectedViolationsException $e) {
-    //        return $e->getViolations();
-    //    }
-    //
-    //    return $this->violations;
-    //}
-
     /**
      * @param $data
      *
@@ -219,21 +152,10 @@ abstract class AbstractElement
         return new ValidationResult($normalizedData, $violations);
     }
 
-    ///**
-    // * @param $data
-    // *
-    // * @return mixed
-    // * @throws ValidationDetectedViolationsException
-    // * @deprecated
-    // */
-    //abstract protected function doValidate($data);
-
-    //public function required()
-    //{
-    //    $this->isRequired = true;
-    //    return $this;
-    //}
-
+    /**
+     * Set that element is optional
+     * @return static
+     */
     public function optional()
     {
         $this->isRequired = false;
@@ -241,6 +163,7 @@ abstract class AbstractElement
     }
 
     /**
+     * Overrideable symfony constraints generator for element of speciefic type
      * @return Constraint[]
      */
     protected function generateSfConstraints(): array
@@ -258,9 +181,8 @@ abstract class AbstractElement
         return $constraints;
     }
 
-    //public function compileToSymfonyValidatorConstraint(): Constraint
-
     /**
+     * Generate symfony constraints for element to be used in Symfony Validator
      * @return Constraint|Constraint[]
      */
     public function compileToSymfonyValidatorConstraint()
@@ -271,6 +193,7 @@ abstract class AbstractElement
     }
 
     /**
+     * Set that element value CANNOT be null
      * @return static
      */
     public function notNull()
@@ -280,6 +203,7 @@ abstract class AbstractElement
     }
 
     /**
+     * Set that element value CAN be null
      * @return static
      */
     public function nullable()
@@ -289,6 +213,10 @@ abstract class AbstractElement
     }
 
     /**
+     * Set element value example
+     *
+     * @param mixed $exampleValue
+     *
      * @return static
      */
     public function example($exampleValue)
@@ -298,6 +226,10 @@ abstract class AbstractElement
     }
 
     /**
+     * Set element default value (default value will be applied if element is missing in input data)
+     *
+     * @param mixed $value
+     *
      * @return static
      */
     public function defaultValue($value)
@@ -311,12 +243,20 @@ abstract class AbstractElement
         return $this->defaultValue;
     }
 
-    public function hasDefaultValue()
+    /**
+     * Does element have defined default value or not
+     * @return bool
+     */
+    public function hasDefaultValue(): bool
     {
         return $this->defaultValue !== self::UNDEFINED;
     }
 
     /**
+     * Set element accepted PHP types.
+     * If value type from input data is outside these types, the exception will be generated
+     * while validating or normalizing input data.
+     *
      * @param string[] ...$acceptedTypes
      *
      * @return static
@@ -328,6 +268,7 @@ abstract class AbstractElement
     }
 
     /**
+     * Set short text label for element
      * @param string $label
      *
      * @return static
@@ -339,6 +280,8 @@ abstract class AbstractElement
     }
 
     /**
+     * @param bool $value enable or disable strict type checks (is disabled by default)
+     *
      * @return static
      */
     public function strict(bool $value = true)
@@ -347,6 +290,13 @@ abstract class AbstractElement
         return $this;
     }
 
+    /**
+     * Internal helper function to detect if $value is match allowed PHP types
+     * @param $value
+     * @param array $acceptedTypes
+     *
+     * @return bool
+     */
     protected function valueHasType($value, array $acceptedTypes): bool
     {
         foreach ($acceptedTypes as $type) {

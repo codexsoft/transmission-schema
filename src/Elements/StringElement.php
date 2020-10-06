@@ -60,6 +60,7 @@ class StringElement extends ScalarElement
      * @param $data
      *
      * @return string
+     * @inheritDoc
      */
     public function doNormalizeData($data): ?string
     {

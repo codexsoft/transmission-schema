@@ -9,7 +9,6 @@ use CodexSoft\Transmission\Elements\JsonElement;
 use CodexSoft\Transmission\Exceptions\IncompatibleInputDataTypeException;
 use CodexSoft\Transmission\Exceptions\GenericException;
 use CodexSoft\Transmission\Exceptions\InvalidJsonSchemaException;
-use CodexSoft\Transmission\Schemas\InvalidRequestBodySchema;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -17,7 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\ConstraintViolationInterface;
 use Symfony\Component\Validator\Validation;
 
-abstract class AbstractJsonController implements DocumentedJsonEndpointInterface
+abstract class AbstractJsonController implements JsonEndpointInterface
 {
     protected Request $request;
 
@@ -31,6 +30,14 @@ abstract class AbstractJsonController implements DocumentedJsonEndpointInterface
         $this->init();
     }
 
+    /**
+     * Expected request JSON schema
+     * @return AbstractElement[]
+     */
+    abstract public static function bodyInputSchema(): array;
+
+    abstract protected function handle(array $data, array $extraData = []): Response;
+
     protected function init(): void
     {
     }
@@ -42,8 +49,6 @@ abstract class AbstractJsonController implements DocumentedJsonEndpointInterface
     protected function afterHandle(Response $response): void
     {
     }
-
-    abstract protected function handle(array $data, array $extraData = []): Response;
 
     /**
      * @return Response
@@ -66,7 +71,6 @@ abstract class AbstractJsonController implements DocumentedJsonEndpointInterface
 
         try {
             [$normalizedData, $extraData] = $schema->normalizeDataReturningNormalizedAndExtraData($inputData);
-            //$normalizedData = $schema->normalizeData($inputData);
         } catch (IncompatibleInputDataTypeException $e) {
             return new JsonResponse([], Response::HTTP_NOT_ACCEPTABLE);
         }
@@ -96,90 +100,4 @@ abstract class AbstractJsonController implements DocumentedJsonEndpointInterface
 
         return $response;
     }
-
-    public static function getOpenApiTags(): array
-    {
-        return [];
-    }
-
-    protected static function defaultAlternativeResponses(): array
-    {
-        return [
-            Response::HTTP_BAD_REQUEST => InvalidRequestBodySchema::class,
-        ];
-    }
-
-    public static function allAlternativeResponses(): array
-    {
-        return \array_replace(static::defaultAlternativeResponses(), static::alternativeResponses());
-    }
-
-    public static function alternativeResponses(): array
-    {
-        return [];
-    }
-
-    /**
-     * Expected request JSON schema
-     * @return AbstractElement[]
-     */
-    abstract public static function bodyInputSchema(): array;
-
-    /**
-     * Successful response JSON schema
-     * @return AbstractElement[]
-     */
-    abstract public static function bodyOutputSchema(): array;
-
-     public static function getOpenApiSummary(): string
-     {
-         return '';
-     }
-
-     public static function getOpenApiDescription(): string
-     {
-         return '';
-     }
-
-     public static function getOpenApiProduces(): array
-     {
-         return ['application/json'];
-     }
-
-     public static function getOpenApiConsumes(): array
-     {
-         return ['application/json'];
-     }
-
-     public static function queryParametersSchema(): array
-     {
-         return [];
-     }
-
-     public static function pathParametersSchema(): array
-     {
-         return [];
-     }
-
-     public static function bodyParametersSchema(): array
-     {
-         return [];
-     }
-
-     public static function headerParametersSchema(): array
-     {
-         return [
-             'X-Authentication-Token' => Accept::string()->notBlank(),
-         ];
-     }
-
-     public static function formDataParametersSchema(): array
-     {
-         return [];
-     }
-
-     public static function getResponses(): array
-     {
-         return [];
-     }
  }

@@ -3,9 +3,6 @@
 
 namespace CodexSoft\Transmission\Elements;
 
-use CodexSoft\Transmission\Elements\NumberElement;
-use Symfony\Component\Validator\Constraints;
-
 class IntegerElement extends NumberElement
 {
     protected ?array $acceptedPhpTypes = ['integer'];
@@ -16,6 +13,7 @@ class IntegerElement extends NumberElement
      * @param $data
      *
      * @return int
+     * @inheritDoc
      */
     public function doNormalizeData($data): ?int
     {
