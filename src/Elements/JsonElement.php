@@ -193,6 +193,12 @@ class JsonElement extends AbstractElement
         return $normalizedData;
     }
 
+    /**
+     * @param $data
+     *
+     * @return ValidationResult
+     * @throws \CodexSoft\Transmission\Exceptions\IncompatibleInputDataTypeException
+     */
     public function getValidatedNormalizedData($data): ValidationResult
     {
         [$normalizedData, $extraData] = $this->normalizeDataReturningNormalizedAndExtraData($data);

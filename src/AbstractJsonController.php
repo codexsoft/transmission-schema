@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\ConstraintViolationInterface;
-use Symfony\Component\Validator\Validation;
+use Symfony\Component\Validator\ConstraintViolationListInterface;
 
 abstract class AbstractJsonController implements JsonEndpointInterface
 {
@@ -36,6 +36,14 @@ abstract class AbstractJsonController implements JsonEndpointInterface
      */
     abstract public static function bodyInputSchema(): array;
 
+    /**
+     * Implement this method to handle input JSON data
+     *
+     * @param array $data
+     * @param array $extraData
+     *
+     * @return Response
+     */
     abstract protected function handle(array $data, array $extraData = []): Response;
 
     protected function init(): void
@@ -48,6 +56,44 @@ abstract class AbstractJsonController implements JsonEndpointInterface
 
     protected function afterHandle(Response $response): void
     {
+    }
+
+    /**
+     * You can also throw exception in overriden method and handle it by Subscriber, for example.
+     * @param InvalidJsonSchemaException $e
+     *
+     * @return Response
+     */
+    protected function onInvalidBodyInputSchema(InvalidJsonSchemaException $e): Response
+    {
+        return new JsonResponse([], Response::HTTP_INTERNAL_SERVER_ERROR);
+    }
+
+    protected function onViolationsDetected(ConstraintViolationListInterface $violations): Response
+    {
+        $violationsData = [];
+
+        /** @var ConstraintViolationInterface $violation */
+        foreach ($violations as $violation) {
+            $violationsData[] = $violation->getPropertyPath().': '.$violation->getInvalidValue().': '.$violation->getMessage();
+        }
+
+        return new JsonResponse([
+            'message' => 'Invalid request data: '.\implode(', ', $violationsData),
+            'data' => $violationsData,
+        ], Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
+     * todo: current implementation prevents to calculate violations by validator in case of normalization fails.
+     *
+     * @param IncompatibleInputDataTypeException $e
+     *
+     * @return Response
+     */
+    protected function onNormalizationFail(IncompatibleInputDataTypeException $e): Response
+    {
+        return new JsonResponse([], Response::HTTP_NOT_ACCEPTABLE);
     }
 
     /**
@@ -64,40 +110,25 @@ abstract class AbstractJsonController implements JsonEndpointInterface
         $inputData = $this->request->request->all();
 
         try {
-            $schema = (new JsonElement($this->bodyInputSchema()));
+            $schema = (new JsonElement(static::bodyInputSchema()));
         } catch (InvalidJsonSchemaException $e) {
-            return new JsonResponse([], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->onInvalidBodyInputSchema($e);
         }
 
         try {
-            [$normalizedData, $extraData] = $schema->normalizeDataReturningNormalizedAndExtraData($inputData);
+            $validationResult = $schema->getValidatedNormalizedData($inputData);
         } catch (IncompatibleInputDataTypeException $e) {
-            return new JsonResponse([], Response::HTTP_NOT_ACCEPTABLE);
+            return $this->onNormalizationFail($e);
         }
 
-        $sfConstraints = $schema->compileToSymfonyValidatorConstraint();
-        $validator = Validation::createValidator();
-        $violations = $validator->validate($normalizedData, $sfConstraints);
-
-        if ($violations->count()) {
-
-            $violationsData = [];
-
-            /** @var ConstraintViolationInterface $violation */
-            foreach ($violations as $violation) {
-                $violationsData[] = $violation->getPropertyPath().': '.$violation->getInvalidValue().': '.$violation->getMessage();
-            }
-
-            return new JsonResponse([
-                'message' => 'Invalid request data: '.\implode(', ', $violationsData),
-                'data' => $violationsData,
-            ], Response::HTTP_BAD_REQUEST);
+        if ($validationResult->getViolations()->count()) {
+            return $this->onViolationsDetected($validationResult->getViolations());
         }
 
         $this->beforeHandle();
-        $response = $this->handle($normalizedData, $extraData);
+        $response = $this->handle($validationResult->getData(), $validationResult->getExtraData());
         $this->afterHandle($response);
 
         return $response;
     }
- }
+}
