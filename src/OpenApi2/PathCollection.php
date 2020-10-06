@@ -4,8 +4,6 @@
 namespace CodexSoft\Transmission\OpenApi2;
 
 
-use Doctrine\Common\Collections\ArrayCollection;
-
 /**
  * @method PathSchema[] toArray()
  * @method PathSchema|false current()
@@ -17,7 +15,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @method true add(PathSchema $element)
  * @method void set(PathSchema|int $key, string $element)
  */
-class PathCollection extends ArrayCollection
+class PathCollection extends AbstractSchemaCollection
 {
 
 }

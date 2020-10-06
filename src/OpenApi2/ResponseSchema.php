@@ -6,11 +6,7 @@ namespace CodexSoft\Transmission\OpenApi2;
 
 class ResponseSchema
 {
-    /**
-     * $ref See http://json-schema.org/latest/json-schema-core.html#rfc.section.7
-     * @var string
-     */
-    public $ref;
+    use RefTrait;
 
     /**
      * The key into Operations->responses array.
@@ -25,10 +21,12 @@ class ResponseSchema
     public ?string $description = null;
 
     /**
-     * A definition of the response structure. It can be a primitive, an array or an object. If this field does not exist, it means no content is returned as part of the response. As an extension to the Schema Object, its root type value may also be "file". This SHOULD be accompanied by a relevant produces mime-type.
-     * @var Schema
+     * A definition of the response structure. It can be a primitive, an array or an object. If this
+     * field does not exist, it means no content is returned as part of the response. As an
+     * \extension to the Schema Object, its root type value may also be "file". This SHOULD be
+     * accompanied by a relevant produces mime-type.
      */
-    public $schema;
+    public IOSchema $schema;
 
     /**
      * A list of headers that are sent with the response.
@@ -40,6 +38,11 @@ class ResponseSchema
      * An example of the response message.
      */
     public array $examples = [];
+
+    public function __construct()
+    {
+        $this->schema = new IOSchema();
+    }
 
     public function toArray(): array
     {

@@ -4,6 +4,8 @@
 namespace CodexSoft\Transmission\OpenApi2;
 
 
+use CodexSoft\Transmission\Elements\AbstractElement;
+
 /**
  * @method ParameterSchema[] toArray()
  * @method ParameterSchema|false current()
@@ -17,5 +19,7 @@ namespace CodexSoft\Transmission\OpenApi2;
  */
 class ParameterCollection extends AbstractSchemaCollection
 {
-
+    public static function importFromElement(AbstractElement $element): void
+    {
+    }
 }

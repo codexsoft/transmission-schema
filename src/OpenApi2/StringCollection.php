@@ -4,8 +4,6 @@
 namespace CodexSoft\Transmission\OpenApi2;
 
 
-use Doctrine\Common\Collections\ArrayCollection;
-
 /**
  * @method string[] toArray()
  * @method string|false current()
@@ -17,7 +15,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @method true add(string $element)
  * @method void set(string|int $key, string $element)
  */
-class StringCollection extends ArrayCollection
+class StringCollection extends AbstractSchemaCollection
 {
 
 }

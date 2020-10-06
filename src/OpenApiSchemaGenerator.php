@@ -6,13 +6,12 @@ namespace CodexSoft\Transmission;
 
 use CodexSoft\Transmission\Elements\JsonElement;
 use CodexSoft\Transmission\OpenApi2\DocumentSchema;
+use CodexSoft\Transmission\OpenApi2\ParameterCollection;
+use CodexSoft\Transmission\OpenApi2\ParameterSchema;
 use CodexSoft\Transmission\OpenApi2\PathSchema;
 use CodexSoft\Transmission\OpenApi2\PostOperationSchema;
 use CodexSoft\Transmission\OpenApi2\ResponseSchema;
 use CodexSoft\Transmission\OpenApiSchemaGeneratorTest\PetsAction;
-use EXSyst\Component\Swagger\Parameter;
-use EXSyst\Component\Swagger\Path;
-use EXSyst\Component\Swagger\Swagger;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Route;
@@ -45,7 +44,12 @@ class OpenApiSchemaGenerator
             //throw new \Exception($endpointClass.' is not '.DocumentedJsonEndpointInterface::class);
         }
 
-        $post->tags = $endpointClass::getOpenApiTags();
+        //foreach ($endpointClass::getOpenApiTags() as $tag) {
+        //    $post->tags->add($tag);
+        //}
+
+        $post->tags->replaceElements($endpointClass::getOpenApiTags());
+        //$post->tags->set() = $endpointClass::getOpenApiTags();
 
         /*
          * Collecting request structure data
@@ -57,6 +61,11 @@ class OpenApiSchemaGenerator
         $inputJsonParameter = $inputJson->toOpenApiV2ParameterArray();
 
         \array_push($this->mentionedSchemaClasses, ...$inputJson->collectMentionedSchemas());
+
+        //$parameter = ParameterSchema::createFromElement($inputJson);
+        //$parameters = ParameterCollection::importFromElement($inputJson);
+        //$post->parameters->add($parameter);
+        $post->parametersArrayed = $inputJsonParameter;
 
         /*
          * Collecting operation responses
@@ -82,7 +91,8 @@ class OpenApiSchemaGenerator
             $responseParameter = $responseSchemaJson->toOpenApiV2ParameterArray();
 
             $rsp = new ResponseSchema();
-            $rsp->schema
+            //$rsp->schema->
+            //$rsp->schema
             $post->responses->set($httpCode, $rsp);
 
             //$routeResponses[$httpCode] = [
@@ -140,20 +150,22 @@ class OpenApiSchemaGenerator
         // generating all mentioned definitions
 
         /** @var mixed[] $definitions standalone definitions */
-        $definitions = [];
-
-        foreach ($collectedSchemaClasses as $collectedSchemaClass) {
-            if (!\in_array(JsonSchemaInterface::class, \class_implements($collectedSchemaClass), true)) {
-                throw new \Exception('Schema definition for class '.$collectedSchemaClass.' could not be generated.');
-            }
-            /** @var JsonSchemaInterface $collectedSchemaClass */
-            $definitionSchema = $collectedSchemaClass::createSchema();
-            $definitionSchemaJson = new JsonElement($definitionSchema);
-            $definitionParameter = $definitionSchemaJson->toOpenApiV2ParameterArray();
-            // #/definitions/App_Controller_Api_Form_BrandForm
-
-            $definitions[$collectedSchemaClass] = $definitionParameter;
-        }
+        //$definitions = [];
+        //
+        //foreach ($collectedSchemaClasses as $collectedSchemaClass) {
+        //    if (!\in_array(JsonSchemaInterface::class, \class_implements($collectedSchemaClass), true)) {
+        //        throw new \Exception('Schema definition for class '.$collectedSchemaClass.' could not be generated.');
+        //    }
+        //    /** @var JsonSchemaInterface $collectedSchemaClass */
+        //    $definitionSchema = $collectedSchemaClass::createSchema();
+        //    $definitionSchemaJson = new JsonElement($definitionSchema);
+        //    $definitionParameter = $definitionSchemaJson->toOpenApiV2ParameterArray();
+        //    /*
+        //     * #/definitions/App_Controller_Api_Form_BrandForm
+        //     */
+        //
+        //    $definitions[$collectedSchemaClass] = $definitionParameter;
+        //}
 
         $result = $sw->exportToArray();
 

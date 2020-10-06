@@ -73,6 +73,7 @@ class OperationSchema
      * There can be one "body" parameter at most.
      */
     public ParameterCollection $parameters;
+    public array $parametersArrayed = [];
 
     /**
      * The list of possible responses as they are returned from executing this operation.
@@ -112,13 +113,15 @@ class OperationSchema
     public function toArray(): array
     {
         $responsesData = [];
-        foreach ($this->responses as $response) {
-            $responsesData[] = $response->toArray();
+        foreach ($this->responses as $httpCode => $response) {
+            $responsesData[$httpCode] = $response->toArray();
         }
 
         return [
             'tags' => $this->tags->toArray(),
-            'parameters' => $inputJsonParameter,
+            'parameters' => $this->parametersArrayed,
+            //'parameters' => [],
+            //'parameters' => $inputJsonParameter,
             'responses' => $responsesData,
         ];
     }

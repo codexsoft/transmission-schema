@@ -41,6 +41,11 @@ class PetsAction extends AbstractJsonController
         return new JsonResponse(['data' => []]);
     }
 
+    public static function getOpenApiTags(): array
+    {
+        return ['Pets'];
+    }
+
     /**
      * @inheritDoc
      */
