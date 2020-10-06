@@ -1,7 +1,7 @@
 {
-    "name": "codexsoft/transmission",
+    "name": "codexsoft/transmission-schema",
     "license": "MIT",
-    "description": "PHP Library for building HTTP JSON API",
+    "description": "Schema configuration, validation and normalization part of CodexSoft Transmission PHP Library for building HTTP JSON API",
     "authors": [
         {
             "name": "Dmitriy V Kozubskiy",
@@ -11,14 +11,13 @@
         }
     ],
     "support": {
-        "issues": "https://github.com/codexsoft/transmission/issues",
-        "source": "https://github.com/codexsoft/transmission"
+        "issues": "https://github.com/codexsoft/transmission-schema/issues",
+        "source": "https://github.com/codexsoft/transmission-schema"
     },
     "require": {
         "php": "^7.4.0",
         "ext-json": "*",
-        "symfony/validator": "^5.1",
-        "symfony/http-foundation": "^4.3|^5.0"
+        "symfony/validator": "^5.1"
     },
     "require-dev": {
         "phpunit/phpunit": "^9",
