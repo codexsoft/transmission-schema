@@ -153,7 +153,7 @@ abstract class AbstractElement
         $validator = Validation::createValidator();
         $sfFormalConstraints = $this->compileToFormalSymfonyValidatorConstraint();
         $formalViolations = $validator->validate($data, $sfFormalConstraints);
-        if ($formalViolations) {
+        if ($formalViolations->count()) {
             return new ValidationResult($data, $formalViolations);
         }
 
