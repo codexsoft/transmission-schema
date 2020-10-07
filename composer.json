@@ -16,7 +16,6 @@
     },
     "require": {
         "php": "^7.4.0",
-        "ext-json": "*",
         "symfony/validator": "^5.1"
     },
     "require-dev": {
