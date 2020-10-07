@@ -19,6 +19,7 @@ class JsonElement extends AbstractElement
     protected ?array $acceptedPhpTypes = ['array'];
     protected bool $strictTypeCheck = true;
     protected string $openApiType = 'object';
+    protected bool $allowExtraFields = true;
     //public const MODE_LEAVE_EXTRA_KEYS = 1;
     //public const MODE_EXTRACT_EXTRA_KEYS = 2;
     //public const MODE_IGNORE_EXTRA_KEYS = 3;
@@ -98,6 +99,12 @@ class JsonElement extends AbstractElement
         return $mentioned;
     }
 
+    public function denyExtraFields(bool $allowExtraFields = false)
+    {
+        $this->allowExtraFields = $allowExtraFields;
+        return $this;
+    }
+
     /**
      * @return Constraint|Constraint[]
      */
@@ -114,6 +121,7 @@ class JsonElement extends AbstractElement
         $collection = new Constraints\Collection([
             'fields' => $constraints,
             'allowMissingFields' => false,
+            'allowExtraFields' => $this->allowExtraFields,
         ]);
 
         return $this->isRequired ? $collection : new Constraints\Optional($collection);
@@ -135,6 +143,7 @@ class JsonElement extends AbstractElement
         $collection = new Constraints\Collection([
             'fields' => $constraints,
             'allowMissingFields' => false,
+            'allowExtraFields' => $this->allowExtraFields,
         ]);
 
         return $this->isRequired ? $collection : new Constraints\Optional($collection);
