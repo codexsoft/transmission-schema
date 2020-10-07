@@ -157,15 +157,27 @@ class CollectionElement extends AbstractElement
         return $constraints;
     }
 
-    /**
-     * @return Constraint|Constraint[]
-     */
-    public function compileToSymfonyValidatorConstraint()
+    protected function generateFormalSfConstraints(): array
     {
-        $constraints = \array_merge($this->generateSfConstraints(), $this->customSfConstraints);
+        $constraints = parent::generateFormalSfConstraints();
 
-        return $this->isRequired ? $constraints : new Constraints\Optional($constraints);
+        if ($this->elementSchema) {
+            $compiledElementSchema = $this->elementSchema->compileToFormalSymfonyValidatorConstraint();
+            $constraints[] = new Constraints\All(['constraints' => $compiledElementSchema]);
+        }
+
+        return $constraints;
     }
+
+    ///**
+    // * @return Constraint|Constraint[]
+    // */
+    //public function compileToSymfonyValidatorConstraint()
+    //{
+    //    $constraints = \array_merge($this->generateSfConstraints(), $this->customSfConstraints);
+    //
+    //    return $this->isRequired ? $constraints : new Constraints\Optional($constraints);
+    //}
 
     /**
      * @param int|null $min

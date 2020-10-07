@@ -5,6 +5,9 @@ namespace CodexSoft\Transmission\Schema\Elements;
 
 use Symfony\Component\Validator\Constraint;
 
+/**
+ * @deprecated currently not usable and not tested
+ */
 class SfConstraintElement extends AbstractElement
 {
     /** @var Constraint[] */

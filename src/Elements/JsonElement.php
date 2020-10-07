@@ -120,6 +120,27 @@ class JsonElement extends AbstractElement
     }
 
     /**
+     * @return Constraint|Constraint[]
+     */
+    public function compileToFormalSymfonyValidatorConstraint()
+    {
+        $constraints = $this->customSfConstraints;
+
+        foreach ($this->schema as $key => $value) {
+            if ($value instanceof AbstractElement) {
+                $constraints[$key] = $value->compileToFormalSymfonyValidatorConstraint();
+            }
+        }
+
+        $collection = new Constraints\Collection([
+            'fields' => $constraints,
+            'allowMissingFields' => false,
+        ]);
+
+        return $this->isRequired ? $collection : new Constraints\Optional($collection);
+    }
+
+    /**
      * @return string|null
      */
     public function getSchemaGatheredFromClass(): ?string
@@ -201,6 +222,16 @@ class JsonElement extends AbstractElement
      */
     public function getValidatedNormalizedData($data): ValidationResult
     {
+        /**
+         * First - check that input data has acceptable types
+         */
+        $validator = Validation::createValidator();
+        $sfFormalConstraints = $this->compileToFormalSymfonyValidatorConstraint();
+        $formalViolations = $validator->validate($data, $sfFormalConstraints);
+        if ($formalViolations) {
+            return new ValidationResult($data, $formalViolations);
+        }
+
         [$normalizedData, $extraData] = $this->normalizeDataReturningNormalizedAndExtraData($data);
 
         $sfConstraints = $this->compileToSymfonyValidatorConstraint();

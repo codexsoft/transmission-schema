@@ -147,10 +147,22 @@ abstract class AbstractElement
      */
     public function getValidatedNormalizedData($data): ValidationResult
     {
+        /**
+         * First - check that input data has acceptable types
+         */
+        $validator = Validation::createValidator();
+        $sfFormalConstraints = $this->compileToFormalSymfonyValidatorConstraint();
+        $formalViolations = $validator->validate($data, $sfFormalConstraints);
+        if ($formalViolations) {
+            return new ValidationResult($data, $formalViolations);
+        }
+
+        /**
+         * If so, normalizing data (trim strings, convert booleans and so on) and validate it
+         */
         $normalizedData = $this->normalizeData($data);
 
         $sfConstraints = $this->compileToSymfonyValidatorConstraint();
-        $validator = Validation::createValidator();
         $violations = $validator->validate($normalizedData, $sfConstraints);
 
         return new ValidationResult($normalizedData, $violations);
@@ -167,10 +179,30 @@ abstract class AbstractElement
     }
 
     /**
-     * Overrideable symfony constraints generator for element of speciefic type
+     * Overrideable symfony constraints generator for element of specific type
      * @return Constraint[]
      */
     protected function generateSfConstraints(): array
+    {
+        $constraints = $this->generateFormalSfConstraints();
+        //$constraints = [];
+
+        //if ($this->isNullable === false) {
+        //    $constraints[] = new Constraints\NotNull();
+        //}
+        //
+        //if ($this->strictTypeCheck && $this->acceptedPhpTypes) {
+        //    $constraints[] = new Constraints\Type(['type' => $this->acceptedPhpTypes]);
+        //}
+
+        return $constraints;
+    }
+
+    /**
+     * Overrideable symfony constraints generator for element of speciefic type
+     * @return Constraint[]
+     */
+    protected function generateFormalSfConstraints(): array
     {
         $constraints = [];
 
@@ -192,6 +224,17 @@ abstract class AbstractElement
     public function compileToSymfonyValidatorConstraint()
     {
         $constraints = \array_merge($this->generateSfConstraints(), $this->customSfConstraints);
+
+        return $this->isRequired ? $constraints : new Constraints\Optional($constraints);
+    }
+
+    /**
+     * Generate symfony constraints for element to be used in Symfony Validator
+     * @return Constraint|Constraint[]
+     */
+    public function compileToFormalSymfonyValidatorConstraint()
+    {
+        $constraints = $this->generateFormalSfConstraints();
 
         return $this->isRequired ? $constraints : new Constraints\Optional($constraints);
     }
