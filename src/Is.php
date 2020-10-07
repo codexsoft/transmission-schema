@@ -1,7 +1,7 @@
 <?php
 
 
-namespace CodexSoft\TransmissionSchema;
+namespace CodexSoft\Transmission\Schema;
 
 /**
  * Alias

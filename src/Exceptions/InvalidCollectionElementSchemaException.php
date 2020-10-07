@@ -1,7 +1,7 @@
 <?php
 
 
-namespace CodexSoft\TransmissionSchema\Exceptions;
+namespace CodexSoft\Transmission\Schema\Exceptions;
 
 
 class InvalidCollectionElementSchemaException extends GenericTransmissionException

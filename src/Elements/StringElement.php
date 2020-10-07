@@ -1,10 +1,10 @@
 <?php
 
 
-namespace CodexSoft\TransmissionSchema\Elements;
+namespace CodexSoft\Transmission\Schema\Elements;
 
-use CodexSoft\TransmissionSchema\Constraints\ContainsAlphanumeric;
-use CodexSoft\TransmissionSchema\Constraints\ContainsNoWhitespaces;
+use CodexSoft\Transmission\Schema\Constraints\ContainsAlphanumeric;
+use CodexSoft\Transmission\Schema\Constraints\ContainsNoWhitespaces;
 use Symfony\Component\Validator\Constraints;
 
 class StringElement extends ScalarElement

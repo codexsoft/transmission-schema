@@ -1,10 +1,10 @@
 <?php
 
 
-namespace CodexSoft\TransmissionSchema\Contracts;
+namespace CodexSoft\Transmission\Schema\Contracts;
 
 
-use CodexSoft\TransmissionSchema\Elements\AbstractElement;
+use CodexSoft\Transmission\Schema\Elements\AbstractElement;
 
 interface JsonEndpointInterface
 {

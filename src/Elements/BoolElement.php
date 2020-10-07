@@ -1,7 +1,7 @@
 <?php
 
 
-namespace CodexSoft\TransmissionSchema\Elements;
+namespace CodexSoft\Transmission\Schema\Elements;
 
 class BoolElement extends ScalarElement
 {

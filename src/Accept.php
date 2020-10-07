@@ -1,10 +1,10 @@
 <?php
 
 
-namespace CodexSoft\TransmissionSchema;
+namespace CodexSoft\Transmission\Schema;
 
 
-use CodexSoft\TransmissionSchema\Elements\AbstractElement;
+use CodexSoft\Transmission\Schema\Elements\AbstractElement;
 
 /**
  * Fascade for constructing elements

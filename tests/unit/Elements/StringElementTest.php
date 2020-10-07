@@ -1,10 +1,10 @@
 <?php
 
-namespace CodexSoft\TransmissionSchema\Elements;
+namespace CodexSoft\Transmission\Schema\Elements;
 
-use CodexSoft\TransmissionSchema\AbstractElementTest;
-use CodexSoft\TransmissionSchema\Accept;
-use CodexSoft\TransmissionSchema\Exceptions\IncompatibleInputDataTypeException;
+use CodexSoft\Transmission\Schema\AbstractElementTest;
+use CodexSoft\Transmission\Schema\Accept;
+use CodexSoft\Transmission\Schema\Exceptions\IncompatibleInputDataTypeException;
 
 class StringElementTest extends AbstractElementTest
 {

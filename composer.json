@@ -24,12 +24,12 @@
     },
     "autoload": {
         "psr-4": {
-            "CodexSoft\\TransmissionSchema\\": ["src/"]
+            "CodexSoft\\Transmission\\Schema\\": ["src/"]
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "CodexSoft\\TransmissionSchema\\": ["tests/unit/"],
+            "CodexSoft\\Transmission\\Schema\\": ["tests/unit/"],
             "": ["vendor/"]
         }
     }

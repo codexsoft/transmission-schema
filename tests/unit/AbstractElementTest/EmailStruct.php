@@ -1,11 +1,11 @@
 <?php
 
 
-namespace CodexSoft\TransmissionSchema\AbstractElementTest;
+namespace CodexSoft\Transmission\Schema\AbstractElementTest;
 
 
-use CodexSoft\TransmissionSchema\Accept;
-use CodexSoft\TransmissionSchema\Contracts\JsonSchemaInterface;
+use CodexSoft\Transmission\Schema\Accept;
+use CodexSoft\Transmission\Schema\Contracts\JsonSchemaInterface;
 
 class EmailStruct implements JsonSchemaInterface
 {

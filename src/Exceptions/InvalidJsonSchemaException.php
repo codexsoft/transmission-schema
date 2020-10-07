@@ -1,7 +1,7 @@
 <?php
 
 
-namespace CodexSoft\TransmissionSchema\Exceptions;
+namespace CodexSoft\Transmission\Schema\Exceptions;
 
 
 class InvalidJsonSchemaException extends GenericTransmissionException

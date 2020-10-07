@@ -1,10 +1,10 @@
 <?php
 
-namespace CodexSoft\TransmissionSchema;
+namespace CodexSoft\Transmission\Schema;
 
-use CodexSoft\TransmissionSchema\AbstractElementTest\EmailStruct;
-use CodexSoft\TransmissionSchema\Elements\AbstractElement;
-use CodexSoft\TransmissionSchema\Tools\SchemaChecker;
+use CodexSoft\Transmission\Schema\AbstractElementTest\EmailStruct;
+use CodexSoft\Transmission\Schema\Elements\AbstractElement;
+use CodexSoft\Transmission\Schema\Tools\SchemaChecker;
 use PHPUnit\Framework\TestCase;
 
 abstract class AbstractElementTest extends TestCase

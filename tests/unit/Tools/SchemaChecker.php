@@ -1,11 +1,11 @@
 <?php
 
 
-namespace CodexSoft\TransmissionSchema\Tools;
+namespace CodexSoft\Transmission\Schema\Tools;
 
 
-use CodexSoft\TransmissionSchema\Elements\AbstractElement;
-use CodexSoft\TransmissionSchema\Elements\JsonElement;
+use CodexSoft\Transmission\Schema\Elements\AbstractElement;
+use CodexSoft\Transmission\Schema\Elements\JsonElement;
 use Symfony\Component\Validator\ConstraintViolationInterface;
 use Symfony\Component\Validator\Validation;
 

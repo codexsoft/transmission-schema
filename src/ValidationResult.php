@@ -1,7 +1,7 @@
 <?php
 
 
-namespace CodexSoft\TransmissionSchema;
+namespace CodexSoft\Transmission\Schema;
 
 
 use Symfony\Component\Validator\ConstraintViolationListInterface;
