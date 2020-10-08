@@ -3,7 +3,7 @@
 
 namespace CodexSoft\Transmission\Schema\Elements;
 
-use Symfony\Component\Validator\Constraints;
+//use Symfony\Component\Validator\Constraints;
 
 class IntegerElement extends NumberElement
 {
@@ -23,10 +23,10 @@ class IntegerElement extends NumberElement
         return (int) $data;
     }
 
-    protected function generateFormalSfConstraints(): array
-    {
-        $constraints = parent::generateFormalSfConstraints();
-        $constraints[] = new Constraints\Type(['type' => 'integer']);
-        return $constraints;
-    }
+    //protected function generateFormalSfConstraints(): array
+    //{
+    //    $constraints = parent::generateFormalSfConstraints();
+    //    $constraints[] = new Constraints\Type(['type' => 'integer']);
+    //    return $constraints;
+    //}
 }
