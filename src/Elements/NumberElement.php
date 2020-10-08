@@ -52,6 +52,8 @@ class NumberElement extends ScalarElement
             }
         }
 
+        $constraints[] = new Constraints\Type(['type' => 'numeric']);
+
         return $constraints;
     }
 
