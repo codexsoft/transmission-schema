@@ -3,11 +3,9 @@
 
 namespace CodexSoft\Transmission\Schema\Elements;
 
-use CodexSoft\Transmission\Schema\Exceptions\IncompatibleInputDataTypeException;
 use CodexSoft\Transmission\Schema\Exceptions\InvalidCollectionElementSchemaException;
 use CodexSoft\Transmission\Schema\Exceptions\InvalidJsonSchemaException;
 use CodexSoft\Transmission\Schema\Contracts\JsonSchemaInterface;
-use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints;
 
 /**
@@ -115,7 +113,6 @@ class CollectionElement extends AbstractElement
      * @param $data
      *
      * @return array|mixed
-     * @throws IncompatibleInputDataTypeException
      */
     protected function doNormalizeData($data)
     {

@@ -80,7 +80,6 @@ abstract class AbstractElement
      * @param $data
      *
      * @return mixed|null
-     * @throws IncompatibleInputDataTypeException
      */
     final public function normalizeData($data)
     {
@@ -88,22 +87,22 @@ abstract class AbstractElement
             return null;
         }
 
-        /**
-         * NULL can be normalized to empty string or to 0. This is default behaviour.
-         * To prevent this, strict type checking must be enabled.
-         * todo: should failure prevent validation and collecting violations?
-         */
-        if ($this->strictTypeCheck && $data === null && !$this->isNullable) {
-            throw new IncompatibleInputDataTypeException('NULL is not acceptable value');
-        }
+        ///**
+        // * NULL can be normalized to empty string or to 0. This is default behaviour.
+        // * To prevent this, strict type checking must be enabled.
+        // * todo: should failure prevent validation and collecting violations?
+        // */
+        //if ($this->strictTypeCheck && $data === null && !$this->isNullable) {
+        //    throw new IncompatibleInputDataTypeException('NULL is not acceptable value');
+        //}
 
-        /**
-         * Check acceptable input data types in strict mode. Not acceptable generates failure.
-         * todo: should failure prevent validation and collecting violations?
-         */
-        if ($this->strictTypeCheck && \is_array($this->acceptedPhpTypes) && $this->acceptedPhpTypes && !$this->valueHasType($data, $this->acceptedPhpTypes)) {
-            throw new IncompatibleInputDataTypeException('Value must be one of accepted types: {'.\implode(', ', $this->acceptedPhpTypes).'} but '.\gettype($data).' given');
-        }
+        ///**
+        // * Check acceptable input data types in strict mode. Not acceptable generates failure.
+        // * todo: should failure prevent validation and collecting violations?
+        // */
+        //if ($this->strictTypeCheck && \is_array($this->acceptedPhpTypes) && $this->acceptedPhpTypes && !$this->valueHasType($data, $this->acceptedPhpTypes)) {
+        //    throw new IncompatibleInputDataTypeException('Value must be one of accepted types: {'.\implode(', ', $this->acceptedPhpTypes).'} but '.\gettype($data).' given');
+        //}
 
         $normalizedData = $this->doNormalizeData($data);
 
@@ -143,7 +142,6 @@ abstract class AbstractElement
      * @param $data
      *
      * @return ValidationResult
-     * @throws IncompatibleInputDataTypeException
      */
     public function getValidatedNormalizedData($data): ValidationResult
     {

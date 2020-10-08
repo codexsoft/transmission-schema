@@ -163,7 +163,6 @@ class JsonElement extends AbstractElement
      * @param bool $extractExtraKeysToExtraData
      *
      * @return array[]
-     * @throws \CodexSoft\Transmission\Schema\Exceptions\IncompatibleInputDataTypeException
      */
     public function normalizeDataReturningNormalizedAndExtraData(
         array $data,
@@ -215,7 +214,6 @@ class JsonElement extends AbstractElement
      * @param $data
      *
      * @return array
-     * @throws \CodexSoft\Transmission\Schema\Exceptions\IncompatibleInputDataTypeException
      */
     protected function doNormalizeData($data): array
     {
@@ -227,7 +225,6 @@ class JsonElement extends AbstractElement
      * @param $data
      *
      * @return ValidationResult
-     * @throws \CodexSoft\Transmission\Schema\Exceptions\IncompatibleInputDataTypeException
      */
     public function getValidatedNormalizedData($data): ValidationResult
     {
