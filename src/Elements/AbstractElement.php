@@ -4,7 +4,6 @@
 namespace CodexSoft\Transmission\Schema\Elements;
 
 
-use CodexSoft\Transmission\Schema\Exceptions\IncompatibleInputDataTypeException;
 use CodexSoft\Transmission\Schema\ValidationResult;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints;

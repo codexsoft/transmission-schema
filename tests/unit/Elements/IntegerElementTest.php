@@ -4,7 +4,6 @@ namespace CodexSoft\Transmission\Schema\Elements;
 
 use CodexSoft\Transmission\Schema\AbstractElementTest;
 use CodexSoft\Transmission\Schema\Accept;
-use CodexSoft\Transmission\Schema\Exceptions\IncompatibleInputDataTypeException;
 
 class IntegerElementTest extends AbstractElementTest
 {
