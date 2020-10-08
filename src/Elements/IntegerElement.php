@@ -3,6 +3,8 @@
 
 namespace CodexSoft\Transmission\Schema\Elements;
 
+use Symfony\Component\Validator\Constraints;
+
 class IntegerElement extends NumberElement
 {
     protected ?array $acceptedPhpTypes = ['integer'];
@@ -19,5 +21,12 @@ class IntegerElement extends NumberElement
     {
         $data = parent::doNormalizeData($data);
         return (int) $data;
+    }
+
+    protected function generateFormalSfConstraints(): array
+    {
+        $constraints = parent::generateFormalSfConstraints();
+        $constraints[] = new Constraints\Type(['type' => 'integer']);
+        return $constraints;
     }
 }
