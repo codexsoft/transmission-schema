@@ -52,8 +52,13 @@ class NumberElement extends ScalarElement
             }
         }
 
-        $constraints[] = new Constraints\Type(['type' => 'numeric']);
+        return $constraints;
+    }
 
+    protected function generateFormalSfConstraints(): array
+    {
+        $constraints = parent::generateFormalSfConstraints();
+        $constraints[] = new Constraints\Type(['type' => 'numeric']);
         return $constraints;
     }
 
