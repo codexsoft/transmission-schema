@@ -28,7 +28,7 @@ abstract class AbstractElement
     /** @var mixed */
     protected $example;
     protected string $label = '';
-    protected ?string $defaultValue = self::UNDEFINED;
+    protected $defaultValue = self::UNDEFINED;
 
     protected bool $isRequired = true;
     protected bool $isNullable = false;
