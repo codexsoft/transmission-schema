@@ -42,7 +42,10 @@ class ScalarElement extends AbstractElement
     {
         $constraints = parent::generateSfConstraints();
         if ($this->choicesSourceArray) {
-            $constraints[] = new Constraints\Choice(['choices' => \array_values($this->choicesSourceArray)]);
+            $constraints[] = new Constraints\Choice([
+                'choices' => \array_values($this->choicesSourceArray),
+                'message' => 'The value you selected is not a valid choice. Accepted values are: {{ choices }}',
+            ]);
         }
 
         return $constraints;
