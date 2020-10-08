@@ -68,6 +68,13 @@ class ScalarElement extends AbstractElement
         return $data;
     }
 
+    protected function generateFormalSfConstraints(): array
+    {
+        $constraints = parent::generateFormalSfConstraints();
+        $constraints[] = new Constraints\Type(['type' => 'scalar']);
+        return $constraints;
+    }
+
     /**
      * @param array $validChoices
      *
