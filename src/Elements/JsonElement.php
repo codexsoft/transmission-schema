@@ -9,6 +9,7 @@ use CodexSoft\Transmission\Schema\Contracts\JsonSchemaInterface;
 use CodexSoft\Transmission\Schema\ValidationResult;
 use Symfony\Component\Validator\Constraints;
 use Symfony\Component\Validator\Constraint;
+use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\Validation;
 
 /**
@@ -146,7 +147,13 @@ class JsonElement extends AbstractElement
             'allowExtraFields' => $this->allowExtraFields,
         ]);
 
-        return $this->isRequired ? $collection : new Constraints\Optional($collection);
+        $selfConstraints = $this->generateFormalSfConstraints();
+        $selfConstraints[] = new Constraints\Type(['type' => 'array']);
+        $selfConstraints[] = $collection;
+
+        //return $this->isRequired ? new Constraints\Required($selfConstraints) : new Constraints\Optional($selfConstraints);
+        return $this->isRequired ? $selfConstraints : new Constraints\Optional($selfConstraints);
+        //return $this->isRequired ? $collection : new Constraints\Optional($collection);
     }
 
     /**
@@ -238,7 +245,11 @@ class JsonElement extends AbstractElement
             return new ValidationResult($data, $formalViolations);
         }
 
-        [$normalizedData, $extraData] = $this->normalizeDataReturningNormalizedAndExtraData($data);
+        if (\is_array($data)) {
+            [$normalizedData, $extraData] = $this->normalizeDataReturningNormalizedAndExtraData($data);
+        } else {
+            [$normalizedData, $extraData] = [$data, []];
+        }
 
         $sfConstraints = $this->compileToSymfonyValidatorConstraint();
         $validator = Validation::createValidator();

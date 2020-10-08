@@ -12,15 +12,16 @@ class JsonElementTest extends AbstractElementTest
 
     public function dataProviderNormalizeData(): array
     {
+        //return [
+        //    [null, Accept::json(TestData::class), null, self::EXPECT_VIOLATIONS],
+        //];
+
         return [
 
-            [null, Accept::json(TestData::class), null, IncompatibleInputDataTypeException::class],
             [null, Accept::json(TestData::class)->nullable(), null, null],
-
-            /**
-             * Data normalizer does not care about missing fields. Validator does.
-             */
-            [[], Accept::json(TestData::class), [], null],
+            [null, Accept::json(TestData::class), null, self::EXPECT_VIOLATIONS], // should not be null
+            [null, Accept::json(TestData::class)->nullable(), null, null],
+            [[], Accept::json(TestData::class), [], self::EXPECT_VIOLATIONS], // missed field a
 
             [
                 ['a' => 'hello'],

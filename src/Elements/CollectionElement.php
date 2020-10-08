@@ -163,6 +163,8 @@ class CollectionElement extends AbstractElement
             $constraints[] = new Constraints\All(['constraints' => $compiledElementSchema]);
         }
 
+        //$constraints[] = new Constraints\Type(['type' => 'array']);
+
         return $constraints;
     }
 

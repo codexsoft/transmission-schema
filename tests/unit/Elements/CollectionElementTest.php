@@ -20,11 +20,11 @@ class CollectionElementTest extends AbstractElementTest
             [['a'], $stringCollection, ['a'], null],
             [[1], $stringCollection, ['1'], null],
             [[1.5], $stringCollection, ['1.5'], null],
-            [[null], $stringCollection, [''], null],
-            [null, $stringCollection, null, IncompatibleInputDataTypeException::class],
-            ['a', $stringCollection, null, IncompatibleInputDataTypeException::class],
-            [1, $stringCollection, null, IncompatibleInputDataTypeException::class],
-            [0.5, $stringCollection, null, IncompatibleInputDataTypeException::class],
+            [[null], $stringCollection, [''], self::EXPECT_VIOLATIONS], // because element is not nullable
+            [null, $stringCollection, null, self::EXPECT_VIOLATIONS],
+            ['a', $stringCollection, null, self::EXPECT_VIOLATIONS],
+            [1, $stringCollection, null, self::EXPECT_VIOLATIONS],
+            [0.5, $stringCollection, null, self::EXPECT_VIOLATIONS],
 
             [null, $stringCollectionNullable, null, null],
 
