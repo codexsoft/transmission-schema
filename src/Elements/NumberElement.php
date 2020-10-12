@@ -59,16 +59,16 @@ class NumberElement extends ScalarElement
     {
         $constraints = parent::generateFormalSfConstraints();
 
-        if ($this->substitutes) {
-            $constraints[] = new Constraints\AtLeastOneOf([
-                new Constraints\Type(['type' => 'numeric']),
-                new Constraints\Choice(['choices' => \array_keys($this->substitutes)]),
-            ]);
-        } else {
-            $constraints[] = new Constraints\Type(['type' => 'numeric']);
-        }
+        //if ($this->substitutes) {
+        //    $constraints[] = new Constraints\AtLeastOneOf([
+        //        new Constraints\Type(['type' => 'numeric']),
+        //        new Constraints\Choice(['choices' => \array_keys($this->substitutes)]),
+        //    ]);
+        //} else {
+        //    $constraints[] = new Constraints\Type(['type' => 'numeric']);
+        //}
 
-        //$constraints[] = new Constraints\Type(['type' => 'numeric']);
+        $constraints[] = new Constraints\Type(['type' => 'numeric']);
         return $constraints;
     }
 

@@ -228,6 +228,31 @@ class JsonElement extends AbstractElement
         return $normalizedData;
     }
 
+    protected function applySubstitutes($rawData)
+    {
+        $substitutedData = [];
+        foreach ($rawData as $key => $rawValue) {
+            if (\array_key_exists($key, $this->schema)) {
+                $substitutedData[$key] = $this->schema[$key]->applySubstitutes($rawValue);
+            } else {
+                $substitutedData[$key] = $rawValue;
+            }
+
+            //if (\array_key_exists($key, $this->schema) && $this->schema[$key] instanceof ScalarElement) {
+            //    $substitutedData[$key] = $this->schema[$key]->applySubstitutes($rawValue);
+            //}
+        }
+        return $substitutedData;
+
+        //$substitutedData = $rawData;
+        //foreach ($rawData as $key => $rawValue) {
+        //    if (\array_key_exists($key, $this->schema) && $this->schema[$key] instanceof ScalarElement) {
+        //        $substitutedData[$key] = $this->schema[$key]->applySubstitutes($rawValue);
+        //    }
+        //}
+        //return $substitutedData;
+    }
+
     /**
      * @param $data
      *
@@ -235,6 +260,11 @@ class JsonElement extends AbstractElement
      */
     public function validateNormalizedData($data): ValidationResult
     {
+        /**
+         * substitutions should be made BEFORE formal validation
+         */
+        $data = $this->applySubstitutes($data);
+
         /**
          * First - check that input data has acceptable types
          */

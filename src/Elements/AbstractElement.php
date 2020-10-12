@@ -133,6 +133,11 @@ abstract class AbstractElement
         return $this->description;
     }
 
+    protected function applySubstitutes($rawData)
+    {
+        return $rawData;
+    }
+
     /**
      * @param $data
      *
