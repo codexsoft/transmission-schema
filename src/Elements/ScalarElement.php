@@ -94,7 +94,7 @@ class ScalarElement extends AbstractElement
 
     protected function applySubstitutes($rawData)
     {
-        if ($this->substitutes && \in_array($rawData, $this->substitutes, true)) {
+        if ($this->substitutes && \array_key_exists($rawData, $this->substitutes)) {
             return $this->substitutes[$rawData];
         }
 
