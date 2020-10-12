@@ -3,7 +3,9 @@
 
 namespace CodexSoft\Transmission\Schema\Elements;
 
+use CodexSoft\Transmission\Schema\ValidationResult;
 use Symfony\Component\Validator\Constraints;
+use Symfony\Component\Validator\Validation;
 
 class ScalarElement extends AbstractElement
 {
@@ -67,13 +69,27 @@ class ScalarElement extends AbstractElement
         return $constraints;
     }
 
-    final public function normalizeData($data)
+    //final public function normalizeData($data)
+    //{
+    //    if ($this->substitutes && \in_array($data, $this->substitutes, true)) {
+    //        return $this->substitutes[$data];
+    //    }
+    //
+    //    return parent::normalizeData($data);
+    //}
+
+    /**
+     * @param $data
+     *
+     * @return ValidationResult
+     */
+    public function validateNormalizedData($data): ValidationResult
     {
         if ($this->substitutes && \in_array($data, $this->substitutes, true)) {
-            return $this->substitutes[$data];
+            $data = $this->substitutes[$data];
         }
 
-        return parent::normalizeData($data);
+        return parent::validateNormalizedData($data);
     }
 
     ///**

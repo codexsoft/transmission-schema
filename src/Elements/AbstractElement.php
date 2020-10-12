@@ -186,18 +186,7 @@ abstract class AbstractElement
      */
     protected function generateSfConstraints(): array
     {
-        $constraints = $this->generateFormalSfConstraints();
-        //$constraints = [];
-
-        //if ($this->isNullable === false) {
-        //    $constraints[] = new Constraints\NotNull();
-        //}
-        //
-        //if ($this->strictTypeCheck && $this->acceptedPhpTypes) {
-        //    $constraints[] = new Constraints\Type(['type' => $this->acceptedPhpTypes]);
-        //}
-
-        return $constraints;
+        return $this->generateFormalSfConstraints();
     }
 
     /**
