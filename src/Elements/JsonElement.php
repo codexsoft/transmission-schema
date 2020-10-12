@@ -233,7 +233,7 @@ class JsonElement extends AbstractElement
      *
      * @return ValidationResult
      */
-    public function getValidatedNormalizedData($data): ValidationResult
+    public function validateNormalizedData($data): ValidationResult
     {
         /**
          * First - check that input data has acceptable types

@@ -52,7 +52,7 @@ abstract class AbstractElementTest extends TestCase
      */
     public function testNormalizeData($input, AbstractElement $schema, $expectedOutput, ?bool $violationsExpected): void
     {
-        $result = $schema->getValidatedNormalizedData($input);
+        $result = $schema->validateNormalizedData($input);
 
         self::assertEquals((bool) $violationsExpected, $result->getViolations()->count() > 0);
         if ($result->getViolations()->count() === 0) {

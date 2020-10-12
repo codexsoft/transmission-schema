@@ -40,7 +40,7 @@ class StringElementTest extends AbstractElementTest
      */
     public function testValidateData($input, AbstractElement $schema, bool $expectedIsValid): void
     {
-        $validationResult = $schema->getValidatedNormalizedData($input);
+        $validationResult = $schema->validateNormalizedData($input);
         //foreach ($validationResult->getViolations() as $violation) {
         //    var_dump($violation->getPropertyPath().': '.$violation->getMessage());
         //}
