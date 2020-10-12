@@ -45,26 +45,9 @@ abstract class AbstractElement
 
     protected string $openApiType = 'mixed';
 
-    /**
-     * Raw input data can be replaced with substitutes array. For example: ['' => null, 'a' => 'b']
-     * @var array
-     */
-    protected array $substitutes = [];
-
     public function __construct(string $label = '')
     {
         $this->label = $label;
-    }
-
-    /**
-     * @param array $substitutes
-     *
-     * @return static
-     */
-    public function substitute(array $substitutes)
-    {
-        $this->substitutes = $substitutes;
-        return $this;
     }
 
     public function toOpenApiV2ParameterArray(): array
@@ -86,6 +69,13 @@ abstract class AbstractElement
         return $data;
     }
 
+    /**
+     * callback to be applied to already normalized data
+     * @param callable|null $callback
+     *
+     * @return $this
+     * @deprecated should not use, needs testing
+     */
     public function process(?callable $callback)
     {
         $this->normalizeDataCallback = $callback;
@@ -97,29 +87,18 @@ abstract class AbstractElement
      *
      * @return mixed|null
      */
-    final public function normalizeData($data)
+    public function normalizeData($data)
     {
+        /**
+         * it doest not make sense normalizing null
+         */
         if ($data === null && $this->isNullable) {
             return null;
         }
 
-        ///**
-        // * NULL can be normalized to empty string or to 0. This is default behaviour.
-        // * To prevent this, strict type checking must be enabled.
-        // * todo: should failure prevent validation and collecting violations?
-        // */
-        //if ($this->strictTypeCheck && $data === null && !$this->isNullable) {
-        //    throw new IncompatibleInputDataTypeException('NULL is not acceptable value');
-        //}
-
-        ///**
-        // * Check acceptable input data types in strict mode. Not acceptable generates failure.
-        // * todo: should failure prevent validation and collecting violations?
-        // */
-        //if ($this->strictTypeCheck && \is_array($this->acceptedPhpTypes) && $this->acceptedPhpTypes && !$this->valueHasType($data, $this->acceptedPhpTypes)) {
-        //    throw new IncompatibleInputDataTypeException('Value must be one of accepted types: {'.\implode(', ', $this->acceptedPhpTypes).'} but '.\gettype($data).' given');
-        //}
-
+        /**
+         * type-speciefic data normalizing
+         */
         $normalizedData = $this->doNormalizeData($data);
 
         if ($this->normalizeDataCallback instanceof \Closure) {
@@ -131,9 +110,6 @@ abstract class AbstractElement
 
     protected function doNormalizeData($data)
     {
-        if ($this->substitutes && \in_array($data, $this->substitutes, true)) {
-            return $this->substitutes[$data];
-        }
         return $data;
     }
 

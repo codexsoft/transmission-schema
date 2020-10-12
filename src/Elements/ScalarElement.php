@@ -11,6 +11,23 @@ class ScalarElement extends AbstractElement
     protected array $choicesSourceArray = [];
     protected ?string $pattern = null;
 
+    /**
+     * Raw input data can be replaced with substitutes array. For example: ['' => null, 'a' => 'b']
+     * @var array
+     */
+    protected array $substitutes = [];
+
+    /**
+     * @param array $substitutes
+     *
+     * @return static
+     */
+    public function substitutes(array $substitutes)
+    {
+        $this->substitutes = $substitutes;
+        return $this;
+    }
+
     public function toOpenApiV2ParameterArray(): array
     {
         $data = parent::toOpenApiV2ParameterArray();
@@ -50,21 +67,30 @@ class ScalarElement extends AbstractElement
         return $constraints;
     }
 
-    /**
-     * @param $data
-     *
-     * @return bool|float|int|mixed|string|null
-     */
-    protected function doNormalizeData($data)
+    final public function normalizeData($data)
     {
-        $data = parent::doNormalizeData($data);
+        if ($this->substitutes && \in_array($data, $this->substitutes, true)) {
+            return $this->substitutes[$data];
+        }
 
-        //if ($data !== null && !\is_scalar($data)) {
-        //    throw new IncompatibleInputDataTypeException(\var_export($data, true).' is not scalar');
-        //}
-
-        return $data;
+        return parent::normalizeData($data);
     }
+
+    ///**
+    // * @param $data
+    // *
+    // * @return bool|float|int|mixed|string|null
+    // */
+    //protected function doNormalizeData($data)
+    //{
+    //    $data = parent::doNormalizeData($data);
+    //
+    //    if ($this->substitutes && \in_array($data, $this->substitutes, true)) {
+    //        return $this->substitutes[$data];
+    //    }
+    //
+    //    return $data;
+    //}
 
     protected function generateFormalSfConstraints(): array
     {
