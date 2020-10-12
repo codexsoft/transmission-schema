@@ -45,6 +45,28 @@ abstract class AbstractElement
 
     protected string $openApiType = 'mixed';
 
+    /**
+     * Raw input data can be replaced with substitutes array. For example: ['' => null, 'a' => 'b']
+     * @var array
+     */
+    protected array $substitutes = [];
+
+    public function __construct(string $label = '')
+    {
+        $this->label = $label;
+    }
+
+    /**
+     * @param array $substitutes
+     *
+     * @return static
+     */
+    public function substitute(array $substitutes)
+    {
+        $this->substitutes = $substitutes;
+        return $this;
+    }
+
     public function toOpenApiV2ParameterArray(): array
     {
         $data = [
@@ -62,11 +84,6 @@ abstract class AbstractElement
         }
 
         return $data;
-    }
-
-    public function __construct(string $label = '')
-    {
-        $this->label = $label;
     }
 
     public function process(?callable $callback)
@@ -114,6 +131,9 @@ abstract class AbstractElement
 
     protected function doNormalizeData($data)
     {
+        if ($this->substitutes && \in_array($data, $this->substitutes, true)) {
+            return $this->substitutes[$data];
+        }
         return $data;
     }
 
@@ -166,12 +186,21 @@ abstract class AbstractElement
     }
 
     /**
-     * Set that element is optional
+     * Set that element is optional.
+     * Often, if optional element is missing in input data, it is replacing with some default value.
+     *
+     * @param string $defaultValue default value to be set if element is missing
+     *
      * @return static
      */
-    public function optional()
+    public function optional($defaultValue = self::UNDEFINED)
     {
         $this->isRequired = false;
+
+        if ($defaultValue !== self::UNDEFINED) {
+            $this->defaultValue($defaultValue);
+        }
+
         return $this;
     }
 

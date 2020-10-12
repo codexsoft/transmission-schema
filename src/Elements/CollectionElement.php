@@ -116,6 +116,7 @@ class CollectionElement extends AbstractElement
      */
     protected function doNormalizeData($data)
     {
+        $data = $this->normalizeData($data);
         $normalizedData = [];
         if ($this->elementSchema) {
             foreach ($data as $datum) {
