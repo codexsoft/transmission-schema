@@ -141,6 +141,10 @@ abstract class AbstractElement
     public function validateNormalizedData($data): ValidationResult
     {
         /**
+         * substitutions should be made BEFORE formal validation
+         */
+
+        /**
          * First - check that input data has acceptable types
          */
         $validator = Validation::createValidator();
