@@ -69,15 +69,6 @@ class ScalarElement extends AbstractElement
         return $constraints;
     }
 
-    //final public function normalizeData($data)
-    //{
-    //    if ($this->substitutes && \in_array($data, $this->substitutes, true)) {
-    //        return $this->substitutes[$data];
-    //    }
-    //
-    //    return parent::normalizeData($data);
-    //}
-
     /**
      * @param $data
      *
@@ -101,35 +92,9 @@ class ScalarElement extends AbstractElement
         return $rawData;
     }
 
-    ///**
-    // * @param $data
-    // *
-    // * @return bool|float|int|mixed|string|null
-    // */
-    //protected function doNormalizeData($data)
-    //{
-    //    $data = parent::doNormalizeData($data);
-    //
-    //    if ($this->substitutes && \in_array($data, $this->substitutes, true)) {
-    //        return $this->substitutes[$data];
-    //    }
-    //
-    //    return $data;
-    //}
-
     protected function generateFormalSfConstraints(): array
     {
         $constraints = parent::generateFormalSfConstraints();
-
-        //if ($this->substitutes) {
-        //    $constraints[] = new Constraints\AtLeastOneOf([
-        //        new Constraints\Type(['type' => 'scalar']),
-        //        new Constraints\Choice(['choices' => \array_keys($this->substitutes)]),
-        //    ]);
-        //} else {
-        //    $constraints[] = new Constraints\Type(['type' => 'scalar']);
-        //}
-
         $constraints[] = new Constraints\Type(['type' => 'scalar']);
 
         return $constraints;

@@ -230,27 +230,21 @@ class JsonElement extends AbstractElement
 
     protected function applySubstitutes($rawData)
     {
+        if (!\is_array($rawData)) {
+            return $rawData;
+        }
+
         $substitutedData = [];
+
         foreach ($rawData as $key => $rawValue) {
             if (\array_key_exists($key, $this->schema)) {
                 $substitutedData[$key] = $this->schema[$key]->applySubstitutes($rawValue);
             } else {
                 $substitutedData[$key] = $rawValue;
             }
-
-            //if (\array_key_exists($key, $this->schema) && $this->schema[$key] instanceof ScalarElement) {
-            //    $substitutedData[$key] = $this->schema[$key]->applySubstitutes($rawValue);
-            //}
         }
-        return $substitutedData;
 
-        //$substitutedData = $rawData;
-        //foreach ($rawData as $key => $rawValue) {
-        //    if (\array_key_exists($key, $this->schema) && $this->schema[$key] instanceof ScalarElement) {
-        //        $substitutedData[$key] = $this->schema[$key]->applySubstitutes($rawValue);
-        //    }
-        //}
-        //return $substitutedData;
+        return $substitutedData;
     }
 
     /**
