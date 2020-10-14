@@ -23,10 +23,10 @@ abstract class AbstractElement
      */
     protected array $customSfConstraints = [];
 
-    protected string $description;
+    protected string $description = '';
 
     /** @var mixed */
-    protected $example;
+    protected $example = self::UNDEFINED;
     protected string $label = '';
     protected $defaultValue = self::UNDEFINED;
 
@@ -58,7 +58,7 @@ abstract class AbstractElement
             'required' => $this->isRequired,
         ];
 
-        if ($this->example !== null) {
+        if ($this->example !== self::UNDEFINED) {
             $data['example'] = $this->example;
         }
 
@@ -131,6 +131,14 @@ abstract class AbstractElement
     public function getDescription(): string
     {
         return $this->description;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLabel(): string
+    {
+        return $this->label;
     }
 
     protected function applySubstitutes($rawData)

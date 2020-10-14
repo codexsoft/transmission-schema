@@ -40,6 +40,10 @@ class ScalarElement extends AbstractElement
 
         if ($this->choicesSourceArray) {
             $data['enum'] = $this->choicesSourceArray;
+
+            if ($this->example === self::UNDEFINED || !\in_array($this->example, $this->choicesSourceArray, true)) {
+                $data['example'] = \array_values($this->choicesSourceArray)[0];
+            }
         }
 
         return $data;
