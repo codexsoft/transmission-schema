@@ -141,6 +141,30 @@ abstract class AbstractElement
         return $this->label;
     }
 
+    /**
+     * @return bool
+     */
+    public function isRequired(): bool
+    {
+        return $this->isRequired;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isNullable(): bool
+    {
+        return $this->isNullable;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getExample()
+    {
+        return $this->example;
+    }
+
     protected function applySubstitutes($rawData)
     {
         return $rawData;
