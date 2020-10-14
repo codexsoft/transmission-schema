@@ -28,6 +28,8 @@ abstract class AbstractElement
     /** @var mixed */
     protected $example = self::UNDEFINED;
     protected string $label = '';
+
+    /** @var mixed */
     protected $defaultValue = self::UNDEFINED;
 
     protected bool $isRequired = true;
@@ -163,6 +165,17 @@ abstract class AbstractElement
     public function getExample()
     {
         return $this->example;
+    }
+
+    /**
+     * @param Constraint[] $customSfConstraints
+     *
+     * @return static
+     */
+    public function sfConstraints(array $customSfConstraints): self
+    {
+        $this->customSfConstraints = $customSfConstraints;
+        return $this;
     }
 
     protected function applySubstitutes($rawData)

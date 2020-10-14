@@ -14,6 +14,12 @@ class StringElement extends ScalarElement
     protected string $openApiType = 'string';
     protected $example = 'Some text sample';
 
+    /**
+     * Example: /^[a-z]+$/
+     * @var string|null
+     */
+    protected ?string $pattern = null;
+
     /*
      * Processing
      */
@@ -36,6 +42,10 @@ class StringElement extends ScalarElement
         $data = parent::toOpenApiV2ParameterArray();
         $data['allowEmptyValue'] = !$this->isNotBlank;
 
+        if ($this->pattern !== null) {
+            $data['pattern'] = $this->pattern;
+        }
+
         if ($this->minLength !== null) {
             $data['minLength'] = $this->minLength;
         }
@@ -53,6 +63,18 @@ class StringElement extends ScalarElement
     public function notBlank()
     {
         $this->isNotBlank = true;
+        return $this;
+    }
+
+    /**
+     * SHOULD be a valid regular expression
+     * @param string|null $pattern
+     *
+     * @return static
+     */
+    public function pattern(?string $pattern): self
+    {
+        $this->pattern = $pattern;
         return $this;
     }
 
@@ -127,6 +149,10 @@ class StringElement extends ScalarElement
         //if ($lengthOptions) {
         //    $constraints[] = new Constraints\Length($lengthOptions);
         //}
+
+        if ($this->pattern) {
+            $constraints[] = new Constraints\Regex($this->pattern);
+        }
 
         if ($this->isNotBlank) {
             $constraints[] = new Constraints\NotBlank();

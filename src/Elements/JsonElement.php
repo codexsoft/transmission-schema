@@ -133,7 +133,9 @@ class JsonElement extends AbstractElement
      */
     public function compileToFormalSymfonyValidatorConstraint()
     {
-        $constraints = $this->customSfConstraints;
+        // todo: should customSfConstraints be applied here?
+        //$constraints = $this->customSfConstraints;
+        $constraints = [];
 
         foreach ($this->schema as $key => $value) {
             if ($value instanceof AbstractElement) {
