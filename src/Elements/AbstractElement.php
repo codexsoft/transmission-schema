@@ -32,8 +32,15 @@ abstract class AbstractElement
     /** @var mixed */
     protected $example = self::UNDEFINED;
     protected string $label = '';
+
+    /**
+     * Default value of element. Is applied when element is optional and input data for element is
+     * missing.
+     * @var string
+     */
     protected $defaultValue = self::UNDEFINED;
 
+    protected bool $isDeprecated = false;
     protected bool $isRequired = true;
     protected bool $isNullable = false;
     protected ?array $acceptedPhpTypes = null;
@@ -146,6 +153,25 @@ abstract class AbstractElement
     public function getLabel(): string
     {
         return $this->label;
+    }
+
+    /**
+     * @param bool $isDeprecated
+     *
+     * @return static
+     */
+    public function deprecated(bool $isDeprecated = true): AbstractElement
+    {
+        $this->isDeprecated = $isDeprecated;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDeprecated(): bool
+    {
+        return $this->isDeprecated;
     }
 
     protected function applySubstitutes($rawData)
