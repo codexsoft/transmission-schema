@@ -68,6 +68,7 @@ abstract class AbstractElement
             'type' => $this->openApiType,
             'required' => $this->isRequired,
             'nullable' => $this->isNullable,
+            'deprecated' => $this->isDeprecated,
         ];
 
         if ($this->example !== self::UNDEFINED) {
