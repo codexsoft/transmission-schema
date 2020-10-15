@@ -23,6 +23,10 @@ abstract class AbstractElement
      */
     protected array $customSfConstraints = [];
 
+    /**
+     * @deprecated use label instead
+     * @var string
+     */
     protected string $description = '';
 
     /** @var mixed */
@@ -115,6 +119,7 @@ abstract class AbstractElement
     }
 
     /**
+     * @deprecated use label() instead
      * Set element description
      * @param string $description
      *
@@ -127,6 +132,7 @@ abstract class AbstractElement
     }
 
     /**
+     * @deprecated use getLabel() instead
      * @return string
      */
     public function getDescription(): string
