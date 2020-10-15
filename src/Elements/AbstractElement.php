@@ -23,15 +23,24 @@ abstract class AbstractElement
      */
     protected array $customSfConstraints = [];
 
+    /**
+     * @deprecated use label instead
+     * @var string
+     */
     protected string $description = '';
 
     /** @var mixed */
     protected $example = self::UNDEFINED;
     protected string $label = '';
 
-    /** @var mixed */
+    /**
+     * Default value of element. Is applied when element is optional and input data for element is
+     * missing.
+     * @var mixed
+     */
     protected $defaultValue = self::UNDEFINED;
 
+    protected bool $isDeprecated = false;
     protected bool $isRequired = true;
     protected bool $isNullable = false;
     protected ?array $acceptedPhpTypes = null;
@@ -58,6 +67,8 @@ abstract class AbstractElement
             'description' => $this->label,
             'type' => $this->openApiType,
             'required' => $this->isRequired,
+            'nullable' => $this->isNullable,
+            'deprecated' => $this->isDeprecated,
         ];
 
         if ($this->example !== self::UNDEFINED) {
@@ -116,6 +127,7 @@ abstract class AbstractElement
     }
 
     /**
+     * @deprecated use label() instead
      * Set element description
      * @param string $description
      *
@@ -128,6 +140,7 @@ abstract class AbstractElement
     }
 
     /**
+     * @deprecated use getLabel() instead
      * @return string
      */
     public function getDescription(): string
@@ -141,6 +154,25 @@ abstract class AbstractElement
     public function getLabel(): string
     {
         return $this->label;
+    }
+
+    /**
+     * @param bool $isDeprecated
+     *
+     * @return static
+     */
+    public function deprecated(bool $isDeprecated = true): AbstractElement
+    {
+        $this->isDeprecated = $isDeprecated;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDeprecated(): bool
+    {
+        return $this->isDeprecated;
     }
 
     /**
