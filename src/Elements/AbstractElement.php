@@ -56,6 +56,7 @@ abstract class AbstractElement
             'description' => $this->label,
             'type' => $this->openApiType,
             'required' => $this->isRequired,
+            'nullable' => $this->isNullable,
         ];
 
         if ($this->example !== self::UNDEFINED) {
