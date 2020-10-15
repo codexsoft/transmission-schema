@@ -175,6 +175,14 @@ abstract class AbstractElement
         return $this->isDeprecated;
     }
 
+    /**
+     * @return bool
+     */
+    public function isRequired(): bool
+    {
+        return $this->isRequired;
+    }
+
     protected function applySubstitutes($rawData)
     {
         return $rawData;
