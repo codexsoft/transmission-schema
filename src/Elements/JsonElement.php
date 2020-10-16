@@ -48,9 +48,9 @@ class JsonElement extends AbstractElement
     //protected bool $ignoreExtraKeys = true;
     //protected bool $extractExtraKeysToExtraData = true;
 
-    public function toOpenApiV2ParameterArray(): array
+    public function toOpenApiSchema(): array
     {
-        $data = parent::toOpenApiV2ParameterArray();
+        $data = parent::toOpenApiSchema();
 
         $requiredKeys = [];
         foreach ($this->schema as $key => $element) {
@@ -63,7 +63,7 @@ class JsonElement extends AbstractElement
         $properties = [];
         foreach ($this->schema as $key => $element) {
             // todo: to avoid infinite loops, $refs should be generated in some cases!
-            $properties[$key] = $element->toOpenApiV2ParameterArray();
+            $properties[$key] = $element->toOpenApiSchema();
         }
         $data['properties'] = $properties;
 

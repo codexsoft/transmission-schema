@@ -61,7 +61,37 @@ abstract class AbstractElement
         $this->label = $label;
     }
 
-    public function toOpenApiV2ParameterArray(): array
+    /**
+     * Export element to Parameter Object of OpenAPI 3.x
+     *
+     * @param string $name a name of parameter
+     * @param string|null $in The location of the parameter. Possible values are "query", "header", "path" or "cookie". If omitted, it won't be added.
+     *
+     * @return array
+     */
+    public function toOpenApiParameter(string $name, ?string $in = null): array
+    {
+        $data = [
+            'name' => $name,
+            'schema' => $this->toOpenApiSchema(),
+            'required' => $this->isRequired()
+        ];
+
+        if ($in !== null) {
+            $data['in'] = $in;
+        }
+
+        return $data;
+    }
+
+    /**
+     * Export element to Schema Object of OpenAPI 3.x (partially)
+     *
+     * @see https://json-schema.org/draft/2019-09/json-schema-core.html
+     * @see https://json-schema.org/draft/2019-09/json-schema-core.html
+     * @return array
+     */
+    public function toOpenApiSchema(): array
     {
         $data = [
             'description' => $this->label,
@@ -443,5 +473,14 @@ abstract class AbstractElement
         }
 
         return false;
+    }
+
+    /**
+     * @deprecated use toOpenApiSchema instead
+     * @return array
+     */
+    final public function toOpenApiV2ParameterArray(): array
+    {
+        return $this->toOpenApiSchema();
     }
 }

@@ -37,9 +37,9 @@ class StringElement extends ScalarElement
     protected bool $isNotBlank = false;
     protected bool $isAlphaNumeric = false;
 
-    public function toOpenApiV2ParameterArray(): array
+    public function toOpenApiSchema(): array
     {
-        $data = parent::toOpenApiV2ParameterArray();
+        $data = parent::toOpenApiSchema();
         $data['allowEmptyValue'] = !$this->isNotBlank;
 
         if ($this->pattern !== null) {

@@ -30,9 +30,9 @@ class ScalarElement extends AbstractElement
         return $this;
     }
 
-    public function toOpenApiV2ParameterArray(): array
+    public function toOpenApiSchema(): array
     {
-        $data = parent::toOpenApiV2ParameterArray();
+        $data = parent::toOpenApiSchema();
 
         if ($this->pattern) {
             $data['pattern'] = $this->pattern;
