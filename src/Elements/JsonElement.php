@@ -9,7 +9,6 @@ use CodexSoft\Transmission\Schema\Contracts\JsonSchemaInterface;
 use CodexSoft\Transmission\Schema\ValidationResult;
 use Symfony\Component\Validator\Constraints;
 use Symfony\Component\Validator\Constraint;
-use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\Validation;
 
 /**
@@ -26,25 +25,14 @@ class JsonElement extends AbstractElement
     protected bool $strictTypeCheck = true;
     protected string $openApiType = 'object';
 
-    ///**
-    // * Validation option: if FALSE, then if extra field is present in input data then violation will
-    // * be created.
-    // *
-    // * @var bool
-    // * @deprecated
-    // */
-    //protected bool $allowExtraFields = true;
-
     /**
-     * If extra fields are present in input data, this normalizing option define behaviour:
-     * - if TRUE, then these fields will be moved to extra data while normalization
-     * - if FALSE, then these fields will stay in normalized data
-     *
-     * @var bool
-     * @deprecated
+     * If extra fields are present in input data, mode define behaviour:
+     * - MODE_EXTRACT_EXTRA_KEYS: these fields will be moved to extra data while normalization
+     * - MODE_LEAVE_EXTRA_KEYS: these fields will stay in normalized data (without any normalization!)
+     * - MODE_IGNORE_EXTRA_KEYS: these fields will be just ignored (will be just absent in normalized and extra data)
+     * - MODE_DENY_EXTRA_KEYS: violation will be produced for each of them while validation
+     * @var int
      */
-    protected bool $extractExtraKeysToExtraData = true;
-
     protected int $mode = self::MODE_EXTRACT_EXTRA_KEYS;
 
     /** @var AbstractElement[] */
@@ -171,7 +159,6 @@ class JsonElement extends AbstractElement
     public function denyExtraFields(bool $allowExtraFields = false)
     {
         $this->mode = self::MODE_DENY_EXTRA_KEYS;
-        //$this->allowExtraFields = $allowExtraFields;
         return $this;
     }
 
@@ -192,7 +179,6 @@ class JsonElement extends AbstractElement
             'fields' => $constraints,
             'allowMissingFields' => false,
             'allowExtraFields' => $this->areExtraKeysAllowed(),
-            //'allowExtraFields' => $this->allowExtraFields,
         ]);
 
         return $this->isRequired ? $collection : new Constraints\Optional($collection);
@@ -217,7 +203,6 @@ class JsonElement extends AbstractElement
             'fields' => $constraints,
             'allowMissingFields' => false,
             'allowExtraFields' => $this->areExtraKeysAllowed(),
-            //'allowExtraFields' => $this->allowExtraFields,
         ]);
 
         $selfConstraints = $this->generateFormalSfConstraints();
@@ -259,7 +244,6 @@ class JsonElement extends AbstractElement
 
         if ($extractExtraKeysToExtraData === null) {
             $extractExtraKeysToExtraData = $this->mode === self::MODE_EXTRACT_EXTRA_KEYS;
-            //$extractExtraKeysToExtraData = $this->extractExtraKeysToExtraData;
         }
 
         foreach ($data as $key => $value) {
