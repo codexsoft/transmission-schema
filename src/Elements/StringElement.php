@@ -155,7 +155,9 @@ class StringElement extends ScalarElement
         }
 
         if ($this->isNotBlank) {
-            $constraints[] = new Constraints\NotBlank();
+            $constraints[] = new Constraints\NotBlank([
+                'allowNull' => $this->isNullable,
+            ]);
         }
 
         if ($this->noWhiteSpace) {
