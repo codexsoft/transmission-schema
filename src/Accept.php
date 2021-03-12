@@ -12,6 +12,7 @@ use CodexSoft\Transmission\Schema\Elements\AbstractElement;
  *
  * @method static Elements\BoolElement bool(string $label = '')
  * @method static Elements\DateElement date(string $label = '')
+ * @method static Elements\DateTimeElement datetime(string $label = '')
  * @method static Elements\EmailElement email(string $label = '')
  * @method static Elements\FloatElement double(string $label = '')
  * @method static Elements\FloatElement float(string $label = '')
@@ -31,6 +32,7 @@ class Accept
     protected const MAP = [
         'bool' => Elements\BoolElement::class,
         'date' => Elements\DateElement::class,
+        'datetime' => Elements\DateTimeElement::class,
         'double' => Elements\FloatElement::class,
         'email' => Elements\EmailElement::class,
         'float' => Elements\FloatElement::class,
