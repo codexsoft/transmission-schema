@@ -60,6 +60,12 @@ class JsonElement extends AbstractElement
         $this->setSchema($schema);
     }
 
+    /**
+     * @param $keySignature
+     * @param $valueSignature
+     *
+     * @return $this
+     */
     public function keyValueSignature($keySignature, $valueSignature)
     {
         $this->dynamicKeyType = $keySignature;
