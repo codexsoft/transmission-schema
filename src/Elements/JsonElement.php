@@ -64,6 +64,8 @@ class JsonElement extends AbstractElement
     {
         $this->dynamicKeyType = $keySignature;
         $this->dynamicValueType = $valueSignature;
+
+        return $this;
     }
 
     protected function areExtraKeysAllowed(): bool
