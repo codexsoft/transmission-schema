@@ -420,7 +420,8 @@ class JsonElement extends AbstractElement
         }
 
         foreach ($this->schema as $key => $value) {
-            if (!$value instanceof AbstractElement) {
+            //if (!$value instanceof AbstractElement) {
+            if (!$value instanceof AbstractBaseElement) {
                 // todo: check it recursively?
                 throw new InvalidJsonSchemaException('All JSON schema elements must be instances of '.AbstractElement::class.' but element with key '.$key.' does not.');
             }
