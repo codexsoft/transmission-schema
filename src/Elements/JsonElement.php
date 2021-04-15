@@ -40,6 +40,12 @@ class JsonElement extends AbstractElement
 
     protected ?string $schemaGatheredFromClass = null;
 
+    // todo
+    //protected ?string $schemaGatheredFromClass = null;
+
+    protected $dynamicKeyType = null;
+    protected $dynamicValueType = null;
+
     /**
      * JsonElement constructor.
      *
@@ -52,6 +58,12 @@ class JsonElement extends AbstractElement
     {
         parent::__construct($label);
         $this->setSchema($schema);
+    }
+
+    public function keyValueSignature($keySignature, $valueSignature)
+    {
+        $this->dynamicKeyType = $keySignature;
+        $this->dynamicValueType = $valueSignature;
     }
 
     protected function areExtraKeysAllowed(): bool
