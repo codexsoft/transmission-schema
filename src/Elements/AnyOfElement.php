@@ -3,7 +3,12 @@
 
 namespace CodexSoft\Transmission\Schema\Elements;
 
-
+/**
+ * Warning! Currently data normalization/validation is not possible for this element.
+ * Use for documenting output schemas.
+ *
+ * Also, seems that additionalProperties does not support anyOf key (redoc-cli failed to handle this)
+ */
 class AnyOfElement extends AbstractCompositeElement
 {
     /** @var AbstractElement[] */
@@ -35,14 +40,6 @@ class AnyOfElement extends AbstractCompositeElement
             'nullable' => $this->isNullable,
             'deprecated' => $this->isDeprecated,
         ];
-
-        //if ($this->example !== self::UNDEFINED) {
-        //    $data['example'] = $this->example;
-        //}
-
-        //if ($this->hasDefaultValue()) {
-        //    $data['default'] = $this->defaultValue;
-        //}
 
         return $data;
     }

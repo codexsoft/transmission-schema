@@ -43,7 +43,7 @@ class JsonElement extends AbstractElement
     // todo
     //protected ?string $schemaGatheredFromClass = null;
 
-    protected ?AbstractBaseElement $extraElementSchema = null;
+    protected ?AbstractElement $extraElementSchema = null;
 
     /**
      * JsonElement constructor.
@@ -64,7 +64,7 @@ class JsonElement extends AbstractElement
      *
      * @return static
      */
-    public function extraElementSchema(AbstractBaseElement $valuePattern): self
+    public function extraElementSchema(AbstractElement $valuePattern): self
     {
         $this->extraElementSchema = $valuePattern;
 
