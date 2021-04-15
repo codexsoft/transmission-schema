@@ -24,9 +24,9 @@ class CollectionElement extends AbstractElement
     private ?int $maxCount = null;
     private bool $elementsMustBeUnique = false;
 
-    public function toOpenApiV2ParameterArray(): array
+    public function toOpenApiSchema(): array
     {
-        $data = parent::toOpenApiV2ParameterArray();
+        $data = parent::toOpenApiSchema();
         $data['uniqueItems'] = $this->elementsMustBeUnique;
 
         if ($this->minCount !== null) {
@@ -44,7 +44,7 @@ class CollectionElement extends AbstractElement
 
             // 'allOf'
 
-            $data['items'] = $this->elementSchema->toOpenApiV2ParameterArray();
+            $data['items'] = $this->elementSchema->toOpenApiSchema();
         }
 
         return $data;

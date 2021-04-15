@@ -26,6 +26,12 @@ class StringElementTest extends AbstractElementTest
             [' abc ', Accept::string()->trim()->noWhiteSpace(), true],
             ['abc', Accept::string()->noWhiteSpace(), true],
             ['a b c', Accept::string()->noWhiteSpace(), false],
+            ['abc', Accept::string()->alnum(), true],
+            ['abc_', Accept::string()->alnum(), false],
+            [' abc', Accept::string()->alnum(), false],
+            ['abc', Accept::string()->pattern('/^[a-z]+$/'), true],
+            ['abc', Accept::string()->pattern('/^[A-Z]+$/'), false],
+            ['abc1', Accept::string()->pattern('/^[a-z]+$/'), false],
         ];
     }
 

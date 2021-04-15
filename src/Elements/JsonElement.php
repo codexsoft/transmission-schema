@@ -9,7 +9,6 @@ use CodexSoft\Transmission\Schema\Contracts\JsonSchemaInterface;
 use CodexSoft\Transmission\Schema\ValidationResult;
 use Symfony\Component\Validator\Constraints;
 use Symfony\Component\Validator\Constraint;
-use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\Validation;
 
 /**
@@ -17,22 +16,29 @@ use Symfony\Component\Validator\Validation;
  */
 class JsonElement extends AbstractElement
 {
+    public const MODE_EXTRACT_EXTRA_KEYS = 1;
+    public const MODE_LEAVE_EXTRA_KEYS = 2;
+    public const MODE_IGNORE_EXTRA_KEYS = 3;
+    public const MODE_DENY_EXTRA_KEYS = 4;
+
     protected ?array $acceptedPhpTypes = ['array'];
     protected bool $strictTypeCheck = true;
     protected string $openApiType = 'object';
-    protected bool $allowExtraFields = true;
-    //public const MODE_LEAVE_EXTRA_KEYS = 1;
-    //public const MODE_EXTRACT_EXTRA_KEYS = 2;
-    //public const MODE_IGNORE_EXTRA_KEYS = 3;
+
+    /**
+     * If extra fields are present in input data, mode define behaviour:
+     * - MODE_EXTRACT_EXTRA_KEYS: these fields will be moved to extra data while normalization
+     * - MODE_LEAVE_EXTRA_KEYS: these fields will stay in normalized data (without any normalization!)
+     * - MODE_IGNORE_EXTRA_KEYS: these fields will be just ignored (will be just absent in normalized and extra data)
+     * - MODE_DENY_EXTRA_KEYS: violation will be produced for each of them while validation
+     * @var int
+     */
+    protected int $mode = self::MODE_EXTRACT_EXTRA_KEYS;
 
     /** @var AbstractElement[] */
     protected array $schema;
 
-    // todo
-    //protected ?string $schemaGatheredFromClass = null;
-
-    protected $dynamicKeyType = null;
-    protected $dynamicValueType = null;
+    protected ?string $schemaGatheredFromClass = null;
 
     /**
      * JsonElement constructor.
@@ -48,21 +54,53 @@ class JsonElement extends AbstractElement
         $this->setSchema($schema);
     }
 
-    protected ?string $schemaGatheredFromClass = null;
-
-    public function keyValueSignature($keySignature, $valueSignature)
+    protected function areExtraKeysAllowed(): bool
     {
-        $this->dynamicKeyType = $keySignature;
-        $this->dynamicValueType = $valueSignature;
+        return $this->mode !== self::MODE_DENY_EXTRA_KEYS;
     }
 
-    //protected $mode = self::MODE_IGNORE_EXTRA_KEYS;
-    //protected bool $ignoreExtraKeys = true;
-    //protected bool $extractExtraKeysToExtraData = true;
-
-    public function toOpenApiV2ParameterArray(): array
+    /**
+     * Set mode for dealing with extra keys in input data
+     * @param int $mode MUST be one of self::MODE_ constants
+     *
+     * @return $this
+     */
+    public function mode(int $mode): self
     {
-        $data = parent::toOpenApiV2ParameterArray();
+        $this->mode = $mode;
+        return $this;
+    }
+
+    /**
+     * Extra keys will be leaved in normalized data (but without any normalization!)
+     * @return static
+     */
+    public function modeLeave(): self
+    {
+        return $this->mode(self::MODE_LEAVE_EXTRA_KEYS);
+    }
+
+    /**
+     * Extra keys are not allowed and violation will be produced for each of them while validation
+     * @return static
+     */
+    public function modeDeny(): self
+    {
+        return $this->mode(self::MODE_DENY_EXTRA_KEYS);
+    }
+
+    /**
+     * Extra keys will be just ignored
+     * @return static
+     */
+    public function modeIgnore(): self
+    {
+        return $this->mode(self::MODE_IGNORE_EXTRA_KEYS);
+    }
+
+    public function toOpenApiSchema(): array
+    {
+        $data = parent::toOpenApiSchema();
 
         $requiredKeys = [];
         foreach ($this->schema as $key => $element) {
@@ -75,7 +113,7 @@ class JsonElement extends AbstractElement
         $properties = [];
         foreach ($this->schema as $key => $element) {
             // todo: to avoid infinite loops, $refs should be generated in some cases!
-            $properties[$key] = $element->toOpenApiV2ParameterArray();
+            $properties[$key] = $element->toOpenApiSchema();
         }
         $data['properties'] = $properties;
 
@@ -112,9 +150,15 @@ class JsonElement extends AbstractElement
         return $mentioned;
     }
 
+    /**
+     * If extra fields are denied then if they are present in input data violation will occured
+     * @param bool $allowExtraFields todo: remove this parameter of refactor method
+     *
+     * @return $this
+     */
     public function denyExtraFields(bool $allowExtraFields = false)
     {
-        $this->allowExtraFields = $allowExtraFields;
+        $this->mode = self::MODE_DENY_EXTRA_KEYS;
         return $this;
     }
 
@@ -134,7 +178,7 @@ class JsonElement extends AbstractElement
         $collection = new Constraints\Collection([
             'fields' => $constraints,
             'allowMissingFields' => false,
-            'allowExtraFields' => $this->allowExtraFields,
+            'allowExtraFields' => $this->areExtraKeysAllowed(),
         ]);
 
         return $this->isRequired ? $collection : new Constraints\Optional($collection);
@@ -145,7 +189,9 @@ class JsonElement extends AbstractElement
      */
     public function compileToFormalSymfonyValidatorConstraint()
     {
-        $constraints = $this->customSfConstraints;
+        // todo: should customSfConstraints be applied here?
+        //$constraints = $this->customSfConstraints;
+        $constraints = [];
 
         foreach ($this->schema as $key => $value) {
             if ($value instanceof AbstractElement) {
@@ -156,7 +202,7 @@ class JsonElement extends AbstractElement
         $collection = new Constraints\Collection([
             'fields' => $constraints,
             'allowMissingFields' => false,
-            'allowExtraFields' => $this->allowExtraFields,
+            'allowExtraFields' => $this->areExtraKeysAllowed(),
         ]);
 
         $selfConstraints = $this->generateFormalSfConstraints();
@@ -178,21 +224,33 @@ class JsonElement extends AbstractElement
 
     /**
      * @param array $data
-     * @param bool $ignoreExtraKeys
-     * @param bool $extractExtraKeysToExtraData
+     * @param bool $ignoreExtraKeys seems that this will be removed...
+     * @param bool $extractExtraKeysToExtraData seems that this will be removed...
      *
      * @return array[]
      */
     public function normalizeDataReturningNormalizedAndExtraData(
         array $data,
-        bool $ignoreExtraKeys = false,
-        bool $extractExtraKeysToExtraData = true
+        ?bool $ignoreExtraKeys = null,
+        ?bool $extractExtraKeysToExtraData = null
     ): array
     {
         $normalizedData = [];
         $extraData = [];
 
+        if ($ignoreExtraKeys === null) {
+            $ignoreExtraKeys = $this->mode === self::MODE_IGNORE_EXTRA_KEYS;
+        }
+
+        if ($extractExtraKeysToExtraData === null) {
+            $extractExtraKeysToExtraData = $this->mode === self::MODE_EXTRACT_EXTRA_KEYS;
+        }
+
         foreach ($data as $key => $value) {
+            /**
+             * If extra keys are allowed, handling them here. If not allowed, normalization
+             * will not even start because of formal validation violations.
+             */
             if (!\array_key_exists($key, $this->schema)) {
                 if ($ignoreExtraKeys) {
                     continue;
@@ -209,11 +267,19 @@ class JsonElement extends AbstractElement
 
             $schemaNode = $this->schema[$key];
 
-            //if (!$schemaNode instanceof AbstractElement) {
-            //    throw new InvalidJsonSchemaException();
-            //}
+            if ($schemaNode instanceof JsonElement) {
+                [$nodeNormalizedData, $nodeExtraData] = $schemaNode->normalizeDataReturningNormalizedAndExtraData($data[$key]);
+                if ($extractExtraKeysToExtraData) {
+                    $normalizedData[$key] = $nodeNormalizedData;
+                    $extraData[$key] = $nodeExtraData;
+                } else {
+                    $normalizedData[$key] = \array_replace($nodeExtraData, $nodeNormalizedData);
+                }
+            } else {
+                // todo: here if element is json we'll lose extra data!
+                $normalizedData[$key] = $schemaNode->normalizeData($data[$key]);
+            }
 
-            $normalizedData[$key] = $schemaNode->normalizeData($data[$key]);
         }
 
         foreach ($this->schema as $key => $value) {
