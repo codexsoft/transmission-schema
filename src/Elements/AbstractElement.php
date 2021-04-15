@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Validation;
  * Element is building block of data structures. Combine them using special element types: Json and
  * Collection.
  */
-abstract class AbstractElement
+abstract class AbstractElement extends AbstractBaseElement
 {
     public const UNDEFINED = 'UNDEFINED-4c970a6d-fe50-492e-ba0c-73a75fd2f2fd';
 
@@ -31,7 +31,6 @@ abstract class AbstractElement
 
     /** @var mixed */
     protected $example = self::UNDEFINED;
-    protected string $label = '';
 
     /**
      * Default value of element. Is applied when element is optional and input data for element is
@@ -40,9 +39,6 @@ abstract class AbstractElement
      */
     protected $defaultValue = self::UNDEFINED;
 
-    protected bool $isDeprecated = false;
-    protected bool $isRequired = true;
-    protected bool $isNullable = false;
     protected ?array $acceptedPhpTypes = null;
 
     /**
@@ -56,10 +52,10 @@ abstract class AbstractElement
 
     protected string $openApiType = 'mixed';
 
-    public function __construct(string $label = '')
-    {
-        $this->label = $label;
-    }
+    //public function __construct(string $label = '')
+    //{
+    //    $this->label = $label;
+    //}
 
     /**
      * Export element to Parameter Object of OpenAPI 3.x
@@ -113,19 +109,6 @@ abstract class AbstractElement
     }
 
     /**
-     * callback to be applied to already normalized data
-     * @param callable|null $callback
-     *
-     * @return $this
-     * @deprecated should not use, needs testing
-     */
-    public function process(?callable $callback)
-    {
-        $this->normalizeDataCallback = $callback;
-        return $this;
-    }
-
-    /**
      * @param $data
      *
      * @return mixed|null
@@ -154,71 +137,6 @@ abstract class AbstractElement
     protected function doNormalizeData($data)
     {
         return $data;
-    }
-
-    /**
-     * @deprecated use label() instead
-     * Set element description
-     * @param string $description
-     *
-     * @return static
-     */
-    public function description(string $description)
-    {
-        $this->description = $description;
-        return $this;
-    }
-
-    /**
-     * @deprecated use getLabel() instead
-     * @return string
-     */
-    public function getDescription(): string
-    {
-        return $this->description;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLabel(): string
-    {
-        return $this->label;
-    }
-
-    /**
-     * @param bool $isDeprecated
-     *
-     * @return static
-     */
-    public function deprecated(bool $isDeprecated = true): AbstractElement
-    {
-        $this->isDeprecated = $isDeprecated;
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isDeprecated(): bool
-    {
-        return $this->isDeprecated;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isRequired(): bool
-    {
-        return $this->isRequired;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isNullable(): bool
-    {
-        return $this->isNullable;
     }
 
     /**
@@ -347,26 +265,6 @@ abstract class AbstractElement
     }
 
     /**
-     * Set that element value CANNOT be null
-     * @return static
-     */
-    public function notNull()
-    {
-        $this->isNullable = false;
-        return $this;
-    }
-
-    /**
-     * Set that element value CAN be null
-     * @return static
-     */
-    public function nullable()
-    {
-        $this->isNullable = true;
-        return $this;
-    }
-
-    /**
      * Set element value example
      *
      * @param mixed $exampleValue
@@ -422,18 +320,6 @@ abstract class AbstractElement
     }
 
     /**
-     * Set short text label for element
-     * @param string $label
-     *
-     * @return static
-     */
-    public function label(string $label)
-    {
-        $this->label = $label;
-        return $this;
-    }
-
-    /**
      * @param bool $value enable or disable strict type checks (is disabled by default)
      *
      * @return static
@@ -482,5 +368,40 @@ abstract class AbstractElement
     final public function toOpenApiV2ParameterArray(): array
     {
         return $this->toOpenApiSchema();
+    }
+
+    /**
+     * callback to be applied to already normalized data
+     * @param callable|null $callback
+     *
+     * @return static
+     * @deprecated should not use, needs testing
+     */
+    public function process(?callable $callback): self
+    {
+        $this->normalizeDataCallback = $callback;
+        return $this;
+    }
+
+    /**
+     * @deprecated use label() instead
+     * Set element description
+     * @param string $description
+     *
+     * @return static
+     */
+    public function description(string $description)
+    {
+        $this->description = $description;
+        return $this;
+    }
+
+    /**
+     * @deprecated use getLabel() instead
+     * @return string
+     */
+    public function getDescription(): string
+    {
+        return $this->description;
     }
 }

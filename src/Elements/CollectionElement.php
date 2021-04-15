@@ -71,10 +71,10 @@ class CollectionElement extends AbstractElement
     /**
      * @param AbstractElement|string|null $elementSchema
      *
-     * @return $this
+     * @return static
      * @throws InvalidCollectionElementSchemaException
      */
-    public function each($elementSchema)
+    public function each($elementSchema): self
     {
         if (\is_string($elementSchema)) {
             $schemaClass = $elementSchema;
@@ -207,9 +207,9 @@ class CollectionElement extends AbstractElement
     /**
      * @param int $max
      *
-     * @return $this
+     * @return static
      */
-    public function maxCount(int $max)
+    public function maxCount(int $max): self
     {
         $this->maxCount = $max;
         return $this;

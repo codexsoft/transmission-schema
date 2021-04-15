@@ -10,6 +10,7 @@ use CodexSoft\Transmission\Schema\Elements\AbstractElement;
  * Fascade for constructing elements
  * You can extend this class for your needs
  *
+ //* @method static Elements\AnyOfElement anyOf(string $label = '')
  * @method static Elements\BoolElement bool(string $label = '')
  * @method static Elements\DateElement date(string $label = '')
  * @method static Elements\DateTimeElement datetime(string $label = '')
@@ -30,6 +31,7 @@ use CodexSoft\Transmission\Schema\Elements\AbstractElement;
 class Accept
 {
     protected const MAP = [
+        //'anyOf' => Elements\AnyOfElement::class,
         'bool' => Elements\BoolElement::class,
         'date' => Elements\DateElement::class,
         'datetime' => Elements\DateTimeElement::class,
@@ -49,6 +51,17 @@ class Accept
     ];
 
     /**
+     * @param array $variants
+     * @param string $label
+     *
+     * @return Elements\AnyOfElement
+     */
+    public static function anyOf(array $variants, string $label = ''): Elements\AnyOfElement
+    {
+        return (new Elements\AnyOfElement($variants, $label));
+    }
+
+    /**
      * @param AbstractElement|string $elementSchema
      * @param string $label
      *
@@ -61,7 +74,7 @@ class Accept
     }
 
     /**
-     * @param AbstractElement[]|string $schema
+     * @param AbstractElement[]|string $schema schema of known elements (dynamical keys signature can be added by separate method)
      * @param string $label
      *
      * @return Elements\JsonElement

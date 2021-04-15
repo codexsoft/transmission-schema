@@ -43,8 +43,7 @@ class JsonElement extends AbstractElement
     // todo
     //protected ?string $schemaGatheredFromClass = null;
 
-    protected $dynamicKeyType = null;
-    protected $dynamicValueType = null;
+    protected ?AbstractBaseElement $extraElementSchema = null;
 
     /**
      * JsonElement constructor.
@@ -61,15 +60,13 @@ class JsonElement extends AbstractElement
     }
 
     /**
-     * @param $keySignature
-     * @param $valueSignature
+     * @param $valuePattern
      *
-     * @return $this
+     * @return static
      */
-    public function keyValueSignature($keySignature, $valueSignature)
+    public function extraElementSchema(AbstractBaseElement $valuePattern): self
     {
-        $this->dynamicKeyType = $keySignature;
-        $this->dynamicValueType = $valueSignature;
+        $this->extraElementSchema = $valuePattern;
 
         return $this;
     }
@@ -83,7 +80,7 @@ class JsonElement extends AbstractElement
      * Set mode for dealing with extra keys in input data
      * @param int $mode MUST be one of self::MODE_ constants
      *
-     * @return $this
+     * @return static
      */
     public function mode(int $mode): self
     {
@@ -137,6 +134,13 @@ class JsonElement extends AbstractElement
         }
         $data['properties'] = $properties;
 
+        if ($this->extraElementSchema) {
+            $data['additionalProperties'] = $this->extraElementSchema->toOpenApiSchema();
+            //$data['additionalProperties'] = [
+            //    'type' => $this->extraElementSchema->toOpenApiSchema(),
+            //];
+        }
+
         return $data;
     }
 
@@ -174,9 +178,9 @@ class JsonElement extends AbstractElement
      * If extra fields are denied then if they are present in input data violation will occured
      * @param bool $allowExtraFields todo: remove this parameter of refactor method
      *
-     * @return $this
+     * @return static
      */
-    public function denyExtraFields(bool $allowExtraFields = false)
+    public function denyExtraFields(bool $allowExtraFields = false): self
     {
         $this->mode = self::MODE_DENY_EXTRA_KEYS;
         return $this;
@@ -240,6 +244,14 @@ class JsonElement extends AbstractElement
     public function getSchemaGatheredFromClass(): ?string
     {
         return $this->schemaGatheredFromClass;
+    }
+
+    /**
+     * @return AbstractBaseElement|null
+     */
+    public function getExtraElementSchema(): ?AbstractBaseElement
+    {
+        return $this->extraElementSchema;
     }
 
     /**
