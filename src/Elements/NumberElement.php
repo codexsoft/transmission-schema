@@ -15,6 +15,10 @@ class NumberElement extends ScalarElement
     protected bool $exclusiveMaximum = true;
     protected bool $exclusiveMinimum = true;
 
+    /**
+     * @deprecated
+     * @return array
+     */
     public function toOpenApiSchema(): array
     {
         $data = parent::toOpenApiSchema();
@@ -30,6 +34,38 @@ class NumberElement extends ScalarElement
         }
 
         return $data;
+    }
+
+    /**
+     * @return null
+     */
+    public function getMaxValue()
+    {
+        return $this->maxValue;
+    }
+
+    /**
+     * @return null
+     */
+    public function getMinValue()
+    {
+        return $this->minValue;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isExclusiveMaximum(): bool
+    {
+        return $this->exclusiveMaximum;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isExclusiveMinimum(): bool
+    {
+        return $this->exclusiveMinimum;
     }
 
     protected function generateSfConstraints(): array
@@ -72,51 +108,51 @@ class NumberElement extends ScalarElement
         return $constraints;
     }
 
-    /**
-     * @param int|float $maxValue
-     *
-     * @return static
-     */
-    public function lt($maxValue)
-    {
-        $this->maxValue = $maxValue;
-        $this->exclusiveMaximum = true;
-        return $this;
-    }
-
-    /**
-     * @param int|float $maxValue
-     *
-     * @return static
-     */
-    public function lte($maxValue)
-    {
-        $this->maxValue = $maxValue;
-        $this->exclusiveMaximum = false;
-        return $this;
-    }
-
-    /**
-     * @param int|float $minValue
-     *
-     * @return static
-     */
-    public function gt($minValue)
-    {
-        $this->minValue = $minValue;
-        $this->exclusiveMinimum = true;
-        return $this;
-    }
-
-    /**
-     * @param int|float $minValue
-     *
-     * @return static
-     */
-    public function gte($minValue)
-    {
-        $this->minValue = $minValue;
-        $this->exclusiveMinimum = false;
-        return $this;
-    }
+    ///**
+    // * @param int|float $maxValue
+    // *
+    // * @return static
+    // */
+    //public function lt($maxValue)
+    //{
+    //    $this->maxValue = $maxValue;
+    //    $this->exclusiveMaximum = true;
+    //    return $this;
+    //}
+    //
+    ///**
+    // * @param int|float $maxValue
+    // *
+    // * @return static
+    // */
+    //public function lte($maxValue)
+    //{
+    //    $this->maxValue = $maxValue;
+    //    $this->exclusiveMaximum = false;
+    //    return $this;
+    //}
+    //
+    ///**
+    // * @param int|float $minValue
+    // *
+    // * @return static
+    // */
+    //public function gt($minValue)
+    //{
+    //    $this->minValue = $minValue;
+    //    $this->exclusiveMinimum = true;
+    //    return $this;
+    //}
+    //
+    ///**
+    // * @param int|float $minValue
+    // *
+    // * @return static
+    // */
+    //public function gte($minValue)
+    //{
+    //    $this->minValue = $minValue;
+    //    $this->exclusiveMinimum = false;
+    //    return $this;
+    //}
 }

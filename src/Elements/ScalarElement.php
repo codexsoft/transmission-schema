@@ -19,17 +19,6 @@ class ScalarElement extends AbstractElement
      */
     protected array $substitutes = [];
 
-    /**
-     * @param array $substitutes
-     *
-     * @return static
-     */
-    public function substitutes(array $substitutes)
-    {
-        $this->substitutes = $substitutes;
-        return $this;
-    }
-
     public function toOpenApiSchema(): array
     {
         $data = parent::toOpenApiSchema();
@@ -50,14 +39,19 @@ class ScalarElement extends AbstractElement
     }
 
     /**
-     * @param string $pattern
-     *
-     * @return static
+     * @return string|null
      */
-    public function pattern(string $pattern)
+    public function getPattern(): ?string
     {
-        $this->pattern = $pattern;
-        return $this;
+        return $this->pattern;
+    }
+
+    /**
+     * @return array
+     */
+    public function getChoicesSourceArray(): array
+    {
+        return $this->choicesSourceArray;
     }
 
     protected function generateSfConstraints(): array
@@ -104,14 +98,14 @@ class ScalarElement extends AbstractElement
         return $constraints;
     }
 
-    /**
-     * @param array $validChoices
-     *
-     * @return static
-     */
-    public function choices(array $validChoices)
-    {
-        $this->choicesSourceArray = $validChoices;
-        return $this;
-    }
+    ///**
+    // * @param array $validChoices
+    // *
+    // * @return static
+    // */
+    //public function choices(array $validChoices)
+    //{
+    //    $this->choicesSourceArray = $validChoices;
+    //    return $this;
+    //}
 }

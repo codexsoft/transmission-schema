@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Validation;
 /**
  * Represents JSON object
  */
-class JsonElement extends AbstractElement implements CompositeElementInterface
+class JsonElement extends AbstractElement implements CompositeElementInterface, ReferencableElementInterface
 {
     public const MODE_EXTRACT_EXTRA_KEYS = 1;
     public const MODE_LEAVE_EXTRA_KEYS = 2;
@@ -56,93 +56,9 @@ class JsonElement extends AbstractElement implements CompositeElementInterface
         $this->setSchema($schema);
     }
 
-    /**
-     * @param $valuePattern
-     *
-     * @return static
-     */
-    public function extraElementSchema(AbstractElement $valuePattern): self
-    {
-        $this->extraElementSchema = $valuePattern;
-
-        return $this;
-    }
-
     protected function areExtraKeysAllowed(): bool
     {
         return $this->mode !== self::MODE_DENY_EXTRA_KEYS;
-    }
-
-    /**
-     * Set mode for dealing with extra keys in input data
-     * @param int $mode MUST be one of self::MODE_ constants
-     *
-     * @return static
-     */
-    public function mode(int $mode): self
-    {
-        $this->mode = $mode;
-        return $this;
-    }
-
-    /**
-     * Extra keys will be leaved in normalized data (but without any normalization!)
-     * @return static
-     */
-    public function modeLeave(): self
-    {
-        return $this->mode(self::MODE_LEAVE_EXTRA_KEYS);
-    }
-
-    /**
-     * Extra keys are not allowed and violation will be produced for each of them while validation
-     * @return static
-     */
-    public function modeDeny(): self
-    {
-        return $this->mode(self::MODE_DENY_EXTRA_KEYS);
-    }
-
-    /**
-     * Extra keys will be just ignored
-     * @return static
-     */
-    public function modeIgnore(): self
-    {
-        return $this->mode(self::MODE_IGNORE_EXTRA_KEYS);
-    }
-
-    /**
-     * todo: implement!
-     *
-     * @param \Closure $classToRef (string $class): string
-     *
-     * @return array
-     */
-    public function toOpenApiSchemaUsingRefs(\Closure $classToRef): array
-    {
-        $data = parent::toOpenApiSchema();
-
-        $requiredKeys = [];
-        foreach ($this->schema as $key => $element) {
-            if ($element->isRequired) {
-                $requiredKeys[] = $key;
-            }
-        }
-        $data['required'] = $requiredKeys;
-
-        $properties = [];
-        foreach ($this->schema as $key => $element) {
-            // todo: to avoid infinite loops, $refs should be generated in some cases!
-            $properties[$key] = $element->toOpenApiSchema();
-        }
-        $data['properties'] = $properties;
-
-        if ($this->extraElementSchema) {
-            $data['additionalProperties'] = $this->extraElementSchema->toOpenApiSchema();
-        }
-
-        return $data;
     }
 
     public function toOpenApiSchema(): array
@@ -178,9 +94,6 @@ class JsonElement extends AbstractElement implements CompositeElementInterface
 
         if ($this->extraElementSchema) {
             $data['additionalProperties'] = $this->extraElementSchema->toOpenApiSchema();
-            //$data['additionalProperties'] = [
-            //    'type' => $this->extraElementSchema->toOpenApiSchema(),
-            //];
         }
 
         return $data;
@@ -215,18 +128,6 @@ class JsonElement extends AbstractElement implements CompositeElementInterface
         //}
 
         return $mentioned;
-    }
-
-    /**
-     * If extra fields are denied then if they are present in input data violation will occured
-     * @param bool $allowExtraFields todo: remove this parameter of refactor method
-     *
-     * @return static
-     */
-    public function denyExtraFields(bool $allowExtraFields = false): self
-    {
-        $this->mode = self::MODE_DENY_EXTRA_KEYS;
-        return $this;
     }
 
     /**
@@ -295,6 +196,14 @@ class JsonElement extends AbstractElement implements CompositeElementInterface
     public function getExtraElementSchema(): ?AbstractBaseElement
     {
         return $this->extraElementSchema;
+    }
+
+    /**
+     * @return AbstractElement[]
+     */
+    public function getSchema(): array
+    {
+        return $this->schema;
     }
 
     /**
@@ -471,5 +380,15 @@ class JsonElement extends AbstractElement implements CompositeElementInterface
         }
 
         return $this;
+    }
+
+    public function isReference(): bool
+    {
+        return $this->schemaGatheredFromClass !== null;
+    }
+
+    public function getReferencedClass(): ?string
+    {
+        return $this->schemaGatheredFromClass;
     }
 }

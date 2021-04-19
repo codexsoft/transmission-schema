@@ -4,19 +4,73 @@
 namespace CodexSoft\Transmission\Schema\Elements;
 
 
-abstract class AbstractBaseElement
+abstract class AbstractBaseElement implements OpenApiAwareInterface
 {
-    protected string $label = '';
-    protected bool $isDeprecated = false;
-    protected bool $isRequired = true;
-    protected bool $isNullable = false;
+    use AbstractBaseElementFieldsTrait;
+
+    ///** @internal */
+    //public string $label = '';
+    ///** @internal */
+    //public bool $isDeprecated = false;
+    ///** @internal */
+    //public bool $isRequired = true;
+    ///** @internal */
+    //public bool $isNullable = false;
 
     public function __construct(string $label = '')
     {
         $this->label = $label;
     }
 
+    /**
+     * @deprecated
+     * @return array
+     */
     abstract public function toOpenApiSchema(): array;
+
+    ///**
+    // * @param bool $isDeprecated
+    // *
+    // * @return static
+    // */
+    //public function setIsDeprecated(bool $isDeprecated): self
+    //{
+    //    $this->isDeprecated = $isDeprecated;
+    //    return $this;
+    //}
+    //
+    ///**
+    // * @param bool $isRequired
+    // *
+    // * @return static
+    // */
+    //public function setIsRequired(bool $isRequired): self
+    //{
+    //    $this->isRequired = $isRequired;
+    //    return $this;
+    //}
+    //
+    ///**
+    // * @param bool $isNullable
+    // *
+    // * @return static
+    // */
+    //public function setIsNullable(bool $isNullable): self
+    //{
+    //    $this->isNullable = $isNullable;
+    //    return $this;
+    //}
+
+    ///**
+    // * @param string $label
+    // *
+    // * @return AbstractBaseElement
+    // */
+    //public function setLabel(string $label): AbstractBaseElement
+    //{
+    //    $this->label = $label;
+    //    return $this;
+    //}
 
     /**
      * Set short text label for element
@@ -30,13 +84,13 @@ abstract class AbstractBaseElement
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getLabel(): string
-    {
-        return $this->label;
-    }
+    ///**
+    // * @return string
+    // */
+    //public function getLabel(): string
+    //{
+    //    return $this->label;
+    //}
 
     /**
      * @return bool
@@ -46,13 +100,13 @@ abstract class AbstractBaseElement
         return $this->isRequired;
     }
 
-    /**
-     * @return bool
-     */
-    public function isNullable(): bool
-    {
-        return $this->isNullable;
-    }
+    ///**
+    // * @return bool
+    // */
+    //public function isNullable(): bool
+    //{
+    //    return $this->isNullable;
+    //}
 
     /**
      * Set that element value CANNOT be null
@@ -85,11 +139,11 @@ abstract class AbstractBaseElement
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function isDeprecated(): bool
-    {
-        return $this->isDeprecated;
-    }
+    ///**
+    // * @return bool
+    // */
+    //public function isDeprecated(): bool
+    //{
+    //    return $this->isDeprecated;
+    //}
 }

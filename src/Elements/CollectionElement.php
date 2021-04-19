@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraints;
 /**
  * Represents JSON array
  */
-class CollectionElement extends AbstractElement implements CompositeElementInterface
+class CollectionElement extends AbstractElement implements CompositeElementInterface, ReferencableElementInterface
 {
     protected ?array $acceptedPhpTypes = ['array'];
     protected string $openApiType = 'array';
@@ -24,6 +24,11 @@ class CollectionElement extends AbstractElement implements CompositeElementInter
     private ?int $maxCount = null;
     private bool $elementsMustBeUnique = false;
 
+    /**
+     * @deprecated
+     * @return array
+     * @throws \ReflectionException
+     */
     public function toOpenApiSchema(): array
     {
         $data = parent::toOpenApiSchema();
@@ -70,45 +75,14 @@ class CollectionElement extends AbstractElement implements CompositeElementInter
         return $mentioned;
     }
 
-    /**
-     * @param AbstractElement|string|null $elementSchema
-     *
-     * @return static
-     * @throws InvalidCollectionElementSchemaException
-     */
-    public function each($elementSchema): self
-    {
-        if (\is_string($elementSchema)) {
-            $schemaClass = $elementSchema;
-            if (!\class_exists($schemaClass) || !\in_array(JsonSchemaInterface::class, class_implements($schemaClass), true)) {
-                throw new InvalidCollectionElementSchemaException("Element schema class $schemaClass does not implement ".JsonSchemaInterface::class);
-            }
-            /** @var JsonSchemaInterface $schemaClass */
-            try {
-                $this->elementSchema = new JsonElement($schemaClass::createSchema());
-            } catch (InvalidJsonSchemaException $e) {
-                throw new InvalidCollectionElementSchemaException("Element schema class $schemaClass contains invalid schema");
-            }
-            $this->schemaGatheredFromClass = $schemaClass;
-        } elseif ($elementSchema instanceof AbstractElement) {
-            $this->elementSchema = $elementSchema;
-            $this->schemaGatheredFromClass = null;
-        } else {
-            throw new InvalidCollectionElementSchemaException('Collection element schema must be object of '.AbstractElement::class.' or class implementing '.JsonSchemaInterface::class);
-        }
 
-        return $this;
-    }
 
     /**
-     * @param bool $elementsMustBeUnique
-     *
-     * @return static
+     * @return AbstractElement|null
      */
-    public function unique(bool $elementsMustBeUnique = true)
+    public function getElementSchema(): ?AbstractElement
     {
-        $this->elementsMustBeUnique = $elementsMustBeUnique;
-        return $this;
+        return $this->elementSchema;
     }
 
     /**
@@ -181,39 +155,13 @@ class CollectionElement extends AbstractElement implements CompositeElementInter
     //    return $this->isRequired ? $constraints : new Constraints\Optional($constraints);
     //}
 
-    /**
-     * @param int|null $min
-     *
-     * @param int|null $max
-     *
-     * @return static
-     */
-    public function count(?int $min = null, ?int $max = null)
+    public function isReference(): bool
     {
-        $this->minCount = $min;
-        $this->maxCount = $max;
-        return $this;
+        return $this->schemaGatheredFromClass !== null;
     }
 
-    /**
-     * @param int $min
-     *
-     * @return static
-     */
-    public function minCount(int $min)
+    public function getReferencedClass(): ?string
     {
-        $this->minCount = $min;
-        return $this;
-    }
-
-    /**
-     * @param int $max
-     *
-     * @return static
-     */
-    public function maxCount(int $max): self
-    {
-        $this->maxCount = $max;
-        return $this;
+        return $this->schemaGatheredFromClass;
     }
 }

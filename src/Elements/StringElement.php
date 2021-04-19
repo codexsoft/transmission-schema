@@ -9,7 +9,6 @@ use Symfony\Component\Validator\Constraints;
 
 class StringElement extends ScalarElement
 {
-
     protected ?array $acceptedPhpTypes = ['string'];
     protected string $openApiType = 'string';
     protected $example = 'Some text sample';
@@ -37,6 +36,10 @@ class StringElement extends ScalarElement
     protected bool $isNotBlank = false;
     protected bool $isAlphaNumeric = false;
 
+    /**
+     * @deprecated
+     * @return array
+     */
     public function toOpenApiSchema(): array
     {
         $data = parent::toOpenApiSchema();
@@ -105,7 +108,7 @@ class StringElement extends ScalarElement
      *
      * @return static
      */
-    public function stripTags(bool $stripTags = true)
+    public function stripTags(bool $stripTags = true): self
     {
         $this->stripTags = $stripTags;
         return $this;
@@ -116,7 +119,7 @@ class StringElement extends ScalarElement
      *
      * @return static
      */
-    public function trim(bool $trim = true)
+    public function trim(bool $trim = true): self
     {
         $this->trim = $trim;
         return $this;
@@ -127,7 +130,7 @@ class StringElement extends ScalarElement
      *
      * @return static
      */
-    public function alnum(bool $isAlphaNumeric = true)
+    public function alnum(bool $isAlphaNumeric = true): self
     {
         $this->isAlphaNumeric = $isAlphaNumeric;
         return $this;
@@ -140,15 +143,10 @@ class StringElement extends ScalarElement
         $lengthOptions = [];
         if ($this->minLength !== null) {
             $constraints[] = new Constraints\Length(['min' => $this->minLength]);
-            //$lengthOptions['min'] = $this->minLength;
         }
         if ($this->maxLength !== null) {
             $constraints[] = new Constraints\Length(['max' => $this->maxLength]);
-            //$lengthOptions['max'] = $this->maxLength;
         }
-        //if ($lengthOptions) {
-        //    $constraints[] = new Constraints\Length($lengthOptions);
-        //}
 
         if ($this->pattern) {
             $constraints[] = new Constraints\Regex($this->pattern);
@@ -181,7 +179,7 @@ class StringElement extends ScalarElement
      *
      * @return static
      */
-    public function length($min = null, $max = null)
+    public function length($min = null, $max = null): self
     {
         $this->minLength = $min;
         $this->maxLength = $max;
@@ -193,7 +191,7 @@ class StringElement extends ScalarElement
      *
      * @return static
      */
-    public function minLength(int $min)
+    public function minLength(int $min): self
     {
         $this->minLength = $min;
         return $this;
@@ -204,7 +202,7 @@ class StringElement extends ScalarElement
      *
      * @return static
      */
-    public function maxLength(int $max)
+    public function maxLength(int $max): self
     {
         $this->maxLength = $max;
         return $this;
@@ -213,7 +211,7 @@ class StringElement extends ScalarElement
     /**
      * @return static
      */
-    public function noWhiteSpace()
+    public function noWhiteSpace(): self
     {
         $this->noWhiteSpace = true;
         return $this;

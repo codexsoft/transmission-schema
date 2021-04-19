@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Validation;
  * Element is building block of data structures. Combine them using special element types: Json and
  * Collection.
  */
-abstract class AbstractElement extends AbstractBaseElement
+abstract class AbstractElement extends AbstractBaseElement implements OpenApiAwareInterface
 {
     public const UNDEFINED = 'UNDEFINED-4c970a6d-fe50-492e-ba0c-73a75fd2f2fd';
 
@@ -22,12 +22,6 @@ abstract class AbstractElement extends AbstractBaseElement
      * todo: implement usage of this feature
      */
     protected array $customSfConstraints = [];
-
-    /**
-     * @deprecated use label instead
-     * @var string
-     */
-    protected string $description = '';
 
     /** @var mixed */
     protected $example = self::UNDEFINED;
@@ -52,11 +46,13 @@ abstract class AbstractElement extends AbstractBaseElement
 
     protected string $openApiType = 'mixed';
 
-    //public function __construct(string $label = '')
-    //{
-    //    $this->label = $label;
-    //}
-
+    /**
+     * @deprecated
+     * @param string $class
+     *
+     * @return string
+     * @throws \ReflectionException
+     */
     protected function createRef(string $class): string
     {
         $reflection = new \ReflectionClass($class);
@@ -64,6 +60,7 @@ abstract class AbstractElement extends AbstractBaseElement
     }
 
     /**
+     * @deprecated
      * Export element to Parameter Object of OpenAPI 3.x
      *
      * @param string $name a name of parameter
@@ -87,6 +84,7 @@ abstract class AbstractElement extends AbstractBaseElement
     }
 
     /**
+     * @deprecated
      * Export element to Schema Object of OpenAPI 3.x (partially)
      *
      * @see https://json-schema.org/draft/2019-09/json-schema-core.html
@@ -202,25 +200,6 @@ abstract class AbstractElement extends AbstractBaseElement
     }
 
     /**
-     * Set that element is optional.
-     * Often, if optional element is missing in input data, it is replacing with some default value.
-     *
-     * @param string $defaultValue default value to be set if element is missing
-     *
-     * @return static
-     */
-    public function optional($defaultValue = self::UNDEFINED)
-    {
-        $this->isRequired = false;
-
-        if ($defaultValue !== self::UNDEFINED) {
-            $this->defaultValue($defaultValue);
-        }
-
-        return $this;
-    }
-
-    /**
      * Overrideable symfony constraints generator for element of specific type
      * @return Constraint[]
      */
@@ -270,32 +249,6 @@ abstract class AbstractElement extends AbstractBaseElement
         return $this->isRequired ? $constraints : new Constraints\Optional($constraints);
     }
 
-    /**
-     * Set element value example
-     *
-     * @param mixed $exampleValue
-     *
-     * @return static
-     */
-    public function example($exampleValue)
-    {
-        $this->example = $exampleValue;
-        return $this;
-    }
-
-    /**
-     * Set element default value (default value will be applied if element is missing in input data)
-     *
-     * @param mixed $value
-     *
-     * @return static
-     */
-    public function defaultValue($value)
-    {
-        $this->defaultValue = $value;
-        return $this;
-    }
-
     public function getDefaultValue()
     {
         return $this->defaultValue;
@@ -308,32 +261,6 @@ abstract class AbstractElement extends AbstractBaseElement
     public function hasDefaultValue(): bool
     {
         return $this->defaultValue !== self::UNDEFINED;
-    }
-
-    /**
-     * Set element accepted PHP types.
-     * If value type from input data is outside these types, the exception will be generated
-     * while validating or normalizing input data.
-     *
-     * @param string[] ...$acceptedTypes
-     *
-     * @return static
-     */
-    public function type(...$acceptedTypes)
-    {
-        $this->acceptedPhpTypes = $acceptedTypes;
-        return $this;
-    }
-
-    /**
-     * @param bool $value enable or disable strict type checks (is disabled by default)
-     *
-     * @return static
-     */
-    public function strict(bool $value = true)
-    {
-        $this->strictTypeCheck = $value;
-        return $this;
     }
 
     /**
@@ -367,47 +294,47 @@ abstract class AbstractElement extends AbstractBaseElement
         return false;
     }
 
-    /**
-     * @deprecated use toOpenApiSchema instead
-     * @return array
-     */
-    final public function toOpenApiV2ParameterArray(): array
-    {
-        return $this->toOpenApiSchema();
-    }
+    ///**
+    // * @deprecated use toOpenApiSchema instead
+    // * @return array
+    // */
+    //final public function toOpenApiV2ParameterArray(): array
+    //{
+    //    return $this->toOpenApiSchema();
+    //}
 
-    /**
-     * callback to be applied to already normalized data
-     * @param callable|null $callback
-     *
-     * @return static
-     * @deprecated should not use, needs testing
-     */
-    public function process(?callable $callback): self
-    {
-        $this->normalizeDataCallback = $callback;
-        return $this;
-    }
-
-    /**
-     * @deprecated use label() instead
-     * Set element description
-     * @param string $description
-     *
-     * @return static
-     */
-    public function description(string $description)
-    {
-        $this->description = $description;
-        return $this;
-    }
-
-    /**
-     * @deprecated use getLabel() instead
-     * @return string
-     */
-    public function getDescription(): string
-    {
-        return $this->description;
-    }
+    ///**
+    // * callback to be applied to already normalized data
+    // * @param callable|null $callback
+    // *
+    // * @return static
+    // * @deprecated should not use, needs testing
+    // */
+    //public function process(?callable $callback): self
+    //{
+    //    $this->normalizeDataCallback = $callback;
+    //    return $this;
+    //}
+    //
+    ///**
+    // * @deprecated use label() instead
+    // * Set element description
+    // * @param string $description
+    // *
+    // * @return static
+    // */
+    //public function description(string $description)
+    //{
+    //    $this->label = $description;
+    //    return $this;
+    //}
+    //
+    ///**
+    // * @deprecated use getLabel() instead
+    // * @return string
+    // */
+    //public function getDescription(): string
+    //{
+    //    return $this->label;
+    //}
 }

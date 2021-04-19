@@ -50,6 +50,11 @@ class Accept
         'uuid' => Elements\UuidElement::class,
     ];
 
+    public static function num2()
+    {
+        return new \CodexSoft\Transmission\Schema\Elements\NumberElementBuilder();
+    }
+
     /**
      * @param array $variants
      * @param string $label

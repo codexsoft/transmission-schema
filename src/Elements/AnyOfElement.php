@@ -45,4 +45,27 @@ class AnyOfElement extends AbstractCompositeElement
 
         return $data;
     }
+
+    public function toOpenApiParameter(string $name, ?string $in = null): array
+    {
+        $data = [
+            'name' => $name,
+            'schema' => $this->toOpenApiSchema(),
+            'required' => $this->isRequired()
+        ];
+
+        if ($in !== null) {
+            $data['in'] = $in;
+        }
+
+        return $data;
+    }
+
+    /**
+     * @return AbstractElement[]
+     */
+    public function getVariants(): array
+    {
+        return $this->variants;
+    }
 }
