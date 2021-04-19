@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraints;
 /**
  * Represents JSON array
  */
-class CollectionElement extends AbstractElement
+class CollectionElement extends AbstractElement implements CompositeElementInterface
 {
     protected ?array $acceptedPhpTypes = ['array'];
     protected string $openApiType = 'array';
@@ -61,7 +61,7 @@ class CollectionElement extends AbstractElement
             return [$this->schemaGatheredFromClass];
         }
 
-        if ($this->elementSchema instanceof JsonElement || $this->elementSchema instanceof CollectionElement) {
+        if ($this->elementSchema instanceof CompositeElementInterface) {
             \array_push($mentioned, ...$this->elementSchema->collectMentionedSchemas());
         }
 
@@ -92,7 +92,7 @@ class CollectionElement extends AbstractElement
             $this->elementSchema = $elementSchema;
             $this->schemaGatheredFromClass = null;
         } else {
-            throw new InvalidCollectionElementSchemaException('Collection element schema must be '.AbstractElement::class.' or class implementing '.JsonSchemaInterface::class);
+            throw new InvalidCollectionElementSchemaException('Collection element schema must be object of '.AbstractElement::class.' or class implementing '.JsonSchemaInterface::class);
         }
 
         return $this;

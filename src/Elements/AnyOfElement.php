@@ -8,6 +8,8 @@ namespace CodexSoft\Transmission\Schema\Elements;
  * Use for documenting output schemas.
  *
  * Also, seems that additionalProperties does not support anyOf key (redoc-cli failed to handle this)
+ *
+ * Also, seems that generally `anyOf` key cause failure in redoc-cli
  */
 class AnyOfElement extends AbstractCompositeElement
 {

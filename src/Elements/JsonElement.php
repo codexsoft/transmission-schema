@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Validation;
 /**
  * Represents JSON object
  */
-class JsonElement extends AbstractElement
+class JsonElement extends AbstractElement implements CompositeElementInterface
 {
     public const MODE_EXTRACT_EXTRA_KEYS = 1;
     public const MODE_LEAVE_EXTRA_KEYS = 2;
@@ -39,9 +39,6 @@ class JsonElement extends AbstractElement
     protected array $schema;
 
     protected ?string $schemaGatheredFromClass = null;
-
-    // todo
-    //protected ?string $schemaGatheredFromClass = null;
 
     protected ?AbstractElement $extraElementSchema = null;
 
@@ -115,6 +112,15 @@ class JsonElement extends AbstractElement
         return $this->mode(self::MODE_IGNORE_EXTRA_KEYS);
     }
 
+    /**
+     * todo: implement!
+     * @return array
+     */
+    public function toOpenApiSchemaUsingRefs(): array
+    {
+
+    }
+
     public function toOpenApiSchema(): array
     {
         $data = parent::toOpenApiSchema();
@@ -145,6 +151,7 @@ class JsonElement extends AbstractElement
     }
 
     /**
+     * Recursively collect all used referenced classes that implement JsonSchemaInterface
      * @return string[]
      */
     public function collectMentionedSchemas(): array
@@ -156,7 +163,7 @@ class JsonElement extends AbstractElement
         }
 
         foreach ($this->schema as $key => $element) {
-            if ($element instanceof JsonElement || $element instanceof CollectionElement) {
+            if ($element instanceof CompositeElementInterface) {
                 \array_push($mentioned, ...$element->collectMentionedSchemas());
             }
         }
