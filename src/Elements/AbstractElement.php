@@ -57,6 +57,12 @@ abstract class AbstractElement extends AbstractBaseElement
     //    $this->label = $label;
     //}
 
+    protected function createRef(string $class): string
+    {
+        $reflection = new \ReflectionClass($class);
+        return '#/components/schemas/'.$reflection->getShortName();
+    }
+
     /**
      * Export element to Parameter Object of OpenAPI 3.x
      *

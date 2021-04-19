@@ -39,12 +39,14 @@ class CollectionElement extends AbstractElement implements CompositeElementInter
 
         if ($this->elementSchema !== null) {
             if ($this->schemaGatheredFromClass) {
-                // todo: use $ref?
+                $data['items'] = [
+                    '$ref' => $this->createRef($this->schemaGatheredFromClass),
+                ];
+            } else {
+                $data['items'] = $this->elementSchema->toOpenApiSchema();
             }
 
             // 'allOf'
-
-            $data['items'] = $this->elementSchema->toOpenApiSchema();
         }
 
         return $data;

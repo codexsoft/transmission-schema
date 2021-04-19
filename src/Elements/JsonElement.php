@@ -114,11 +114,35 @@ class JsonElement extends AbstractElement implements CompositeElementInterface
 
     /**
      * todo: implement!
+     *
+     * @param \Closure $classToRef (string $class): string
+     *
      * @return array
      */
-    public function toOpenApiSchemaUsingRefs(): array
+    public function toOpenApiSchemaUsingRefs(\Closure $classToRef): array
     {
+        $data = parent::toOpenApiSchema();
 
+        $requiredKeys = [];
+        foreach ($this->schema as $key => $element) {
+            if ($element->isRequired) {
+                $requiredKeys[] = $key;
+            }
+        }
+        $data['required'] = $requiredKeys;
+
+        $properties = [];
+        foreach ($this->schema as $key => $element) {
+            // todo: to avoid infinite loops, $refs should be generated in some cases!
+            $properties[$key] = $element->toOpenApiSchema();
+        }
+        $data['properties'] = $properties;
+
+        if ($this->extraElementSchema) {
+            $data['additionalProperties'] = $this->extraElementSchema->toOpenApiSchema();
+        }
+
+        return $data;
     }
 
     public function toOpenApiSchema(): array
@@ -135,8 +159,16 @@ class JsonElement extends AbstractElement implements CompositeElementInterface
 
         $properties = [];
         foreach ($this->schema as $key => $element) {
-            // todo: to avoid infinite loops, $refs should be generated in some cases!
-            $properties[$key] = $element->toOpenApiSchema();
+            /**
+             * to avoid infinite loops, $refs should be generated in some cases!
+             */
+            if ($this->schemaGatheredFromClass) {
+                $properties[$key] = [
+                    '$ref' => $this->createRef($this->schemaGatheredFromClass),
+                ];
+            } else {
+                $properties[$key] = $element->toOpenApiSchema();
+            }
         }
         $data['properties'] = $properties;
 
