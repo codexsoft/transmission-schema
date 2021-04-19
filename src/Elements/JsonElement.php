@@ -157,20 +157,24 @@ class JsonElement extends AbstractElement implements CompositeElementInterface
         }
         $data['required'] = $requiredKeys;
 
-        $properties = [];
-        foreach ($this->schema as $key => $element) {
-            /**
-             * to avoid infinite loops, $refs should be generated in some cases!
-             */
-            if ($this->schemaGatheredFromClass) {
-                $properties[$key] = [
-                    '$ref' => $this->createRef($this->schemaGatheredFromClass),
-                ];
-            } else {
-                $properties[$key] = $element->toOpenApiSchema();
+        if ($this->schemaGatheredFromClass) {
+            $data['$ref'] = $this->createRef($this->schemaGatheredFromClass);
+        } else {
+            $properties = [];
+            foreach ($this->schema as $key => $element) {
+                /**
+                 * to avoid infinite loops, $refs should be generated in some cases!
+                 */
+                if ($this->schemaGatheredFromClass) {
+                    $properties[$key] = [
+                        '$ref' => $this->createRef($this->schemaGatheredFromClass),
+                    ];
+                } else {
+                    $properties[$key] = $element->toOpenApiSchema();
+                }
             }
+            $data['properties'] = $properties;
         }
-        $data['properties'] = $properties;
 
         if ($this->extraElementSchema) {
             $data['additionalProperties'] = $this->extraElementSchema->toOpenApiSchema();
