@@ -121,5 +121,11 @@ class StringElement extends ScalarElement implements StringElementBuilderInterfa
         return $constraints;
     }
 
-
+    /**
+     * @return string|null
+     */
+    public function getPattern(): ?string
+    {
+        return $this->pattern;
+    }
 }

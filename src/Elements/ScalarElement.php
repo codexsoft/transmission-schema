@@ -5,7 +5,6 @@ namespace CodexSoft\Transmission\Schema\Elements;
 
 use CodexSoft\Transmission\Schema\ValidationResult;
 use Symfony\Component\Validator\Constraints;
-use Symfony\Component\Validator\Validation;
 
 class ScalarElement extends AbstractElement implements ScalarElementBuilderInterface
 {
@@ -38,14 +37,6 @@ class ScalarElement extends AbstractElement implements ScalarElementBuilderInter
         }
 
         return $data;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getPattern(): ?string
-    {
-        return $this->pattern;
     }
 
     /**

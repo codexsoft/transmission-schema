@@ -28,6 +28,10 @@ class AnyOfElement extends AbstractCompositeElement
         $this->variants = $variants;
     }
 
+    /**
+     * @deprecated
+     * @return array
+     */
     public function toOpenApiSchema(): array
     {
         $oaVariants = [];

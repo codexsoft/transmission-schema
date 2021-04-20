@@ -144,10 +144,7 @@ abstract class AbstractElement extends AbstractBaseElement implements AbstractEl
         return $data;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getExample()
+    public function getExample(): mixed
     {
         return $this->example;
     }

@@ -8,32 +8,36 @@ use CodexSoft\Transmission\Schema\Elements\CollectionElement;
 
 class CollectionElementConverter extends AbstractElementConverter
 {
-    /**
-     * @param CollectionElement $element
-     *
-     * @return array
-     */
-    public function convert($element): array
+    public function __construct(
+        protected CollectionElement $element,
+        protected OpenApiConvertFactory $factory
+    )
     {
-        $data = parent::convert($element);
+        parent::__construct($element, $factory);
+    }
 
-        $data['uniqueItems'] = $element->elementsMustBeUnique;
+    public function convert(): array
+    {
+        $data = parent::convert();
 
-        if ($element->minCount !== null) {
-            $data['minItems'] = $element->minCount;
+        $data['uniqueItems'] = $this->element->elementsMustBeUnique;
+
+        if ($this->element->minCount !== null) {
+            $data['minItems'] = $this->element->minCount;
         }
 
-        if ($element->maxCount !== null) {
-            $data['maxItems'] = $element->maxCount;
+        if ($this->element->maxCount !== null) {
+            $data['maxItems'] = $this->element->maxCount;
         }
 
-        if ($element->elementSchema !== null) {
-            if ($element->schemaGatheredFromClass) {
+        if ($this->element->elementSchema !== null) {
+            if ($this->element->schemaGatheredFromClass) {
                 $data['items'] = [
-                    '$ref' => $this->createRef($element->schemaGatheredFromClass),
+                    '$ref' => $this->factory->createRef($this->element->schemaGatheredFromClass),
                 ];
             } else {
-                $data['items'] = $element->elementSchema->toOpenApiSchema();
+                //$data['items'] = $this->element->elementSchema->toOpenApiSchema();
+                $data['items'] = $this->factory->convert($this->element->elementSchema);
             }
 
             // 'allOf'

@@ -4,7 +4,7 @@
 namespace CodexSoft\Transmission\Schema\Elements;
 
 
-interface StringElementBuilderInterface
+interface StringElementBuilderInterface extends ScalarElementBuilderInterface
 {
     public function notBlank(): static;
     public function pattern(?string $pattern): static;

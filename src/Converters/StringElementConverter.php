@@ -8,27 +8,30 @@ use CodexSoft\Transmission\Schema\Elements\StringElement;
 
 class StringElementConverter extends ScalarElementConverter
 {
-    /**
-     * @param StringElement $element
-     *
-     * @return array
-     */
-    public function convert($element): array
+    public function __construct(
+        protected StringElement $element,
+        protected OpenApiConvertFactory $factory
+    )
     {
-        $data = parent::convert($element);
+        parent::__construct($element, $factory);
+    }
 
-        $data['allowEmptyValue'] = !$element->isNotBlank;
+    public function convert(): array
+    {
+        $data = parent::convert();
 
-        if ($element->getPattern() !== null) {
-            $data['pattern'] = $element->getPattern();
+        $data['allowEmptyValue'] = !$this->element->isNotBlank;
+
+        if ($this->element->getPattern() !== null) {
+            $data['pattern'] = $this->element->getPattern();
         }
 
-        if ($element->minLength !== null) {
-            $data['minLength'] = $element->minLength;
+        if ($this->element->minLength !== null) {
+            $data['minLength'] = $this->element->minLength;
         }
 
-        if ($element->maxLength !== null) {
-            $data['maxLength'] = $element->maxLength;
+        if ($this->element->maxLength !== null) {
+            $data['maxLength'] = $this->element->maxLength;
         }
 
         return $data;

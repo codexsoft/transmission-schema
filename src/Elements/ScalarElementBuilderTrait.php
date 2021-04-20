@@ -17,16 +17,16 @@ trait ScalarElementBuilderTrait
         return $this;
     }
 
-    /**
-     * @param string $pattern
-     *
-     * @return static
-     */
-    public function pattern(string $pattern): static
-    {
-        $this->pattern = $pattern;
-        return $this;
-    }
+    ///**
+    // * @param string $pattern
+    // *
+    // * @return static
+    // */
+    //public function pattern(string $pattern): static
+    //{
+    //    $this->pattern = $pattern;
+    //    return $this;
+    //}
 
     /**
      * @param array $substitutes

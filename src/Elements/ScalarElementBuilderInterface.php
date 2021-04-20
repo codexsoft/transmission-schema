@@ -13,12 +13,12 @@ interface ScalarElementBuilderInterface extends AbstractElementBuilderInterface
      */
     public function choices(array $validChoices): static;
 
-    /**
-     * @param string $pattern
-     *
-     * @return static
-     */
-    public function pattern(string $pattern): static;
+    ///**
+    // * @param string $pattern
+    // *
+    // * @return static
+    // */
+    //public function pattern(string $pattern): static;
 
     /**
      * @param array $substitutes

@@ -8,24 +8,26 @@ use CodexSoft\Transmission\Schema\Elements\NumberElement;
 
 class NumberElementConverter extends ScalarElementConverter
 {
-
-    /**
-     * @param NumberElement $element
-     *
-     * @return array
-     */
-    public function convert($element): array
+    public function __construct(
+        protected NumberElement $element,
+        protected OpenApiConvertFactory $factory
+    )
     {
-        $data = parent::convert($element);
+        parent::__construct($element, $factory);
+    }
 
-        if ($element->getMaxValue() !== null) {
-            $data['maximum'] = $element->getMaxValue();
-            $data['exclusiveMaximum'] = $element->isExclusiveMaximum();
+    public function convert(): array
+    {
+        $data = parent::convert();
+
+        if ($this->element->getMaxValue() !== null) {
+            $data['maximum'] = $this->element->getMaxValue();
+            $data['exclusiveMaximum'] = $this->element->isExclusiveMaximum();
         }
 
-        if ($element->getMinValue() !== null) {
-            $data['minimum'] = $element->getMinValue();
-            $data['exclusiveMinimum'] = $element->isExclusiveMinimum();
+        if ($this->element->getMinValue() !== null) {
+            $data['minimum'] = $this->element->getMinValue();
+            $data['exclusiveMinimum'] = $this->element->isExclusiveMinimum();
         }
 
         return $data;

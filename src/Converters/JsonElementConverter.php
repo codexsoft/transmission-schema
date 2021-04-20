@@ -4,47 +4,54 @@
 namespace CodexSoft\Transmission\Schema\Converters;
 
 
+use CodexSoft\Transmission\Schema\Elements\JsonElement;
+use CodexSoft\Transmission\Schema\Elements\NumberElement;
+
 class JsonElementConverter extends AbstractElementConverter
 {
-
-    /**
-     * @param \CodexSoft\Transmission\Schema\Elements\JsonElement $element
-     *
-     * @return array
-     */
-    public function convert($element): array
+    public function __construct(
+        protected JsonElement $element,
+        protected OpenApiConvertFactory $factory
+    )
     {
-        $data = parent::convert($element);
+        parent::__construct($element, $factory);
+    }
+
+    public function convert(): array
+    {
+        $data = parent::convert();
 
         $requiredKeys = [];
-        foreach ($element->schema as $key => $item) {
+        foreach ($this->element->schema as $key => $item) {
             if ($item->isRequired) {
                 $requiredKeys[] = $key;
             }
         }
         $data['required'] = $requiredKeys;
 
-        if ($element->schemaGatheredFromClass) {
-            $data['$ref'] = $this->createRef($element->schemaGatheredFromClass);
+        if ($this->element->schemaGatheredFromClass) {
+            $data['$ref'] = $this->createRef($this->element->schemaGatheredFromClass);
         } else {
             $properties = [];
-            foreach ($element->schema as $key => $item) {
+            foreach ($this->element->schema as $key => $item) {
                 /**
                  * to avoid infinite loops, $refs should be generated in some cases!
                  */
-                if ($element->schemaGatheredFromClass) {
+                if ($this->element->schemaGatheredFromClass) {
                     $properties[$key] = [
-                        '$ref' => $this->createRef($element->schemaGatheredFromClass),
+                        '$ref' => $this->factory->createRef($this->element->schemaGatheredFromClass),
                     ];
                 } else {
-                    $properties[$key] = $item->toOpenApiSchema();
+                    //$properties[$key] = $item->toOpenApiSchema();
+                    $properties[$key] = $this->factory->convert($item);
                 }
             }
             $data['properties'] = $properties;
         }
 
-        if ($element->extraElementSchema) {
-            $data['additionalProperties'] = $element->extraElementSchema->toOpenApiSchema();
+        if ($this->element->extraElementSchema) {
+            //$data['additionalProperties'] = $this->element->extraElementSchema->toOpenApiSchema();
+            $data['additionalProperties'] = $this->factory->convert($this->element->extraElementSchema);
         }
 
         return $data;

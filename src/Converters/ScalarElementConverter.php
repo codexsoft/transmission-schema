@@ -9,24 +9,27 @@ use CodexSoft\Transmission\Schema\Elements\ScalarElement;
 
 class ScalarElementConverter extends AbstractElementConverter
 {
-    /**
-     * @param ScalarElement $element
-     *
-     * @return array
-     */
-    public function convert($element): array
+    public function __construct(
+        protected ScalarElement $element,
+        protected OpenApiConvertFactory $factory
+    )
     {
-        $data = parent::convert($element);
+        parent::__construct($element, $factory);
+    }
 
-        if ($element->getPattern()) {
-            $data['pattern'] = $element->getPattern();
-        }
+    public function convert(): array
+    {
+        $data = parent::convert();
 
-        if ($element->getChoicesSourceArray()) {
-            $data['enum'] = $element->getChoicesSourceArray();
+        //if ($element->getPattern()) {
+        //    $data['pattern'] = $element->getPattern();
+        //}
 
-            if ($element->getExample() === AbstractElement::UNDEFINED || !\in_array($element->getExample(), $element->getChoicesSourceArray(), true)) {
-                $data['example'] = \array_values($element->getChoicesSourceArray())[0];
+        if ($this->element->getChoicesSourceArray()) {
+            $data['enum'] = $this->element->getChoicesSourceArray();
+
+            if ($this->element->getExample() === AbstractElement::UNDEFINED || !\in_array($this->element->getExample(), $this->element->getChoicesSourceArray(), true)) {
+                $data['example'] = \array_values($this->element->getChoicesSourceArray())[0];
             }
         }
 
