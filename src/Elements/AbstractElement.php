@@ -13,8 +13,10 @@ use Symfony\Component\Validator\Validation;
  * Element is building block of data structures. Combine them using special element types: Json and
  * Collection.
  */
-abstract class AbstractElement extends AbstractBaseElement implements OpenApiAwareInterface
+abstract class AbstractElement extends AbstractBaseElement implements AbstractElementBuilderInterface
 {
+    use AbstractElementBuilderTrait;
+
     public const UNDEFINED = 'UNDEFINED-4c970a6d-fe50-492e-ba0c-73a75fd2f2fd';
 
     /**
@@ -23,8 +25,7 @@ abstract class AbstractElement extends AbstractBaseElement implements OpenApiAwa
      */
     protected array $customSfConstraints = [];
 
-    /** @var mixed */
-    protected $example = self::UNDEFINED;
+    protected mixed $example = self::UNDEFINED;
 
     /**
      * Default value of element. Is applied when element is optional and input data for element is

@@ -14,7 +14,7 @@ trait AbstractBaseElementBuilderTrait
      *
      * @return static
      */
-    public function label(string $label): self
+    public function label(string $label): static
     {
         $this->label = $label;
         return $this;
@@ -24,7 +24,7 @@ trait AbstractBaseElementBuilderTrait
      * Set that element value CANNOT be null
      * @return static
      */
-    public function notNull()
+    public function notNull(): static
     {
         $this->isNullable = false;
         return $this;
@@ -35,9 +35,19 @@ trait AbstractBaseElementBuilderTrait
      *
      * @return static
      */
-    public function deprecated(bool $isDeprecated = true): self
+    public function deprecated(bool $isDeprecated = true): static
     {
         $this->isDeprecated = $isDeprecated;
+        return $this;
+    }
+
+    /**
+     * Set that element value CAN be null
+     * @return static
+     */
+    public function nullable(): static
+    {
+        $this->isNullable = true;
         return $this;
     }
 }

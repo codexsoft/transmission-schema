@@ -9,7 +9,7 @@ class IntegerElement extends NumberElement
 {
     protected ?array $acceptedPhpTypes = ['integer'];
     protected string $openApiType = 'integer';
-    protected $example = 42;
+    protected mixed $example = 42;
 
     /**
      * @param $data

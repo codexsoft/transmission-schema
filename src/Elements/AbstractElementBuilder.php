@@ -3,7 +3,9 @@
 
 namespace CodexSoft\Transmission\Schema\Elements;
 
-
+/**
+ * @deprecated
+ */
 abstract class AbstractElementBuilder extends AbstractBaseElementBuilder
 {
     //use AbstractElementBuilderTrait;

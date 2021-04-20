@@ -3,7 +3,9 @@
 
 namespace CodexSoft\Transmission\Schema\Elements;
 
-
+/**
+ * @deprecated
+ */
 class ScalarElementBuilder extends AbstractBaseElementBuilder
 {
     public function __construct(?ScalarElement $element = null)

@@ -14,8 +14,10 @@ use Symfony\Component\Validator\Validation;
 /**
  * Represents JSON object
  */
-class JsonElement extends AbstractElement implements CompositeElementInterface, ReferencableElementInterface
+class JsonElement extends AbstractElement implements CompositeElementInterface, ReferencableElementInterface, JsonElementBuilderInterface
 {
+    use JsonElementBuilderTrait;
+
     public const MODE_EXTRACT_EXTRA_KEYS = 1;
     public const MODE_LEAVE_EXTRA_KEYS = 2;
     public const MODE_IGNORE_EXTRA_KEYS = 3;
@@ -367,7 +369,7 @@ class JsonElement extends AbstractElement implements CompositeElementInterface, 
         }
 
         if (\is_array($schema)) {
-            $this->schema = $schema;
+            $this->schema = BuilderToElementConverter::normalize($schema);
             $this->schemaGatheredFromClass = null;
         }
 

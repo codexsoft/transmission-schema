@@ -7,7 +7,7 @@ use Symfony\Component\Validator\Constraints;
 
 class DateTimeElement extends StringElement
 {
-    protected $example = '2020-05-10 12:34:56';
+    protected mixed $example = '2020-05-10 12:34:56';
 
     protected function generateSfConstraints(): array
     {

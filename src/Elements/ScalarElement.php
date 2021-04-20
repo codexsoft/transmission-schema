@@ -7,9 +7,11 @@ use CodexSoft\Transmission\Schema\ValidationResult;
 use Symfony\Component\Validator\Constraints;
 use Symfony\Component\Validator\Validation;
 
-class ScalarElement extends AbstractElement
+class ScalarElement extends AbstractElement implements ScalarElementBuilderInterface
 {
-    protected $example = 'value';
+    use ScalarElementBuilderTrait;
+
+    protected mixed $example = 'value';
     protected array $choicesSourceArray = [];
     protected ?string $pattern = null;
 

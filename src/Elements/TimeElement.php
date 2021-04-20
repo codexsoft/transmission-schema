@@ -7,7 +7,7 @@ use Symfony\Component\Validator\Constraints;
 
 class TimeElement extends StringElement
 {
-    protected $example = '12:34:56';
+    protected mixed $example = '12:34:56';
 
     protected function generateSfConstraints(): array
     {

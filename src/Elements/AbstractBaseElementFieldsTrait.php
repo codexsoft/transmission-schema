@@ -3,7 +3,9 @@
 
 namespace CodexSoft\Transmission\Schema\Elements;
 
-
+/**
+ * @deprecated
+ */
 trait AbstractBaseElementFieldsTrait
 {
     /** @internal */

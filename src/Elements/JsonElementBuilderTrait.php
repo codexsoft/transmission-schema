@@ -3,29 +3,18 @@
 
 namespace CodexSoft\Transmission\Schema\Elements;
 
-/**
- * @deprecated
- */
-class JsonElementBuilder extends AbstractElementBuilder
-{
-    /**
-     * @noinspection MagicMethodsValidityInspection
-     * @noinspection PhpMissingParentConstructorInspection
-     */
-    public function __construct(JsonElement $element)
-    {
-        $this->element = $element;
-    }
 
+trait JsonElementBuilderTrait
+{
     /**
      * If extra fields are denied then if they are present in input data violation will occured
      * @param bool $allowExtraFields todo: remove this parameter of refactor method
      *
      * @return static
      */
-    public function denyExtraFields(bool $allowExtraFields = false): self
+    public function denyExtraFields(bool $allowExtraFields = false): static
     {
-        $this->element->mode = JsonElement::MODE_DENY_EXTRA_KEYS;
+        $this->mode = JsonElement::MODE_DENY_EXTRA_KEYS;
         return $this;
     }
 
@@ -35,9 +24,9 @@ class JsonElementBuilder extends AbstractElementBuilder
      *
      * @return static
      */
-    public function mode(int $mode): self
+    public function mode(int $mode): static
     {
-        $this->element->mode = $mode;
+        $this->mode = $mode;
         return $this;
     }
 
@@ -45,27 +34,27 @@ class JsonElementBuilder extends AbstractElementBuilder
      * Extra keys will be leaved in normalized data (but without any normalization!)
      * @return static
      */
-    public function modeLeave(): self
+    public function modeLeave(): static
     {
-        return $this->element->mode(JsonElement::MODE_LEAVE_EXTRA_KEYS);
+        return $this->mode(JsonElement::MODE_LEAVE_EXTRA_KEYS);
     }
 
     /**
      * Extra keys are not allowed and violation will be produced for each of them while validation
      * @return static
      */
-    public function modeDeny(): self
+    public function modeDeny(): static
     {
-        return $this->element->mode(JsonElement::MODE_DENY_EXTRA_KEYS);
+        return $this->mode(JsonElement::MODE_DENY_EXTRA_KEYS);
     }
 
     /**
      * Extra keys will be just ignored
      * @return static
      */
-    public function modeIgnore(): self
+    public function modeIgnore(): static
     {
-        return $this->element->mode(JsonElement::MODE_IGNORE_EXTRA_KEYS);
+        return $this->mode(JsonElement::MODE_IGNORE_EXTRA_KEYS);
     }
 
     /**
@@ -73,9 +62,9 @@ class JsonElementBuilder extends AbstractElementBuilder
      *
      * @return static
      */
-    public function extraElementSchema(AbstractElement $valuePattern): self
+    public function extraElementSchema(AbstractElement $valuePattern): static
     {
-        $this->element->extraElementSchema = $valuePattern;
+        $this->extraElementSchema = $valuePattern;
         return $this;
     }
 }

@@ -4,9 +4,51 @@
 namespace CodexSoft\Transmission\Schema\Elements;
 
 
-abstract class AbstractBaseElement implements OpenApiAwareInterface
+abstract class AbstractBaseElement implements OpenApiAwareInterface, AbstractBaseElementBuilderInterface
 {
-    use AbstractBaseElementFieldsTrait;
+    //use AbstractBaseElementFieldsTrait;
+    use AbstractBaseElementBuilderTrait;
+
+    /** @internal */
+    public string $label = '';
+    /** @internal */
+    public bool $isDeprecated = false;
+    /** @internal */
+    public bool $isRequired = true;
+    /** @internal */
+    public bool $isNullable = false;
+
+    /**
+     * @return string
+     */
+    public function getLabel(): string
+    {
+        return $this->label;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRequired(): bool
+    {
+        return $this->isRequired;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isNullable(): bool
+    {
+        return $this->isNullable;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDeprecated(): bool
+    {
+        return $this->isDeprecated;
+    }
 
     ///** @internal */
     //public string $label = '';
@@ -72,17 +114,17 @@ abstract class AbstractBaseElement implements OpenApiAwareInterface
     //    return $this;
     //}
 
-    /**
-     * Set short text label for element
-     * @param string $label
-     *
-     * @return static
-     */
-    public function label(string $label)
-    {
-        $this->label = $label;
-        return $this;
-    }
+    ///**
+    // * Set short text label for element
+    // * @param string $label
+    // *
+    // * @return static
+    // */
+    //public function label(string $label)
+    //{
+    //    $this->label = $label;
+    //    return $this;
+    //}
 
     ///**
     // * @return string
@@ -92,13 +134,13 @@ abstract class AbstractBaseElement implements OpenApiAwareInterface
     //    return $this->label;
     //}
 
-    /**
-     * @return bool
-     */
-    public function isRequired(): bool
-    {
-        return $this->isRequired;
-    }
+    ///**
+    // * @return bool
+    // */
+    //public function isRequired(): bool
+    //{
+    //    return $this->isRequired;
+    //}
 
     ///**
     // * @return bool
@@ -108,36 +150,36 @@ abstract class AbstractBaseElement implements OpenApiAwareInterface
     //    return $this->isNullable;
     //}
 
-    /**
-     * Set that element value CANNOT be null
-     * @return static
-     */
-    public function notNull()
-    {
-        $this->isNullable = false;
-        return $this;
-    }
+    ///**
+    // * Set that element value CANNOT be null
+    // * @return static
+    // */
+    //public function notNull()
+    //{
+    //    $this->isNullable = false;
+    //    return $this;
+    //}
 
-    /**
-     * Set that element value CAN be null
-     * @return static
-     */
-    public function nullable()
-    {
-        $this->isNullable = true;
-        return $this;
-    }
+    ///**
+    // * Set that element value CAN be null
+    // * @return static
+    // */
+    //public function nullable()
+    //{
+    //    $this->isNullable = true;
+    //    return $this;
+    //}
 
-    /**
-     * @param bool $isDeprecated
-     *
-     * @return static
-     */
-    public function deprecated(bool $isDeprecated = true): self
-    {
-        $this->isDeprecated = $isDeprecated;
-        return $this;
-    }
+    ///**
+    // * @param bool $isDeprecated
+    // *
+    // * @return static
+    // */
+    //public function deprecated(bool $isDeprecated = true): self
+    //{
+    //    $this->isDeprecated = $isDeprecated;
+    //    return $this;
+    //}
 
     ///**
     // * @return bool

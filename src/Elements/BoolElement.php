@@ -5,7 +5,7 @@ namespace CodexSoft\Transmission\Schema\Elements;
 
 class BoolElement extends ScalarElement
 {
-    protected $example = true;
+    protected mixed $example = true;
     protected string $openApiType = 'boolean';
     protected ?array $acceptedPhpTypes = ['bool'];
 

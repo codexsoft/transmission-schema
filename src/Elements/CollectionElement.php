@@ -3,16 +3,15 @@
 
 namespace CodexSoft\Transmission\Schema\Elements;
 
-use CodexSoft\Transmission\Schema\Exceptions\InvalidCollectionElementSchemaException;
-use CodexSoft\Transmission\Schema\Exceptions\InvalidJsonSchemaException;
-use CodexSoft\Transmission\Schema\Contracts\JsonSchemaInterface;
 use Symfony\Component\Validator\Constraints;
 
 /**
  * Represents JSON array
  */
-class CollectionElement extends AbstractElement implements CompositeElementInterface, ReferencableElementInterface
+class CollectionElement extends AbstractElement implements CompositeElementInterface, ReferencableElementInterface, CollectionElementBuilderInterface
 {
+    use CollectionElementBuilderTrait;
+
     protected ?array $acceptedPhpTypes = ['array'];
     protected string $openApiType = 'array';
 

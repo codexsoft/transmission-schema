@@ -7,7 +7,7 @@ use Symfony\Component\Validator\Constraints;
 
 class EmailElement extends StringElement
 {
-    protected $example = 'some@example.com';
+    protected mixed $example = 'some@example.com';
 
     protected function generateSfConstraints(): array
     {

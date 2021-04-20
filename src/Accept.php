@@ -11,22 +11,22 @@ use CodexSoft\Transmission\Schema\Elements\AbstractElement;
  * You can extend this class for your needs
  *
  //* @method static Elements\AnyOfElement anyOf(string $label = '')
- * @method static Elements\BoolElement bool(string $label = '')
- * @method static Elements\DateElement date(string $label = '')
- * @method static Elements\DateTimeElement datetime(string $label = '')
- * @method static Elements\EmailElement email(string $label = '')
- * @method static Elements\FloatElement double(string $label = '')
- * @method static Elements\FloatElement float(string $label = '')
- * @method static Elements\IdElement id(string $label = '')
- * @method static Elements\IntegerElement integer(string $label = '')
- * @method static Elements\NumberElement number(string $label = '')
- * @method static Elements\ScalarElement scalar(string $label = '')
- * @method static Elements\StringElement string(string $label = '')
- * @method static Elements\StringElement text(string $label = '')
- * @method static Elements\TimeElement time(string $label = '')
- * @method static Elements\TimestampElement timestamp(string $label = '')
- * @method static Elements\UrlElement url(string $label = '')
- * @method static Elements\UuidElement uuid(string $label = '')
+ * @method static Elements\ScalarElementBuilderInterface bool(string $label = '')
+ * @method static Elements\StringElementBuilderInterface date(string $label = '')
+ * @method static Elements\StringElementBuilderInterface datetime(string $label = '')
+ * @method static Elements\StringElementBuilderInterface email(string $label = '')
+ * @method static Elements\NumberElementBuilderInterface double(string $label = '')
+ * @method static Elements\NumberElementBuilderInterface float(string $label = '')
+ * @method static Elements\NumberElementBuilderInterface id(string $label = '')
+ * @method static Elements\NumberElementBuilderInterface integer(string $label = '')
+ * @method static Elements\NumberElementBuilderInterface number(string $label = '')
+ * @method static Elements\ScalarElementBuilderInterface scalar(string $label = '')
+ * @method static Elements\StringElementBuilderInterface string(string $label = '')
+ * @method static Elements\StringElementBuilderInterface text(string $label = '')
+ * @method static Elements\StringElementBuilderInterface time(string $label = '')
+ * @method static Elements\NumberElementBuilderInterface timestamp(string $label = '')
+ * @method static Elements\StringElementBuilderInterface url(string $label = '')
+ * @method static Elements\StringElementBuilderInterface uuid(string $label = '')
  */
 class Accept
 {
@@ -50,11 +50,6 @@ class Accept
         'uuid' => Elements\UuidElement::class,
     ];
 
-    public static function num2()
-    {
-        return new \CodexSoft\Transmission\Schema\Elements\NumberElementBuilder();
-    }
-
     /**
      * @param array $variants
      * @param string $label
@@ -70,10 +65,10 @@ class Accept
      * @param AbstractElement|string $elementSchema
      * @param string $label
      *
-     * @return Elements\CollectionElement
+     * @return Elements\CollectionElementBuilderInterface
      * @throws Exceptions\InvalidCollectionElementSchemaException
      */
-    public static function collection($elementSchema, string $label = ''): Elements\CollectionElement
+    public static function collection($elementSchema, string $label = ''): Elements\CollectionElementBuilderInterface
     {
         return (new Elements\CollectionElement($label))->each($elementSchema);
     }
@@ -82,10 +77,10 @@ class Accept
      * @param AbstractElement[]|string $schema schema of known elements (dynamical keys signature can be added by separate method)
      * @param string $label
      *
-     * @return Elements\JsonElement
+     * @return Elements\JsonElementBuilderInterface
      * @throws Exceptions\InvalidJsonSchemaException
      */
-    public static function json($schema, string $label = ''): Elements\JsonElement
+    public static function json($schema, string $label = ''): Elements\JsonElementBuilderInterface
     {
         return (new Elements\JsonElement($schema, $label));
     }

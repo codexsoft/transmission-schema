@@ -6,6 +6,9 @@ namespace CodexSoft\Transmission\Schema\Elements;
 
 use CodexSoft\Transmission\Schema\Elements\AbstractBaseElement;
 
+/**
+ * @deprecated
+ */
 trait AbstractBaseElementBuilderTrait2
 {
     protected AbstractBaseElement $element;

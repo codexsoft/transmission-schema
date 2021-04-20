@@ -7,11 +7,13 @@ use CodexSoft\Transmission\Schema\Constraints\ContainsAlphanumeric;
 use CodexSoft\Transmission\Schema\Constraints\ContainsNoWhitespaces;
 use Symfony\Component\Validator\Constraints;
 
-class StringElement extends ScalarElement
+class StringElement extends ScalarElement implements StringElementBuilderInterface
 {
+    use StringElementBuilderTrait;
+
     protected ?array $acceptedPhpTypes = ['string'];
     protected string $openApiType = 'string';
-    protected $example = 'Some text sample';
+    protected mixed $example = 'Some text sample';
 
     /**
      * Example: /^[a-z]+$/
@@ -61,27 +63,6 @@ class StringElement extends ScalarElement
     }
 
     /**
-     * @return static
-     */
-    public function notBlank()
-    {
-        $this->isNotBlank = true;
-        return $this;
-    }
-
-    /**
-     * SHOULD be a valid regular expression
-     * @param string|null $pattern
-     *
-     * @return static
-     */
-    public function pattern(?string $pattern): self
-    {
-        $this->pattern = $pattern;
-        return $this;
-    }
-
-    /**
      * @param $data
      *
      * @return string
@@ -101,39 +82,6 @@ class StringElement extends ScalarElement
         }
 
         return $data;
-    }
-
-    /**
-     * @param bool $stripTags
-     *
-     * @return static
-     */
-    public function stripTags(bool $stripTags = true): self
-    {
-        $this->stripTags = $stripTags;
-        return $this;
-    }
-
-    /**
-     * @param bool $trim
-     *
-     * @return static
-     */
-    public function trim(bool $trim = true): self
-    {
-        $this->trim = $trim;
-        return $this;
-    }
-
-    /**
-     * @param bool $isAlphaNumeric
-     *
-     * @return static
-     */
-    public function alnum(bool $isAlphaNumeric = true): self
-    {
-        $this->isAlphaNumeric = $isAlphaNumeric;
-        return $this;
     }
 
     protected function generateSfConstraints(): array
@@ -173,47 +121,5 @@ class StringElement extends ScalarElement
         return $constraints;
     }
 
-    /**
-     * @param null $min
-     * @param null $max
-     *
-     * @return static
-     */
-    public function length($min = null, $max = null): self
-    {
-        $this->minLength = $min;
-        $this->maxLength = $max;
-        return $this;
-    }
 
-    /**
-     * @param int $min
-     *
-     * @return static
-     */
-    public function minLength(int $min): self
-    {
-        $this->minLength = $min;
-        return $this;
-    }
-
-    /**
-     * @param int $max
-     *
-     * @return static
-     */
-    public function maxLength(int $max): self
-    {
-        $this->maxLength = $max;
-        return $this;
-    }
-
-    /**
-     * @return static
-     */
-    public function noWhiteSpace(): self
-    {
-        $this->noWhiteSpace = true;
-        return $this;
-    }
 }

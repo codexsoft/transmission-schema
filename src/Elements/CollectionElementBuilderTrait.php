@@ -8,27 +8,15 @@ use CodexSoft\Transmission\Schema\Contracts\JsonSchemaInterface;
 use CodexSoft\Transmission\Schema\Exceptions\InvalidCollectionElementSchemaException;
 use CodexSoft\Transmission\Schema\Exceptions\InvalidJsonSchemaException;
 
-/**
- * @deprecated
- */
-class CollectionElementBuilder extends AbstractElementBuilder
+trait CollectionElementBuilderTrait
 {
-    /**
-     * @noinspection MagicMethodsValidityInspection
-     * @noinspection PhpMissingParentConstructorInspection
-     */
-    public function __construct(?CollectionElement $element = null)
-    {
-        $this->element = $element ?? new CollectionElement();
-    }
-
     /**
      * @param AbstractElement|string|null $elementSchema
      *
      * @return static
      * @throws InvalidCollectionElementSchemaException
      */
-    public function each($elementSchema): self
+    public function each($elementSchema): static
     {
         if (\is_string($elementSchema)) {
             $schemaClass = $elementSchema;
@@ -38,14 +26,14 @@ class CollectionElementBuilder extends AbstractElementBuilder
             /** @var JsonSchemaInterface $schemaClass */
             try {
                 //$this->element->elementSchema = new JsonElement($schemaClass::createSchema());
-                $this->element->elementSchema = BuilderToElementConverter::normalizeToJsonElement($schemaClass::createSchema());
+                $this->elementSchema = BuilderToElementConverter::normalizeToJsonElement($schemaClass::createSchema());
             } catch (InvalidJsonSchemaException $e) {
                 throw new InvalidCollectionElementSchemaException("Element schema class $schemaClass contains invalid schema");
             }
-            $this->element->schemaGatheredFromClass = $schemaClass;
+            $this->schemaGatheredFromClass = $schemaClass;
         } elseif ($elementSchema instanceof AbstractElement) {
-            $this->element->elementSchema = $elementSchema;
-            $this->element->schemaGatheredFromClass = null;
+            $this->elementSchema = $elementSchema;
+            $this->schemaGatheredFromClass = null;
         } else {
             throw new InvalidCollectionElementSchemaException('Collection element schema must be object of '.AbstractElement::class.' or class implementing '.JsonSchemaInterface::class);
         }
@@ -58,9 +46,9 @@ class CollectionElementBuilder extends AbstractElementBuilder
      *
      * @return static
      */
-    public function unique(bool $elementsMustBeUnique = true)
+    public function unique(bool $elementsMustBeUnique = true): static
     {
-        $this->element->elementsMustBeUnique = $elementsMustBeUnique;
+        $this->elementsMustBeUnique = $elementsMustBeUnique;
         return $this;
     }
 
@@ -71,10 +59,10 @@ class CollectionElementBuilder extends AbstractElementBuilder
      *
      * @return static
      */
-    public function count(?int $min = null, ?int $max = null)
+    public function count(?int $min = null, ?int $max = null): static
     {
-        $this->element->minCount = $min;
-        $this->element->maxCount = $max;
+        $this->minCount = $min;
+        $this->maxCount = $max;
         return $this;
     }
 
@@ -85,7 +73,7 @@ class CollectionElementBuilder extends AbstractElementBuilder
      */
     public function minCount(int $min)
     {
-        $this->element->minCount = $min;
+        $this->minCount = $min;
         return $this;
     }
 
@@ -94,9 +82,9 @@ class CollectionElementBuilder extends AbstractElementBuilder
      *
      * @return static
      */
-    public function maxCount(int $max): self
+    public function maxCount(int $max): static
     {
-        $this->element->maxCount = $max;
+        $this->maxCount = $max;
         return $this;
     }
 }

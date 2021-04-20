@@ -4,7 +4,7 @@
 namespace CodexSoft\Transmission\Schema\Elements;
 
 
-trait AbstractElementBuilderTrait
+interface AbstractElementBuilderInterface extends AbstractBaseElementBuilderInterface
 {
     /**
      * Set that element is optional.
@@ -14,16 +14,7 @@ trait AbstractElementBuilderTrait
      *
      * @return static
      */
-    public function optional($defaultValue = AbstractElement::UNDEFINED): static
-    {
-        $this->isRequired = false;
-
-        if ($defaultValue !== AbstractElement::UNDEFINED) {
-            $this->defaultValue($defaultValue);
-        }
-
-        return $this;
-    }
+    public function optional($defaultValue = AbstractElement::UNDEFINED): static;
 
     /**
      * Set element value example
@@ -32,11 +23,7 @@ trait AbstractElementBuilderTrait
      *
      * @return static
      */
-    public function example($exampleValue): static
-    {
-        $this->example = $exampleValue;
-        return $this;
-    }
+    public function example($exampleValue): static;
 
     /**
      * Set element default value (default value will be applied if element is missing in input data)
@@ -45,11 +32,7 @@ trait AbstractElementBuilderTrait
      *
      * @return static
      */
-    public function defaultValue($value): static
-    {
-        $this->defaultValue = $value;
-        return $this;
-    }
+    public function defaultValue($value): static;
 
     /**
      * Set element accepted PHP types.
@@ -60,20 +43,12 @@ trait AbstractElementBuilderTrait
      *
      * @return static
      */
-    public function type(...$acceptedTypes): static
-    {
-        $this->acceptedPhpTypes = $acceptedTypes;
-        return $this;
-    }
+    public function type(...$acceptedTypes): static;
 
     /**
      * @param bool $value enable or disable strict type checks (is disabled by default)
      *
      * @return static
      */
-    public function strict(bool $value = true): static
-    {
-        $this->strictTypeCheck = $value;
-        return $this;
-    }
+    public function strict(bool $value = true): static;
 }

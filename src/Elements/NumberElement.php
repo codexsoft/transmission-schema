@@ -5,10 +5,12 @@ namespace CodexSoft\Transmission\Schema\Elements;
 
 use Symfony\Component\Validator\Constraints;
 
-class NumberElement extends ScalarElement
+class NumberElement extends ScalarElement implements NumberElementBuilderInterface
 {
+    use NumberElementBuilderTrait;
+
     protected ?array $acceptedPhpTypes = ['integer', 'float', 'double'];
-    protected $example = 42.5;
+    protected mixed $example = 42.5;
 
     protected $maxValue = null;
     protected $minValue = null;
