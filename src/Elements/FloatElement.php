@@ -12,9 +12,8 @@ class FloatElement extends NumberElement
      * @param $data
      *
      * @return double|float|null
-     * @inheritDoc
      */
-    public function doNormalizeData($data): ?float
+    public function doNormalizeData(mixed $data): ?float
     {
         $data = parent::doNormalizeData($data);
         return (double) $data;

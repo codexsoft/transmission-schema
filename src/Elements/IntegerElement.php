@@ -15,9 +15,8 @@ class IntegerElement extends NumberElement
      * @param $data
      *
      * @return int
-     * @inheritDoc
      */
-    public function doNormalizeData($data): ?int
+    public function doNormalizeData(mixed $data): ?int
     {
         $data = parent::doNormalizeData($data);
         return (int) $data;

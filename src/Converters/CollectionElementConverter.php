@@ -36,11 +36,10 @@ class CollectionElementConverter extends AbstractElementConverter
                     '$ref' => $this->factory->createRef($this->element->getSchemaSourceClass()),
                 ];
             } else {
-                //$data['items'] = $this->element->elementSchema->toOpenApiSchema();
                 $data['items'] = $this->factory->convert($this->element->getElementSchema());
             }
 
-            // 'allOf'
+            // todo: 'allOf'?
         }
 
         return $data;

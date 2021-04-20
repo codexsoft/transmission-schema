@@ -83,19 +83,6 @@ class OpenApiConvertFactory
         }
 
         return 'mixed';
-
-        ///**
-        // * todo: how to respect inherited openApiType?..
-        // */
-        //return match ($elementClass) {
-        //    BoolElement::class => 'boolean',
-        //    CollectionElement::class => 'array',
-        //    IntegerElement::class => 'integer',
-        //    JsonElement::class => 'object',
-        //    NumberElement::class => 'number',
-        //    StringElement::class => 'string',
-        //    default => 'mixed',
-        //};
     }
 
     /**

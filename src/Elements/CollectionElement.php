@@ -123,11 +123,11 @@ class CollectionElement extends AbstractElement implements CompositeElementInter
     }
 
     /**
-     * @param $data
+     * @param mixed $data
      *
      * @return array|mixed
      */
-    protected function doNormalizeData($data)
+    protected function doNormalizeData(mixed $data)
     {
         $data = parent::doNormalizeData($data);
         $normalizedData = [];

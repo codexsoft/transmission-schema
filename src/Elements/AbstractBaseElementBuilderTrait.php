@@ -4,8 +4,6 @@
 namespace CodexSoft\Transmission\Schema\Elements;
 
 
-use CodexSoft\Transmission\Schema\Elements\AbstractBaseElement;
-
 trait AbstractBaseElementBuilderTrait
 {
     /**

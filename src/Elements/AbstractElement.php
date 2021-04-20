@@ -139,7 +139,7 @@ abstract class AbstractElement extends AbstractBaseElement implements AbstractEl
         return $normalizedData;
     }
 
-    protected function doNormalizeData($data)
+    protected function doNormalizeData(mixed $data)
     {
         return $data;
     }
@@ -261,34 +261,34 @@ abstract class AbstractElement extends AbstractBaseElement implements AbstractEl
         return $this->defaultValue !== self::UNDEFINED;
     }
 
-    /**
-     * Internal helper function to detect if $value is match allowed PHP types
-     * @param $value
-     * @param array $acceptedTypes
-     *
-     * @return bool
-     */
-    protected function valueHasType($value, array $acceptedTypes): bool
-    {
-        foreach ($acceptedTypes as $type) {
-            $type = strtolower($type);
-            $type = 'boolean' === $type ? 'bool' : $type;
-            $isFunction = 'is_'.$type;
-            $ctypeFunction = 'ctype_'.$type;
-
-            if (\function_exists($isFunction) && $isFunction($value)) {
-                return true;
-            }
-
-            if (\function_exists($ctypeFunction) && $ctypeFunction($value)) {
-                return true;
-            }
-
-            if ($value instanceof $type) {
-                return true;
-            }
-        }
-
-        return false;
-    }
+    ///**
+    // * Internal helper function to detect if $value is match allowed PHP types
+    // * @param $value
+    // * @param array $acceptedTypes
+    // *
+    // * @return bool
+    // */
+    //protected function valueHasType($value, array $acceptedTypes): bool
+    //{
+    //    foreach ($acceptedTypes as $type) {
+    //        $type = strtolower($type);
+    //        $type = 'boolean' === $type ? 'bool' : $type;
+    //        $isFunction = 'is_'.$type;
+    //        $ctypeFunction = 'ctype_'.$type;
+    //
+    //        if (\function_exists($isFunction) && $isFunction($value)) {
+    //            return true;
+    //        }
+    //
+    //        if (\function_exists($ctypeFunction) && $ctypeFunction($value)) {
+    //            return true;
+    //        }
+    //
+    //        if ($value instanceof $type) {
+    //            return true;
+    //        }
+    //    }
+    //
+    //    return false;
+    //}
 }

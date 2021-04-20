@@ -21,10 +21,6 @@ class ScalarElementConverter extends AbstractElementConverter
     {
         $data = parent::convert();
 
-        //if ($element->getPattern()) {
-        //    $data['pattern'] = $element->getPattern();
-        //}
-
         if ($this->element->getChoicesSourceArray()) {
             $data['enum'] = $this->element->getChoicesSourceArray();
 

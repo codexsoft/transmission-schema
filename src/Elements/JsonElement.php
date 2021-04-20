@@ -287,11 +287,11 @@ class JsonElement extends AbstractElement implements CompositeElementInterface, 
     }
 
     /**
-     * @param $data
+     * @param mixed $data
      *
      * @return array
      */
-    protected function doNormalizeData($data): array
+    protected function doNormalizeData(mixed $data): array
     {
         [$normalizedData, $extraData] = $this->normalizeDataReturningNormalizedAndExtraData($data);
         return $normalizedData;

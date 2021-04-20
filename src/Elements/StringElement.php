@@ -103,12 +103,11 @@ class StringElement extends ScalarElement implements StringElementBuilderInterfa
     }
 
     /**
-     * @param $data
+     * @param mixed $data
      *
      * @return string
-     * @inheritDoc
      */
-    protected function doNormalizeData($data): ?string
+    protected function doNormalizeData(mixed $data): ?string
     {
         $data = parent::doNormalizeData($data);
         $data = (string) $data;

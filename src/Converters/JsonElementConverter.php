@@ -49,7 +49,6 @@ class JsonElementConverter extends AbstractElementConverter
         }
 
         if ($this->element->getExtraElementSchema()) {
-            //$data['additionalProperties'] = $this->element->extraElementSchema->toOpenApiSchema();
             $data['additionalProperties'] = $this->factory->convert($this->element->getExtraElementSchema());
         }
 
