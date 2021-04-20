@@ -63,6 +63,46 @@ class StringElement extends ScalarElement implements StringElementBuilderInterfa
     }
 
     /**
+     * @return int|null
+     */
+    public function getMinLength(): ?int
+    {
+        return $this->minLength;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getMaxLength(): ?int
+    {
+        return $this->maxLength;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isNoWhiteSpace(): bool
+    {
+        return $this->noWhiteSpace;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isNotBlank(): bool
+    {
+        return $this->isNotBlank;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAlphaNumeric(): bool
+    {
+        return $this->isAlphaNumeric;
+    }
+
+    /**
      * @param $data
      *
      * @return string

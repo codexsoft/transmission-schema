@@ -8,14 +8,15 @@ abstract class AbstractBaseElement implements OpenApiAwareInterface, AbstractBas
 {
     use AbstractBaseElementBuilderTrait;
 
-    /** @internal */
-    public string $label = '';
-    /** @internal */
-    public bool $isDeprecated = false;
-    /** @internal */
-    public bool $isRequired = true;
-    /** @internal */
-    public bool $isNullable = false;
+    protected string $label = '';
+    protected bool $isDeprecated = false;
+    protected bool $isRequired = true;
+    protected bool $isNullable = false;
+
+    public function __construct(string $label = '')
+    {
+        $this->label = $label;
+    }
 
     /**
      * @return string
@@ -47,11 +48,6 @@ abstract class AbstractBaseElement implements OpenApiAwareInterface, AbstractBas
     public function isDeprecated(): bool
     {
         return $this->isDeprecated;
-    }
-
-    public function __construct(string $label = '')
-    {
-        $this->label = $label;
     }
 
     /**

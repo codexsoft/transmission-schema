@@ -3,7 +3,9 @@
 
 namespace CodexSoft\Transmission\Schema;
 
-
+/**
+ * @deprecated
+ */
 class tst
 {
     public static function x()

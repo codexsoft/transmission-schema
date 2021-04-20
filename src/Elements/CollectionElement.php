@@ -16,10 +16,50 @@ class CollectionElement extends AbstractElement implements CompositeElementInter
     protected string $openApiType = 'array';
 
     private ?AbstractElement $elementSchema = null;
-    protected ?string $schemaGatheredFromClass = null;
+    protected ?string $schemaSourceClass = null;
     protected bool $strictTypeCheck = true;
 
     private ?int $minCount = null;
+
+    /**
+     * @return string|null
+     */
+    public function getSchemaSourceClass(): ?string
+    {
+        return $this->schemaSourceClass;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isStrictTypeCheck(): bool
+    {
+        return $this->strictTypeCheck;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getMinCount(): ?int
+    {
+        return $this->minCount;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getMaxCount(): ?int
+    {
+        return $this->maxCount;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isElementsMustBeUnique(): bool
+    {
+        return $this->elementsMustBeUnique;
+    }
     private ?int $maxCount = null;
     private bool $elementsMustBeUnique = false;
 
@@ -42,9 +82,9 @@ class CollectionElement extends AbstractElement implements CompositeElementInter
         }
 
         if ($this->elementSchema !== null) {
-            if ($this->schemaGatheredFromClass) {
+            if ($this->schemaSourceClass) {
                 $data['items'] = [
-                    '$ref' => $this->createRef($this->schemaGatheredFromClass),
+                    '$ref' => $this->createRef($this->schemaSourceClass),
                 ];
             } else {
                 $data['items'] = $this->elementSchema->toOpenApiSchema();
@@ -63,8 +103,8 @@ class CollectionElement extends AbstractElement implements CompositeElementInter
     {
         $mentioned = [];
 
-        if ($this->schemaGatheredFromClass) {
-            return [$this->schemaGatheredFromClass];
+        if ($this->schemaSourceClass) {
+            return [$this->schemaSourceClass];
         }
 
         if ($this->elementSchema instanceof CompositeElementInterface) {
@@ -73,8 +113,6 @@ class CollectionElement extends AbstractElement implements CompositeElementInter
 
         return $mentioned;
     }
-
-
 
     /**
      * @return AbstractElement|null
@@ -144,23 +182,13 @@ class CollectionElement extends AbstractElement implements CompositeElementInter
         return $constraints;
     }
 
-    ///**
-    // * @return Constraint|Constraint[]
-    // */
-    //public function compileToSymfonyValidatorConstraint()
-    //{
-    //    $constraints = \array_merge($this->generateSfConstraints(), $this->customSfConstraints);
-    //
-    //    return $this->isRequired ? $constraints : new Constraints\Optional($constraints);
-    //}
-
     public function isReference(): bool
     {
-        return $this->schemaGatheredFromClass !== null;
+        return $this->schemaSourceClass !== null;
     }
 
     public function getReferencedClass(): ?string
     {
-        return $this->schemaGatheredFromClass;
+        return $this->schemaSourceClass;
     }
 }

@@ -18,11 +18,11 @@ class AbstractElementConverter
     public function convert(): array
     {
         $data = [
-            'description' => $this->element->label,
+            'description' => $this->element->getLabel(),
             'type' => $this->factory->targetTypeFromElementClass(\get_class($this->element)),
-            'required' => $this->element->isRequired,
-            'nullable' => $this->element->isNullable,
-            'deprecated' => $this->element->isDeprecated,
+            'required' => $this->element->isRequired(),
+            'nullable' => $this->element->isNullable(),
+            'deprecated' => $this->element->isDeprecated(),
         ];
 
         if ($this->element->getExample() !== AbstractElement::UNDEFINED) {

@@ -5,7 +5,6 @@ namespace CodexSoft\Transmission\Schema\Converters;
 
 
 use CodexSoft\Transmission\Schema\Elements\JsonElement;
-use CodexSoft\Transmission\Schema\Elements\NumberElement;
 
 class JsonElementConverter extends AbstractElementConverter
 {
@@ -22,36 +21,36 @@ class JsonElementConverter extends AbstractElementConverter
         $data = parent::convert();
 
         $requiredKeys = [];
-        foreach ($this->element->schema as $key => $item) {
-            if ($item->isRequired) {
+        foreach ($this->element->getSchema() as $key => $item) {
+            if ($item->isRequired()) {
                 $requiredKeys[] = $key;
             }
         }
         $data['required'] = $requiredKeys;
 
-        if ($this->element->schemaGatheredFromClass) {
-            $data['$ref'] = $this->createRef($this->element->schemaGatheredFromClass);
+        if ($this->factory->isUseRefs() && $this->element->getSchemaSourceClass()) {
+            $data['$ref'] = $this->factory->createRef($this->element->getSchemaSourceClass());
         } else {
             $properties = [];
-            foreach ($this->element->schema as $key => $item) {
-                /**
-                 * to avoid infinite loops, $refs should be generated in some cases!
-                 */
-                if ($this->element->schemaGatheredFromClass) {
-                    $properties[$key] = [
-                        '$ref' => $this->factory->createRef($this->element->schemaGatheredFromClass),
-                    ];
-                } else {
-                    //$properties[$key] = $item->toOpenApiSchema();
-                    $properties[$key] = $this->factory->convert($item);
-                }
+            foreach ($this->element->getSchema() as $key => $item) {
+                $properties[$key] = $this->factory->convert($item);
+                ///**
+                // * to avoid infinite loops, $refs should be generated in some cases!
+                // */
+                //if ($this->element->getSchemaGatheredFromClass()) {
+                //    $properties[$key] = [
+                //        '$ref' => $this->factory->createRef($this->element->getSchemaGatheredFromClass()),
+                //    ];
+                //} else {
+                //    $properties[$key] = $this->factory->convert($item);
+                //}
             }
             $data['properties'] = $properties;
         }
 
-        if ($this->element->extraElementSchema) {
+        if ($this->element->getExtraElementSchema()) {
             //$data['additionalProperties'] = $this->element->extraElementSchema->toOpenApiSchema();
-            $data['additionalProperties'] = $this->factory->convert($this->element->extraElementSchema);
+            $data['additionalProperties'] = $this->factory->convert($this->element->getExtraElementSchema());
         }
 
         return $data;

@@ -30,10 +30,10 @@ trait CollectionElementBuilderTrait
             } catch (InvalidJsonSchemaException $e) {
                 throw new InvalidCollectionElementSchemaException("Element schema class $schemaClass contains invalid schema");
             }
-            $this->schemaGatheredFromClass = $schemaClass;
+            $this->schemaSourceClass = $schemaClass;
         } elseif ($elementSchema instanceof AbstractElement) {
             $this->elementSchema = $elementSchema;
-            $this->schemaGatheredFromClass = null;
+            $this->schemaSourceClass = null;
         } else {
             throw new InvalidCollectionElementSchemaException('Collection element schema must be object of '.AbstractElement::class.' or class implementing '.JsonSchemaInterface::class);
         }
@@ -71,7 +71,7 @@ trait CollectionElementBuilderTrait
      *
      * @return static
      */
-    public function minCount(int $min)
+    public function minCount(int $min): static
     {
         $this->minCount = $min;
         return $this;

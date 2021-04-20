@@ -40,7 +40,7 @@ class JsonElement extends AbstractElement implements CompositeElementInterface, 
     /** @var AbstractElement[] */
     protected array $schema;
 
-    protected ?string $schemaGatheredFromClass = null;
+    protected ?string $schemaSourceClass = null;
 
     protected ?AbstractElement $extraElementSchema = null;
 
@@ -80,17 +80,17 @@ class JsonElement extends AbstractElement implements CompositeElementInterface, 
         }
         $data['required'] = $requiredKeys;
 
-        if ($this->schemaGatheredFromClass) {
-            $data['$ref'] = $this->createRef($this->schemaGatheredFromClass);
+        if ($this->schemaSourceClass) {
+            $data['$ref'] = $this->createRef($this->schemaSourceClass);
         } else {
             $properties = [];
             foreach ($this->schema as $key => $element) {
                 /**
                  * to avoid infinite loops, $refs should be generated in some cases!
                  */
-                if ($this->schemaGatheredFromClass) {
+                if ($this->schemaSourceClass) {
                     $properties[$key] = [
-                        '$ref' => $this->createRef($this->schemaGatheredFromClass),
+                        '$ref' => $this->createRef($this->schemaSourceClass),
                     ];
                 } else {
                     $properties[$key] = $element->toOpenApiSchema();
@@ -114,8 +114,8 @@ class JsonElement extends AbstractElement implements CompositeElementInterface, 
     {
         $mentioned = [];
 
-        if ($this->schemaGatheredFromClass) {
-            return [$this->schemaGatheredFromClass];
+        if ($this->schemaSourceClass) {
+            return [$this->schemaSourceClass];
         }
 
         foreach ($this->schema as $key => $element) {
@@ -192,9 +192,9 @@ class JsonElement extends AbstractElement implements CompositeElementInterface, 
     /**
      * @return string|null
      */
-    public function getSchemaGatheredFromClass(): ?string
+    public function getSchemaSourceClass(): ?string
     {
-        return $this->schemaGatheredFromClass;
+        return $this->schemaSourceClass;
     }
 
     /**
@@ -370,12 +370,12 @@ class JsonElement extends AbstractElement implements CompositeElementInterface, 
             }
             /** @var JsonSchemaInterface $schemaClass */
             $this->schema = $schemaClass::createSchema();
-            $this->schemaGatheredFromClass = $schemaClass;
+            $this->schemaSourceClass = $schemaClass;
         }
 
         if (\is_array($schema)) {
             $this->schema = $this->schema = $schema;;
-            $this->schemaGatheredFromClass = null;
+            $this->schemaSourceClass = null;
         }
 
         foreach ($this->schema as $key => $value) {
@@ -391,11 +391,11 @@ class JsonElement extends AbstractElement implements CompositeElementInterface, 
 
     public function isReference(): bool
     {
-        return $this->schemaGatheredFromClass !== null;
+        return $this->schemaSourceClass !== null;
     }
 
     public function getReferencedClass(): ?string
     {
-        return $this->schemaGatheredFromClass;
+        return $this->schemaSourceClass;
     }
 }

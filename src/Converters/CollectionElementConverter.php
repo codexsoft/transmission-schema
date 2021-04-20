@@ -20,24 +20,24 @@ class CollectionElementConverter extends AbstractElementConverter
     {
         $data = parent::convert();
 
-        $data['uniqueItems'] = $this->element->elementsMustBeUnique;
+        $data['uniqueItems'] = $this->element->isElementsMustBeUnique();
 
-        if ($this->element->minCount !== null) {
-            $data['minItems'] = $this->element->minCount;
+        if ($this->element->getMinCount() !== null) {
+            $data['minItems'] = $this->element->getMinCount();
         }
 
-        if ($this->element->maxCount !== null) {
-            $data['maxItems'] = $this->element->maxCount;
+        if ($this->element->getMaxCount() !== null) {
+            $data['maxItems'] = $this->element->getMaxCount();
         }
 
-        if ($this->element->elementSchema !== null) {
-            if ($this->element->schemaGatheredFromClass) {
+        if ($this->element->getElementSchema() !== null) {
+            if ($this->element->getSchemaSourceClass()) {
                 $data['items'] = [
-                    '$ref' => $this->factory->createRef($this->element->schemaGatheredFromClass),
+                    '$ref' => $this->factory->createRef($this->element->getSchemaSourceClass()),
                 ];
             } else {
                 //$data['items'] = $this->element->elementSchema->toOpenApiSchema();
-                $data['items'] = $this->factory->convert($this->element->elementSchema);
+                $data['items'] = $this->factory->convert($this->element->getElementSchema());
             }
 
             // 'allOf'

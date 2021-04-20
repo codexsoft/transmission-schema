@@ -16,6 +16,7 @@ use CodexSoft\Transmission\Schema\Elements\StringElement;
 class OpenApiConvertFactory
 {
     protected array $references = [];
+    protected bool $useRefs = true;
 
     /**
      * @param string $class
@@ -95,5 +96,21 @@ class OpenApiConvertFactory
         //    StringElement::class => 'string',
         //    default => 'mixed',
         //};
+    }
+
+    /**
+     * @return bool
+     */
+    public function isUseRefs(): bool
+    {
+        return $this->useRefs;
+    }
+
+    /**
+     * @return array
+     */
+    public function getReferences(): array
+    {
+        return $this->references;
     }
 }

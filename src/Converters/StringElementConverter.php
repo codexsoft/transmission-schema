@@ -20,18 +20,18 @@ class StringElementConverter extends ScalarElementConverter
     {
         $data = parent::convert();
 
-        $data['allowEmptyValue'] = !$this->element->isNotBlank;
+        $data['allowEmptyValue'] = !$this->element->isNotBlank();
 
         if ($this->element->getPattern() !== null) {
             $data['pattern'] = $this->element->getPattern();
         }
 
-        if ($this->element->minLength !== null) {
-            $data['minLength'] = $this->element->minLength;
+        if ($this->element->getMinLength() !== null) {
+            $data['minLength'] = $this->element->getMinLength();
         }
 
-        if ($this->element->maxLength !== null) {
-            $data['maxLength'] = $this->element->maxLength;
+        if ($this->element->getMaxLength() !== null) {
+            $data['maxLength'] = $this->element->getMaxLength();
         }
 
         return $data;
