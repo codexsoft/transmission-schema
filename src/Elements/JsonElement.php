@@ -63,6 +63,11 @@ class JsonElement extends AbstractElement implements CompositeElementInterface, 
         return $this->mode !== self::MODE_DENY_EXTRA_KEYS;
     }
 
+    /**
+     * @deprecated
+     * @return array
+     * @throws \ReflectionException
+     */
     public function toOpenApiSchema(): array
     {
         $data = parent::toOpenApiSchema();
@@ -369,7 +374,7 @@ class JsonElement extends AbstractElement implements CompositeElementInterface, 
         }
 
         if (\is_array($schema)) {
-            $this->schema = BuilderToElementConverter::normalize($schema);
+            $this->schema = $this->schema = $schema;;
             $this->schemaGatheredFromClass = null;
         }
 

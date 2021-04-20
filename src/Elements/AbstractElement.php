@@ -291,48 +291,4 @@ abstract class AbstractElement extends AbstractBaseElement implements AbstractEl
 
         return false;
     }
-
-    ///**
-    // * @deprecated use toOpenApiSchema instead
-    // * @return array
-    // */
-    //final public function toOpenApiV2ParameterArray(): array
-    //{
-    //    return $this->toOpenApiSchema();
-    //}
-
-    ///**
-    // * callback to be applied to already normalized data
-    // * @param callable|null $callback
-    // *
-    // * @return static
-    // * @deprecated should not use, needs testing
-    // */
-    //public function process(?callable $callback): self
-    //{
-    //    $this->normalizeDataCallback = $callback;
-    //    return $this;
-    //}
-    //
-    ///**
-    // * @deprecated use label() instead
-    // * Set element description
-    // * @param string $description
-    // *
-    // * @return static
-    // */
-    //public function description(string $description)
-    //{
-    //    $this->label = $description;
-    //    return $this;
-    //}
-    //
-    ///**
-    // * @deprecated use getLabel() instead
-    // * @return string
-    // */
-    //public function getDescription(): string
-    //{
-    //    return $this->label;
-    //}
 }

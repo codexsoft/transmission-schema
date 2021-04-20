@@ -20,6 +20,10 @@ class ScalarElement extends AbstractElement implements ScalarElementBuilderInter
      */
     protected array $substitutes = [];
 
+    /**
+     * @deprecated
+     * @return array
+     */
     public function toOpenApiSchema(): array
     {
         $data = parent::toOpenApiSchema();

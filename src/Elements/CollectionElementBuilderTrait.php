@@ -25,8 +25,8 @@ trait CollectionElementBuilderTrait
             }
             /** @var JsonSchemaInterface $schemaClass */
             try {
-                //$this->element->elementSchema = new JsonElement($schemaClass::createSchema());
-                $this->elementSchema = BuilderToElementConverter::normalizeToJsonElement($schemaClass::createSchema());
+                $this->elementSchema = new JsonElement($schemaClass::createSchema());
+                //$this->elementSchema = BuilderToElementConverter::normalizeToJsonElement($schemaClass::createSchema());
             } catch (InvalidJsonSchemaException $e) {
                 throw new InvalidCollectionElementSchemaException("Element schema class $schemaClass contains invalid schema");
             }
