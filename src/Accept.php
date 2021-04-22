@@ -4,6 +4,8 @@
 namespace CodexSoft\Transmission\Schema;
 
 
+use CodexSoft\Transmission\Schema\Elements\AbstractBaseElement;
+use CodexSoft\Transmission\Schema\Elements\AbstractBaseElementBuilderInterface;
 use CodexSoft\Transmission\Schema\Elements\AbstractElement;
 
 /**
@@ -62,7 +64,7 @@ class Accept
     }
 
     /**
-     * @param AbstractElement|string $elementSchema
+     * @param AbstractBaseElement|AbstractBaseElementBuilderInterface|string $elementSchema
      * @param string $label
      *
      * @return Elements\CollectionElementBuilderInterface
@@ -74,7 +76,7 @@ class Accept
     }
 
     /**
-     * @param AbstractElement[]|string $schema schema of known elements (dynamical keys signature can be added by separate method)
+     * @param AbstractBaseElement[]|AbstractBaseElementBuilderInterface[]|string $schema schema of known elements (dynamical keys signature can be added by separate method)
      * @param string $label
      *
      * @return Elements\JsonElementBuilderInterface
