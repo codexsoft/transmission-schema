@@ -4,7 +4,7 @@
 namespace CodexSoft\Transmission\Schema\Elements;
 
 
-interface AbstractBaseElementBuilderInterface extends ElementBuilderInterface
+interface AbstractBaseElementBuilderInterface
 {
     public function label(string $label): static;
     public function notNull(): static;

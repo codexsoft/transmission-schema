@@ -9,3 +9,9 @@ Provides normalization and validation features.
 ```shell script
 composer require codexsoft/transmission
 ``` 
+
+## Testing
+
+```shell script
+php ./vendor/bin/phpunit
+```
