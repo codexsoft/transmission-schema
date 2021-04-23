@@ -21,29 +21,6 @@ class ScalarElement extends BasicElement implements ScalarElementBuilderInterfac
     protected array $substitutes = [];
 
     /**
-     * @deprecated
-     * @return array
-     */
-    public function toOpenApiSchema(): array
-    {
-        $data = parent::toOpenApiSchema();
-
-        if ($this->pattern) {
-            $data['pattern'] = $this->pattern;
-        }
-
-        if ($this->choicesSourceArray) {
-            $data['enum'] = $this->choicesSourceArray;
-
-            if ($this->example === self::UNDEFINED || !\in_array($this->example, $this->choicesSourceArray, true)) {
-                $data['example'] = \array_values($this->choicesSourceArray)[0];
-            }
-        }
-
-        return $data;
-    }
-
-    /**
      * @return array
      */
     public function getChoicesSourceArray(): array

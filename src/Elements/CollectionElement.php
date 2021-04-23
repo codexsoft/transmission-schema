@@ -13,7 +13,6 @@ class CollectionElement extends BasicElement implements CompositeElementInterfac
     use CollectionElementBuilderTrait;
 
     protected ?array $acceptedPhpTypes = ['array'];
-    protected string $openApiType = 'array';
 
     private ?BasicElement $elementSchema = null;
     protected ?string $schemaSourceClass = null;
@@ -62,39 +61,6 @@ class CollectionElement extends BasicElement implements CompositeElementInterfac
     }
     private ?int $maxCount = null;
     private bool $elementsMustBeUnique = false;
-
-    /**
-     * @deprecated
-     * @return array
-     * @throws \ReflectionException
-     */
-    public function toOpenApiSchema(): array
-    {
-        $data = parent::toOpenApiSchema();
-        $data['uniqueItems'] = $this->elementsMustBeUnique;
-
-        if ($this->minCount !== null) {
-            $data['minItems'] = $this->minCount;
-        }
-
-        if ($this->maxCount !== null) {
-            $data['maxItems'] = $this->maxCount;
-        }
-
-        if ($this->elementSchema !== null) {
-            if ($this->schemaSourceClass) {
-                $data['items'] = [
-                    '$ref' => $this->createRef($this->schemaSourceClass),
-                ];
-            } else {
-                $data['items'] = $this->elementSchema->toOpenApiSchema();
-            }
-
-            // 'allOf'
-        }
-
-        return $data;
-    }
 
     /**
      * @return string[]

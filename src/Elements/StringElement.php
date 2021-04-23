@@ -12,7 +12,6 @@ class StringElement extends ScalarElement implements StringElementBuilderInterfa
     use StringElementBuilderTrait;
 
     protected ?array $acceptedPhpTypes = ['string'];
-    protected string $openApiType = 'string';
     protected mixed $example = 'Some text sample';
 
     /**
@@ -37,30 +36,6 @@ class StringElement extends ScalarElement implements StringElementBuilderInterfa
     protected bool $noWhiteSpace = false;
     protected bool $isNotBlank = false;
     protected bool $isAlphaNumeric = false;
-
-    /**
-     * @deprecated
-     * @return array
-     */
-    public function toOpenApiSchema(): array
-    {
-        $data = parent::toOpenApiSchema();
-        $data['allowEmptyValue'] = !$this->isNotBlank;
-
-        if ($this->pattern !== null) {
-            $data['pattern'] = $this->pattern;
-        }
-
-        if ($this->minLength !== null) {
-            $data['minLength'] = $this->minLength;
-        }
-
-        if ($this->maxLength !== null) {
-            $data['maxLength'] = $this->maxLength;
-        }
-
-        return $data;
-    }
 
     /**
      * @return int|null

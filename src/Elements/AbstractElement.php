@@ -4,7 +4,7 @@
 namespace CodexSoft\Transmission\Schema\Elements;
 
 
-abstract class AbstractElement implements OpenApiAwareInterface, AbstractElementBuilderInterface
+abstract class AbstractElement implements AbstractElementBuilderInterface
 {
     use AbstractElementBuilderTrait;
 
@@ -49,10 +49,4 @@ abstract class AbstractElement implements OpenApiAwareInterface, AbstractElement
     {
         return $this->isDeprecated;
     }
-
-    /**
-     * @deprecated
-     * @return array
-     */
-    abstract public function toOpenApiSchema(): array;
 }

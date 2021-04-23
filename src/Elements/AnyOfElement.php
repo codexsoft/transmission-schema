@@ -29,43 +29,6 @@ class AnyOfElement extends AbstractCompositeElement
     }
 
     /**
-     * @deprecated
-     * @return array
-     */
-    public function toOpenApiSchema(): array
-    {
-        $oaVariants = [];
-        foreach ($this->variants as $variant) {
-            $oaVariants[] = $variant->toOpenApiSchema();
-        }
-
-        $data = [
-            'anyOf' => $oaVariants,
-            'description' => $this->label,
-            'required' => $this->isRequired,
-            'nullable' => $this->isNullable,
-            'deprecated' => $this->isDeprecated,
-        ];
-
-        return $data;
-    }
-
-    public function toOpenApiParameter(string $name, ?string $in = null): array
-    {
-        $data = [
-            'name' => $name,
-            'schema' => $this->toOpenApiSchema(),
-            'required' => $this->isRequired()
-        ];
-
-        if ($in !== null) {
-            $data['in'] = $in;
-        }
-
-        return $data;
-    }
-
-    /**
      * @return BasicElement[]
      */
     public function getVariants(): array

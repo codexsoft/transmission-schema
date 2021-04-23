@@ -25,7 +25,6 @@ class JsonElement extends BasicElement implements CompositeElementInterface, Ref
 
     protected ?array $acceptedPhpTypes = ['array'];
     protected bool $strictTypeCheck = true;
-    protected string $openApiType = 'object';
 
     /**
      * If extra fields are present in input data, mode define behaviour:
@@ -64,49 +63,6 @@ class JsonElement extends BasicElement implements CompositeElementInterface, Ref
     }
 
     /**
-     * @deprecated
-     * @return array
-     * @throws \ReflectionException
-     */
-    public function toOpenApiSchema(): array
-    {
-        $data = parent::toOpenApiSchema();
-
-        $requiredKeys = [];
-        foreach ($this->schema as $key => $element) {
-            if ($element->isRequired) {
-                $requiredKeys[] = $key;
-            }
-        }
-        $data['required'] = $requiredKeys;
-
-        if ($this->schemaSourceClass) {
-            $data['$ref'] = $this->createRef($this->schemaSourceClass);
-        } else {
-            $properties = [];
-            foreach ($this->schema as $key => $element) {
-                /**
-                 * to avoid infinite loops, $refs should be generated in some cases!
-                 */
-                if ($this->schemaSourceClass) {
-                    $properties[$key] = [
-                        '$ref' => $this->createRef($this->schemaSourceClass),
-                    ];
-                } else {
-                    $properties[$key] = $element->toOpenApiSchema();
-                }
-            }
-            $data['properties'] = $properties;
-        }
-
-        if ($this->extraElementSchema) {
-            $data['additionalProperties'] = $this->extraElementSchema->toOpenApiSchema();
-        }
-
-        return $data;
-    }
-
-    /**
      * Recursively collect all used referenced classes that implement JsonSchemaInterface
      * @return string[]
      */
@@ -123,16 +79,6 @@ class JsonElement extends BasicElement implements CompositeElementInterface, Ref
                 \array_push($mentioned, ...$element->collectMentionedSchemas());
             }
         }
-
-        //foreach ($this->schema as $key => $element) {
-        //    if ($element instanceof JsonElement) {
-        //        if ($element->getSchemaGatheredFromClass()) {
-        //            $mentioned[] = $element->getSchemaGatheredFromClass();
-        //        } else {
-        //            \array_push($mentioned, ...$element->collectMentionedSchemas());
-        //        }
-        //    }
-        //}
 
         return $mentioned;
     }

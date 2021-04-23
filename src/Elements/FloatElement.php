@@ -6,7 +6,6 @@ namespace CodexSoft\Transmission\Schema\Elements;
 class FloatElement extends NumberElement
 {
     protected ?array $acceptedPhpTypes = ['double', 'float', 'integer'];
-    protected string $openApiType = 'number';
 
     /**
      * @param $data

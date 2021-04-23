@@ -18,27 +18,6 @@ class NumberElement extends ScalarElement implements NumberElementBuilderInterfa
     protected bool $exclusiveMinimum = true;
 
     /**
-     * @deprecated
-     * @return array
-     */
-    public function toOpenApiSchema(): array
-    {
-        $data = parent::toOpenApiSchema();
-
-        if ($this->maxValue !== null) {
-            $data['maximum'] = $this->maxValue;
-            $data['exclusiveMaximum'] = $this->exclusiveMaximum;
-        }
-
-        if ($this->minValue !== null) {
-            $data['minimum'] = $this->minValue;
-            $data['exclusiveMinimum'] = $this->exclusiveMinimum;
-        }
-
-        return $data;
-    }
-
-    /**
      * @return null
      */
     public function getMaxValue()

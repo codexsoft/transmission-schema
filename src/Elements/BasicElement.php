@@ -32,7 +32,7 @@ abstract class BasicElement extends AbstractElement implements BasicElementBuild
      * missing.
      * @var mixed
      */
-    protected $defaultValue = self::UNDEFINED;
+    protected mixed $defaultValue = self::UNDEFINED;
 
     protected ?array $acceptedPhpTypes = null;
 
@@ -58,59 +58,6 @@ abstract class BasicElement extends AbstractElement implements BasicElementBuild
     {
         $reflection = new \ReflectionClass($class);
         return '#/components/schemas/'.$reflection->getShortName();
-    }
-
-    /**
-     * @deprecated
-     * Export element to Parameter Object of OpenAPI 3.x
-     *
-     * @param string $name a name of parameter
-     * @param string|null $in The location of the parameter. Possible values are "query", "header", "path" or "cookie". If omitted, it won't be added.
-     *
-     * @return array
-     */
-    public function toOpenApiParameter(string $name, ?string $in = null): array
-    {
-        $data = [
-            'name' => $name,
-            'schema' => $this->toOpenApiSchema(),
-            'required' => $this->isRequired()
-        ];
-
-        if ($in !== null) {
-            $data['in'] = $in;
-        }
-
-        return $data;
-    }
-
-    /**
-     * @deprecated
-     * Export element to Schema Object of OpenAPI 3.x (partially)
-     *
-     * @see https://json-schema.org/draft/2019-09/json-schema-core.html
-     * @see https://json-schema.org/draft/2019-09/json-schema-core.html
-     * @return array
-     */
-    public function toOpenApiSchema(): array
-    {
-        $data = [
-            'description' => $this->label,
-            'type' => $this->openApiType,
-            'required' => $this->isRequired,
-            'nullable' => $this->isNullable,
-            'deprecated' => $this->isDeprecated,
-        ];
-
-        if ($this->example !== self::UNDEFINED) {
-            $data['example'] = $this->example;
-        }
-
-        if ($this->hasDefaultValue()) {
-            $data['default'] = $this->defaultValue;
-        }
-
-        return $data;
     }
 
     /**

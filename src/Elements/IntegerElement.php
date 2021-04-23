@@ -8,7 +8,6 @@ namespace CodexSoft\Transmission\Schema\Elements;
 class IntegerElement extends NumberElement
 {
     protected ?array $acceptedPhpTypes = ['integer'];
-    protected string $openApiType = 'integer';
     protected mixed $example = 42;
 
     /**
