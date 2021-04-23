@@ -6,10 +6,10 @@ namespace CodexSoft\Transmission\Schema\Elements;
 
 use CodexSoft\Transmission\Schema\Exceptions\InvalidCollectionElementSchemaException;
 
-interface CollectionElementBuilderInterface extends AbstractElementBuilderInterface
+interface CollectionElementBuilderInterface extends BasicElementBuilderInterface
 {
     /**
-     * @param AbstractElement|string|null $elementSchema
+     * @param BasicElement|string|null $elementSchema
      *
      * @return static
      * @throws InvalidCollectionElementSchemaException

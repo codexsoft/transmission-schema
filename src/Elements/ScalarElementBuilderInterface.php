@@ -4,7 +4,7 @@
 namespace CodexSoft\Transmission\Schema\Elements;
 
 
-interface ScalarElementBuilderInterface extends AbstractElementBuilderInterface
+interface ScalarElementBuilderInterface extends BasicElementBuilderInterface
 {
     /**
      * @param array $validChoices

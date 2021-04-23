@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Validation;
 /**
  * Represents JSON object
  */
-class JsonElement extends AbstractElement implements CompositeElementInterface, ReferencableElementInterface, JsonElementBuilderInterface
+class JsonElement extends BasicElement implements CompositeElementInterface, ReferencableElementInterface, JsonElementBuilderInterface
 {
     use JsonElementBuilderTrait;
 
@@ -37,17 +37,17 @@ class JsonElement extends AbstractElement implements CompositeElementInterface, 
      */
     protected int $mode = self::MODE_EXTRACT_EXTRA_KEYS;
 
-    /** @var AbstractElement[] */
+    /** @var BasicElement[] */
     protected array $schema;
 
     protected ?string $schemaSourceClass = null;
 
-    protected ?AbstractElement $extraElementSchema = null;
+    protected ?BasicElement $extraElementSchema = null;
 
     /**
      * JsonElement constructor.
      *
-     * @param AbstractElement[]|string $schema
+     * @param BasicElement[]|string $schema
      * @param string $label
      *
      * @throws InvalidJsonSchemaException
@@ -145,7 +145,7 @@ class JsonElement extends AbstractElement implements CompositeElementInterface, 
         $constraints = $this->customSfConstraints;
 
         foreach ($this->schema as $key => $value) {
-            if ($value instanceof AbstractElement) {
+            if ($value instanceof BasicElement) {
                 $constraints[$key] = $value->compileToSymfonyValidatorConstraint();
             }
         }
@@ -169,7 +169,7 @@ class JsonElement extends AbstractElement implements CompositeElementInterface, 
         $constraints = [];
 
         foreach ($this->schema as $key => $value) {
-            if ($value instanceof AbstractElement) {
+            if ($value instanceof BasicElement) {
                 $constraints[$key] = $value->compileToFormalSymfonyValidatorConstraint();
             }
         }
@@ -198,15 +198,15 @@ class JsonElement extends AbstractElement implements CompositeElementInterface, 
     }
 
     /**
-     * @return AbstractBaseElement|null
+     * @return AbstractElement|null
      */
-    public function getExtraElementSchema(): ?AbstractBaseElement
+    public function getExtraElementSchema(): ?AbstractElement
     {
         return $this->extraElementSchema;
     }
 
     /**
-     * @return AbstractElement[]
+     * @return BasicElement[]
      */
     public function getSchema(): array
     {
@@ -352,7 +352,7 @@ class JsonElement extends AbstractElement implements CompositeElementInterface, 
     }
 
     /**
-     * @param AbstractElement[]|string $schema
+     * @param BasicElement[]|string $schema
      *
      * @return static
      * @throws InvalidJsonSchemaException
@@ -380,9 +380,9 @@ class JsonElement extends AbstractElement implements CompositeElementInterface, 
 
         foreach ($this->schema as $key => $value) {
             //if (!$value instanceof AbstractElement) {
-            if (!$value instanceof AbstractBaseElement) {
+            if (!$value instanceof AbstractElement) {
                 // todo: check it recursively?
-                throw new InvalidJsonSchemaException('All JSON schema elements must be instances of '.AbstractElement::class.' but element with key '.$key.' does not.');
+                throw new InvalidJsonSchemaException('All JSON schema elements must be instances of '.BasicElement::class.' but element with key '.$key.' does not.');
             }
         }
 

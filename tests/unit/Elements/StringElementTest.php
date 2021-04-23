@@ -39,12 +39,12 @@ class StringElementTest extends AbstractElementTest
      * @dataProvider dataProviderValidateData
      *
      * @param $input
-     * @param AbstractElement $schema
+     * @param BasicElement $schema
      * @param bool $expectedIsValid
      *
      * @throws IncompatibleInputDataTypeException
      */
-    public function testValidateData($input, AbstractElement $schema, bool $expectedIsValid): void
+    public function testValidateData($input, BasicElement $schema, bool $expectedIsValid): void
     {
         $validationResult = $schema->validateNormalizedData($input);
         //foreach ($validationResult->getViolations() as $violation) {

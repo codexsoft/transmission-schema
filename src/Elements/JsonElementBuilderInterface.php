@@ -4,7 +4,7 @@
 namespace CodexSoft\Transmission\Schema\Elements;
 
 
-interface JsonElementBuilderInterface extends AbstractElementBuilderInterface
+interface JsonElementBuilderInterface extends BasicElementBuilderInterface
 {
     /**
      * If extra fields are denied then if they are present in input data violation will occured
@@ -45,5 +45,5 @@ interface JsonElementBuilderInterface extends AbstractElementBuilderInterface
      *
      * @return static
      */
-    public function extraElementSchema(AbstractElement $valuePattern): static;
+    public function extraElementSchema(BasicElement $valuePattern): static;
 }

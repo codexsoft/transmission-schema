@@ -62,7 +62,7 @@ trait JsonElementBuilderTrait
      *
      * @return static
      */
-    public function extraElementSchema(AbstractElement $valuePattern): static
+    public function extraElementSchema(BasicElement $valuePattern): static
     {
         $this->extraElementSchema = $valuePattern;
         return $this;

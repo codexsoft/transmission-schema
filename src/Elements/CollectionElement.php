@@ -8,14 +8,14 @@ use Symfony\Component\Validator\Constraints;
 /**
  * Represents JSON array
  */
-class CollectionElement extends AbstractElement implements CompositeElementInterface, ReferencableElementInterface, CollectionElementBuilderInterface
+class CollectionElement extends BasicElement implements CompositeElementInterface, ReferencableElementInterface, CollectionElementBuilderInterface
 {
     use CollectionElementBuilderTrait;
 
     protected ?array $acceptedPhpTypes = ['array'];
     protected string $openApiType = 'array';
 
-    private ?AbstractElement $elementSchema = null;
+    private ?BasicElement $elementSchema = null;
     protected ?string $schemaSourceClass = null;
     protected bool $strictTypeCheck = true;
 
@@ -115,9 +115,9 @@ class CollectionElement extends AbstractElement implements CompositeElementInter
     }
 
     /**
-     * @return AbstractElement|null
+     * @return BasicElement|null
      */
-    public function getElementSchema(): ?AbstractElement
+    public function getElementSchema(): ?BasicElement
     {
         return $this->elementSchema;
     }

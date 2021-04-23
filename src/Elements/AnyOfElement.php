@@ -13,13 +13,13 @@ namespace CodexSoft\Transmission\Schema\Elements;
  */
 class AnyOfElement extends AbstractCompositeElement
 {
-    /** @var AbstractElement[] */
+    /** @var BasicElement[] */
     protected array $variants;
 
     /**
      * AnyOfElement constructor.
      *
-     * @param AbstractElement[] $variants
+     * @param BasicElement[] $variants
      * @param string $label
      */
     public function __construct(array $variants, string $label = '')
@@ -66,7 +66,7 @@ class AnyOfElement extends AbstractCompositeElement
     }
 
     /**
-     * @return AbstractElement[]
+     * @return BasicElement[]
      */
     public function getVariants(): array
     {

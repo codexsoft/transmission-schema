@@ -11,7 +11,7 @@ use CodexSoft\Transmission\Schema\Exceptions\InvalidJsonSchemaException;
 trait CollectionElementBuilderTrait
 {
     /**
-     * @param AbstractElement|string|null $elementSchema
+     * @param BasicElement|string|null $elementSchema
      *
      * @return static
      * @throws InvalidCollectionElementSchemaException
@@ -31,11 +31,11 @@ trait CollectionElementBuilderTrait
                 throw new InvalidCollectionElementSchemaException("Element schema class $schemaClass contains invalid schema");
             }
             $this->schemaSourceClass = $schemaClass;
-        } elseif ($elementSchema instanceof AbstractElement) {
+        } elseif ($elementSchema instanceof BasicElement) {
             $this->elementSchema = $elementSchema;
             $this->schemaSourceClass = null;
         } else {
-            throw new InvalidCollectionElementSchemaException('Collection element schema must be object of '.AbstractElement::class.' or class implementing '.JsonSchemaInterface::class);
+            throw new InvalidCollectionElementSchemaException('Collection element schema must be object of '.BasicElement::class.' or class implementing '.JsonSchemaInterface::class);
         }
 
         return $this;

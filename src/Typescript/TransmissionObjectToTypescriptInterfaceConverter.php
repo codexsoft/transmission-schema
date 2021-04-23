@@ -4,7 +4,7 @@
 namespace CodexSoft\Transmission\Schema\Typescript;
 
 
-use CodexSoft\Transmission\Schema\Elements\AbstractBaseElement;
+use CodexSoft\Transmission\Schema\Elements\AbstractElement;
 use CodexSoft\Transmission\Schema\Elements\AnyOfElement;
 use CodexSoft\Transmission\Schema\Elements\BoolElement;
 use CodexSoft\Transmission\Schema\Elements\CollectionElement;
@@ -66,7 +66,7 @@ class TransmissionObjectToTypescriptInterfaceConverter
         return $result;
     }
 
-    private function detectTypescriptType(AbstractBaseElement $element): string
+    private function detectTypescriptType(AbstractElement $element): string
     {
         if ($element instanceof BoolElement) {
             return 'boolean';
@@ -94,7 +94,7 @@ class TransmissionObjectToTypescriptInterfaceConverter
      *
      * @return string
      */
-    private function convertElementToTypescriptType(AbstractBaseElement $element): string
+    private function convertElementToTypescriptType(AbstractElement $element): string
     {
         if ($this->useReferences && $element instanceof ReferencableElementInterface && $element->isReference()) {
             $tsType = $this->convertRefToInterface($element->getReferencedClass());

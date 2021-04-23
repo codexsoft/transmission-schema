@@ -7,73 +7,45 @@ namespace CodexSoft\Transmission\Schema\Elements;
 trait AbstractElementBuilderTrait
 {
     /**
-     * Set that element is optional.
-     * Often, if optional element is missing in input data, it is replacing with some default value.
-     *
-     * @param string $defaultValue default value to be set if element is missing
+     * Set short text label for element
+     * @param string $label
      *
      * @return static
      */
-    public function optional($defaultValue = AbstractElement::UNDEFINED): static
+    public function label(string $label): static
     {
-        $this->isRequired = false;
-
-        if ($defaultValue !== AbstractElement::UNDEFINED) {
-            $this->defaultValue($defaultValue);
-        }
-
+        $this->label = $label;
         return $this;
     }
 
     /**
-     * Set element value example
-     *
-     * @param mixed $exampleValue
-     *
+     * Set that element value CANNOT be null
      * @return static
      */
-    public function example($exampleValue): static
+    public function notNull(): static
     {
-        $this->example = $exampleValue;
+        $this->isNullable = false;
         return $this;
     }
 
     /**
-     * Set element default value (default value will be applied if element is missing in input data)
-     *
-     * @param mixed $value
+     * @param bool $isDeprecated
      *
      * @return static
      */
-    public function defaultValue($value): static
+    public function deprecated(bool $isDeprecated = true): static
     {
-        $this->defaultValue = $value;
+        $this->isDeprecated = $isDeprecated;
         return $this;
     }
 
     /**
-     * Set element accepted PHP types.
-     * If value type from input data is outside these types, the exception will be generated
-     * while validating or normalizing input data.
-     *
-     * @param string[] ...$acceptedTypes
-     *
+     * Set that element value CAN be null
      * @return static
      */
-    public function type(...$acceptedTypes): static
+    public function nullable(): static
     {
-        $this->acceptedPhpTypes = $acceptedTypes;
-        return $this;
-    }
-
-    /**
-     * @param bool $value enable or disable strict type checks (is disabled by default)
-     *
-     * @return static
-     */
-    public function strict(bool $value = true): static
-    {
-        $this->strictTypeCheck = $value;
+        $this->isNullable = true;
         return $this;
     }
 }

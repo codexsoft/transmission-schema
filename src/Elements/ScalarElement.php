@@ -6,7 +6,7 @@ namespace CodexSoft\Transmission\Schema\Elements;
 use CodexSoft\Transmission\Schema\ValidationResult;
 use Symfony\Component\Validator\Constraints;
 
-class ScalarElement extends AbstractElement implements ScalarElementBuilderInterface
+class ScalarElement extends BasicElement implements ScalarElementBuilderInterface
 {
     use ScalarElementBuilderTrait;
 

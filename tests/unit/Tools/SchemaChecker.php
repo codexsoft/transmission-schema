@@ -4,19 +4,19 @@
 namespace CodexSoft\Transmission\Schema\Tools;
 
 
-use CodexSoft\Transmission\Schema\Elements\AbstractElement;
+use CodexSoft\Transmission\Schema\Elements\BasicElement;
 use CodexSoft\Transmission\Schema\Elements\JsonElement;
 use Symfony\Component\Validator\ConstraintViolationInterface;
 use Symfony\Component\Validator\Validation;
 
 class SchemaChecker
 {
-    private AbstractElement $schema;
-    private $expectedNormalizedData = AbstractElement::UNDEFINED;
-    private $expectedExtraData = AbstractElement::UNDEFINED;
+    private BasicElement $schema;
+    private $expectedNormalizedData = BasicElement::UNDEFINED;
+    private $expectedExtraData = BasicElement::UNDEFINED;
     private array $expectedSfViolations = [];
 
-    public function __construct(AbstractElement $schema)
+    public function __construct(BasicElement $schema)
     {
         $this->schema = $schema;
     }
@@ -59,7 +59,7 @@ class SchemaChecker
         if ($this->schema instanceof JsonElement) {
             [$normalizedData, $extraData] = $this->schema->normalizeDataReturningNormalizedAndExtraData($data);
 
-            if ($this->expectedExtraData !== AbstractElement::UNDEFINED && $extraData !== $this->expectedExtraData) {
+            if ($this->expectedExtraData !== BasicElement::UNDEFINED && $extraData !== $this->expectedExtraData) {
                 $n1 = $extraData;
                 $n2 = $this->expectedExtraData;
                 throw new \RuntimeException('Extra data is not same as expected');
@@ -69,7 +69,7 @@ class SchemaChecker
             $normalizedData = $this->schema->normalizeData($data);
         }
 
-        if ($this->expectedNormalizedData !== AbstractElement::UNDEFINED && $normalizedData !== $this->expectedNormalizedData) {
+        if ($this->expectedNormalizedData !== BasicElement::UNDEFINED && $normalizedData !== $this->expectedNormalizedData) {
             $n1 = $normalizedData;
             $n2 = $this->expectedNormalizedData;
             throw new \RuntimeException('Normalized data is not same as expected');

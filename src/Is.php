@@ -3,7 +3,7 @@
 
 namespace CodexSoft\Transmission\Schema;
 
-use CodexSoft\Transmission\Schema\Elements\AbstractBaseElementBuilderInterface;
+use CodexSoft\Transmission\Schema\Elements\AbstractElementBuilderInterface;
 use CodexSoft\Transmission\Schema\Elements\StringElement;
 
 /**
@@ -11,7 +11,7 @@ use CodexSoft\Transmission\Schema\Elements\StringElement;
  */
 class Is extends Accept
 {
-    public static function test(): AbstractBaseElementBuilderInterface
+    public static function test(): AbstractElementBuilderInterface
     {
         return new StringElement();
     }

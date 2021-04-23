@@ -2,7 +2,7 @@
 
 namespace CodexSoft\Transmission\Schema;
 
-use CodexSoft\Transmission\Schema\Elements\AbstractElement;
+use CodexSoft\Transmission\Schema\Elements\BasicElement;
 use PHPUnit\Framework\TestCase;
 
 abstract class AbstractElementTest extends TestCase
@@ -15,12 +15,12 @@ abstract class AbstractElementTest extends TestCase
      * @dataProvider dataProviderNormalizeData
      *
      * @param $input
-     * @param AbstractElement $schema
+     * @param BasicElement $schema
      * @param mixed|null $expectedOutput
      *
      * @param string|null $exceptionClass
      */
-    public function _testNormalizeData($input, AbstractElement $schema, $expectedOutput, ?string $exceptionClass): void
+    public function _testNormalizeData($input, BasicElement $schema, $expectedOutput, ?string $exceptionClass): void
     {
         try {
             $normalizedData = $schema->normalizeData($input);
@@ -45,12 +45,12 @@ abstract class AbstractElementTest extends TestCase
      * @dataProvider dataProviderNormalizeData
      *
      * @param $input
-     * @param AbstractElement $schema
+     * @param BasicElement $schema
      * @param mixed|null $expectedOutput
      *
      * @param string|null $violationsExpected
      */
-    public function testNormalizeData($input, AbstractElement $schema, $expectedOutput, ?bool $violationsExpected): void
+    public function testNormalizeData($input, BasicElement $schema, $expectedOutput, ?bool $violationsExpected): void
     {
         $result = $schema->validateNormalizedData($input);
 
