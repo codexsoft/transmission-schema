@@ -45,5 +45,5 @@ interface JsonElementBuilderInterface extends BasicElementBuilderInterface
      *
      * @return static
      */
-    public function extraElementSchema(BasicElement $valuePattern): static;
+    public function extraElementSchema(BasicElement|AbstractElementBuilderInterface $valuePattern): static;
 }
